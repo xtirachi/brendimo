@@ -23,12 +23,6 @@
                 <select id="malAdiSelect" name="malAdiSelect" required>
                     <!-- Options will be populated dynamically -->
                 </select>
-
-                <label for="satisMeblegi">Satış Qiyməti:</label>
-                <input type="number" id="satisMeblegi" name="satisMeblegi" required>
-                
-                <label for="gelir">Gəlir:</label>
-                <input type="number" id="gelir" name="gelir" required>
                 
                 <label for="sehifeAdi">Səhifə Adı:</label>
                 <select id="sehifeAdi" name="sehifeAdi" required>
@@ -42,9 +36,12 @@
             </form>
         </div>
 
-        <!-- Section to view sales (Daily/Monthly) -->
-        <div class="table-section">
+        <!-- Section to filter sales by month -->
+        <div class="form-section">
             <h2>Aylıq və Günlük Satışlar</h2>
+            <label for="monthSelect">Ay Seçin:</label>
+            <input type="month" id="monthSelect" name="monthSelect" value="" required>
+
             <table id="salesTable">
                 <thead>
                     <tr>
@@ -52,7 +49,6 @@
                         <th>Malın Adı</th>
                         <th>Xərc</th>
                         <th>Satış Qiyməti</th>
-                        <th>Gəlir</th>
                         <th>Səhifə Adı</th>
                     </tr>
                 </thead>
@@ -60,9 +56,20 @@
                     <!-- Sales data will be populated dynamically -->
                 </tbody>
             </table>
+
+            <div id="totals">
+                <!-- Display monthly and daily totals -->
+                <h3>Aylıq Toplamlar</h3>
+                <p id="monthlySales">Satışlar: 0</p>
+                <p id="monthlyCosts">Xərclər: 0</p>
+
+                <h3>Günlük Toplamlar</h3>
+                <p id="dailySales">Satışlar: 0</p>
+                <p id="dailyCosts">Xərclər: 0</p>
+            </div>
         </div>
 
-        <!-- Section to add product -->
+        <!-- Section to add product (at the end of the page) -->
         <div class="form-section" id="product-section">
             <h2>Yeni Məhsul Əlavə Et</h2>
             <form id="productForm">
