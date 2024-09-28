@@ -10,14 +10,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const dailyCosts = document.getElementById('dailyCosts');
 
     // Placeholder for products list - This will be fetched from Google Sheets
-    const products = [];
+    let products = [];
 
     // Placeholder for Google Apps Script URL (Replace with actual URL)
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHUUlVj9a49RhedOCxCrmG4Uqndk3SZ9DMFIgP69DQvBe7rys3yugY6VTcEVyyN14/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzb73ZZnP0kqABnS0N1ybGMhIgw8u1vf8hIFEkxtjG0x9QO3V85AlYnZp9GySy6iL4/exec';
 
     // Set current month by default
     const currentMonth = new Date().toISOString().slice(0, 7);
     monthSelect.value = currentMonth;
+
+    // Set current date by default in the sales form
+    const currentDate = new Date().toISOString().split('T')[0];
+    document.getElementById('tarix').value = currentDate;
 
     // Function to populate product dropdown from available products
     function populateProductDropdown() {
@@ -56,6 +60,40 @@ document.addEventListener('DOMContentLoaded', () => {
         monthlyCosts.textContent = `Xərclər: ${totalCosts}`;
         dailySales.textContent = `Satışlar: ${dailySalesAmount}`;
         dailyCosts.textContent = `Xərclər: ${dailyCostsAmount}`;
+    }
+
+    // Fetch products and sales data from Google Sheets
+    function fetchDataFromGoogleSheet() {
+        // Fetch products from Google Sheets
+        fetch(`${GOOGLE_SCRIPT_URL}?action=getProducts`)
+            .then(response => response.json())
+            .then(data => {
+                products = data;
+                populateProductDropdown(); // Populate product dropdown
+            })
+            .catch(error => console.error('Error fetching product data:', error));
+
+        // Fetch sales data from Google Sheets
+        fetch(`${GOOGLE_SCRIPT_URL}?action=getSales&month=${monthSelect.value}`)
+            .then(response => response.json())
+            .then(data => {
+                salesTableBody.innerHTML = '';
+                data.forEach(row => {
+                    const rowElement = document.createElement('tr');
+                    rowElement.innerHTML = `
+                        <td>${row.tarix}</td>
+                        <td>${row.malAdi}</td>
+                        <td>${row.xerc}</td>
+                        <td>${row.satisQiymeti}</td>
+                        <td>${row.sehifeAdi}</td>
+                    `;
+                    salesTableBody.appendChild(rowElement);
+                });
+
+                // Calculate and display totals
+                calculateTotals(data);
+            })
+            .catch(error => console.error('Error fetching sales data:', error));
     }
 
     // Event listener to handle product form submission
@@ -136,31 +174,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Event listener for month selection
     monthSelect.addEventListener('change', function() {
-        const selectedMonth = monthSelect.value;
-
-        // Fetch filtered data from Google Sheets based on selected month
-        fetch(`${GOOGLE_SCRIPT_URL}?action=getSales&month=${selectedMonth}`)
-            .then(response => response.json())
-            .then(data => {
-                salesTableBody.innerHTML = '';
-                data.forEach(row => {
-                    const rowElement = document.createElement('tr');
-                    rowElement.innerHTML = `
-                        <td>${row.tarix}</td>
-                        <td>${row.malAdi}</td>
-                        <td>${row.xerc}</td>
-                        <td>${row.satisQiymeti}</td>
-                        <td>${row.sehifeAdi}</td>
-                    `;
-                    salesTableBody.appendChild(rowElement);
-                });
-
-                // Calculate and display totals
-                calculateTotals(data);
-            })
-            .catch(error => console.error('Error fetching sales data:', error));
+        fetchDataFromGoogleSheet(); // Fetch data for selected month
     });
 
-    // Load the current month's data on page load
-    monthSelect.dispatchEvent(new Event('change'));
+    // Fetch all data from Google Sheets on page load
+    fetchDataFromGoogleSheet();
 });
