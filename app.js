@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let products = [];
 
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyvbiyZQUI-2b2DkuaeMgu0rMoFgvX2VYZKUjC-f-vYZu3Qb1oaX5DBGvNfl1qMDcw/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJrhFkmuvqF27POE_R7kzPgCH8pdcRYJnVsZP0Z8E6QOZTmvNeJA9ozkIdMeMQZrc/exec';
 
     const currentMonth = new Date().toISOString().slice(0, 7);
     monthSelect.value = currentMonth;
@@ -34,21 +34,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function calculateTotals(data) {
         let totalSales = 0;
         let totalCosts = 0;
+        let totalDiscounts = 0;
         let dailySalesAmount = 0;
         let dailyCostsAmount = 0;
+        let dailyDiscountsAmount = 0;
         const today = new Date().toISOString().split('T')[0];
 
         data.forEach(row => {
             const saleDate = row.tarix;
             const saleAmount = parseFloat(row.satisQiymeti);
             const costAmount = parseFloat(row.xerc);
+            const discountAmount = row.endirim ? parseFloat(row.endirim) : 0;
 
-            totalSales += saleAmount;
+            totalSales += (saleAmount - discountAmount);
             totalCosts += costAmount;
+            totalDiscounts += discountAmount;
 
             if (saleDate === today) {
-                dailySalesAmount += saleAmount;
+                dailySalesAmount += (saleAmount - discountAmount);
                 dailyCostsAmount += costAmount;
+                dailyDiscountsAmount += discountAmount;
             }
         });
 
@@ -83,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <td>${row.malAdi}</td>
                         <td>${row.xerc}</td>
                         <td>${row.satisQiymeti}</td>
+                        <td>${row.endirim || 0}</td>
                         <td>${row.sehifeAdi}</td>
                     `;
                     salesTableBody.appendChild(rowElement);
@@ -129,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const satisQiymeti = selectedProduct.satisQiymeti;
         const xerc = selectedProduct.xerc;
         const sehifeAdi = document.getElementById('sehifeAdi').value;
+        const discount = document.getElementById('discount').value || 0;
 
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -136,6 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <td>${malAdi}</td>
             <td>${xerc}</td>
             <td>${satisQiymeti}</td>
+            <td>${discount}</td>
             <td>${sehifeAdi}</td>
         `;
         salesTableBody.appendChild(row);
@@ -148,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 malAdi,
                 satisQiymeti,
                 xerc,
+                discount,
                 sehifeAdi
             })
         })
@@ -163,3 +172,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fetchDataFromGoogleSheet();
 });
+
