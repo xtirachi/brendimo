@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const salesDataResponse = await salesResponse.json();
             salesData = salesDataResponse;
 
+            // Clear and populate the sales table with fetched sales data
             salesTableBody.innerHTML = '';
             salesData.forEach(row => {
                 const rowElement = document.createElement('tr');
@@ -97,7 +98,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 salesTableBody.appendChild(rowElement);
             });
 
-            calculateTotals(); // Update totals after sales data is loaded
+            // Calculate totals after fetching sales data
+            calculateTotals();
 
         } catch (error) {
             console.error('Error fetching data from Google Sheets:', error);
