@@ -3,12 +3,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const salesForm = document.getElementById('salesForm');
     const malAdiSelect = document.getElementById('malAdiSelect');
     const salesTableBody = document.querySelector('#salesTable tbody');
+    const monthSelect = document.getElementById('monthSelect');
+    const monthlySales = document.getElementById('monthlySales');
+    const monthlyCosts = document.getElementById('monthlyCosts');
+    const dailySales = document.getElementById('dailySales');
+    const dailyCosts = document.getElementById('dailyCosts');
 
     // Placeholder for products list - This will be fetched from Google Sheets
     const products = [];
 
     // Placeholder for Google Apps Script URL (Replace with actual URL)
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzd4idxtI9u6Y2Tv5TbCz4Q1A1wZVKSf8QM_hZnuzAwJ8w3Y1QApwbrkOhP0o3WwCI/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyz4g3wujBVChFjU5LOd6dmXaCaBLqZGQnJ3vYcwlyoRxBSaP1eqN2Hv65bvLBcSGE/exec';
+
+    // Set current month by default
+    const currentMonth = new Date().toISOString().slice(0, 7);
+    monthSelect.value = currentMonth;
 
     // Function to populate product dropdown from available products
     function populateProductDropdown() {
@@ -19,6 +28,34 @@ document.addEventListener('DOMContentLoaded', () => {
             option.textContent = product.name;
             malAdiSelect.appendChild(option);
         });
+    }
+
+    // Function to calculate and display daily and monthly totals
+    function calculateTotals(data) {
+        let totalSales = 0;
+        let totalCosts = 0;
+        let dailySalesAmount = 0;
+        let dailyCostsAmount = 0;
+        const today = new Date().toISOString().split('T')[0];
+
+        data.forEach(row => {
+            const saleDate = row.tarix;
+            const saleAmount = parseFloat(row.satisQiymeti);
+            const costAmount = parseFloat(row.xerc);
+
+            totalSales += saleAmount;
+            totalCosts += costAmount;
+
+            if (saleDate === today) {
+                dailySalesAmount += saleAmount;
+                dailyCostsAmount += costAmount;
+            }
+        });
+
+        monthlySales.textContent = `Satışlar: ${totalSales}`;
+        monthlyCosts.textContent = `Xərclər: ${totalCosts}`;
+        dailySales.textContent = `Satışlar: ${dailySalesAmount}`;
+        dailyCosts.textContent = `Xərclər: ${dailyCostsAmount}`;
     }
 
     // Event listener to handle product form submission
@@ -59,8 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         const tarix = document.getElementById('tarix').value;
         const malAdi = document.getElementById('malAdiSelect').value;
-        const satisMeblegi = document.getElementById('satisMeblegi').value;
-        const gelir = document.getElementById('gelir').value;
+        const selectedProduct = products.find(product => product.name === malAdi);
+        const satisQiymeti = selectedProduct.satisQiymeti;
+        const xerc = selectedProduct.xerc;
         const sehifeAdi = document.getElementById('sehifeAdi').value;
 
         // Add sales data to the table
@@ -68,9 +106,8 @@ document.addEventListener('DOMContentLoaded', () => {
         row.innerHTML = `
             <td>${tarix}</td>
             <td>${malAdi}</td>
-            <td>${satisMeblegi}</td>
-            <td>${satisMeblegi}</td>
-            <td>${gelir}</td>
+            <td>${xerc}</td>
+            <td>${satisQiymeti}</td>
             <td>${sehifeAdi}</td>
         `;
         salesTableBody.appendChild(row);
@@ -82,8 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 action: 'addSale',
                 tarix,
                 malAdi,
-                satisMeblegi,
-                gelir,
+                satisQiymeti,
+                xerc,
                 sehifeAdi
             })
         })
@@ -96,4 +133,34 @@ document.addEventListener('DOMContentLoaded', () => {
         // Clear form
         salesForm.reset();
     });
+
+    // Event listener for month selection
+    monthSelect.addEventListener('change', function() {
+        const selectedMonth = monthSelect.value;
+
+        // Fetch filtered data from Google Sheets based on selected month
+        fetch(`${GOOGLE_SCRIPT_URL}?action=getSales&month=${selectedMonth}`)
+            .then(response => response.json())
+            .then(data => {
+                salesTableBody.innerHTML = '';
+                data.forEach(row => {
+                    const rowElement = document.createElement('tr');
+                    rowElement.innerHTML = `
+                        <td>${row.tarix}</td>
+                        <td>${row.malAdi}</td>
+                        <td>${row.xerc}</td>
+                        <td>${row.satisQiymeti}</td>
+                        <td>${row.sehifeAdi}</td>
+                    `;
+                    salesTableBody.appendChild(rowElement);
+                });
+
+                // Calculate and display totals
+                calculateTotals(data);
+            })
+            .catch(error => console.error('Error fetching sales data:', error));
+    });
+
+    // Load the current month's data on page load
+    monthSelect.dispatchEvent(new Event('change'));
 });
