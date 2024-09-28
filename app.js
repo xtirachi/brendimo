@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const products = [];
 
     // Placeholder for Google Apps Script URL (Replace with actual URL)
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyz4g3wujBVChFjU5LOd6dmXaCaBLqZGQnJ3vYcwlyoRxBSaP1eqN2Hv65bvLBcSGE/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHUUlVj9a49RhedOCxCrmG4Uqndk3SZ9DMFIgP69DQvBe7rys3yugY6VTcEVyyN14/exec';
 
     // Set current month by default
     const currentMonth = new Date().toISOString().slice(0, 7);
