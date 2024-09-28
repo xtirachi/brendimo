@@ -23,7 +23,7 @@
                 <select id="malAdiSelect" name="malAdiSelect" required>
                     <!-- Options will be populated dynamically -->
                 </select>
-                
+
                 <label for="sehifeAdi">Səhifə Adı:</label>
                 <select id="sehifeAdi" name="sehifeAdi" required>
                     <option value="Brendimoaz">Brendimoaz</option>
@@ -31,6 +31,9 @@
                     <option value="İdealhediyyeler">İdealhediyyeler</option>
                     <option value="idealhediyyeler.az">idealhediyyeler.az</option>
                 </select>
+
+                <label for="discount">Endirim (fakultativ):</label>
+                <input type="number" id="discount" name="discount" placeholder="Endirim məbləği (əgər varsa)" step="0.01">
 
                 <button type="submit">Satışı Əlavə Et</button>
             </form>
@@ -49,6 +52,7 @@
                         <th>Malın Adı</th>
                         <th>Xərc</th>
                         <th>Satış Qiyməti</th>
+                        <th>Endirim</th>
                         <th>Səhifə Adı</th>
                     </tr>
                 </thead>
@@ -94,3 +98,4 @@
     <script src="app.js"></script>
 </body>
 </html>
+
