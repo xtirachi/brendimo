@@ -12,15 +12,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const dailyProfit = document.getElementById('dailyProfit');
 
     let products = [];
+    let salesData = [];
 
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxJrhFkmuvqF27POE_R7kzPgCH8pdcRYJnVsZP0Z8E6QOZTmvNeJA9ozkIdMeMQZrc/exec';
 
+    // Set the current month by default in the month selector
     const currentMonth = new Date().toISOString().slice(0, 7);
     monthSelect.value = currentMonth;
 
+    // Set the current date by default in the sales form
     const currentDate = new Date().toISOString().split('T')[0];
     document.getElementById('tarix').value = currentDate;
 
+    // Function to populate the product dropdown
     function populateProductDropdown() {
         malAdiSelect.innerHTML = '';
         products.forEach(product => {
@@ -31,44 +35,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function calculateTotals(data) {
+    // Function to calculate and display totals (sales, costs, profit)
+    function calculateTotals() {
         let totalSales = 0;
         let totalCosts = 0;
-        let totalDiscounts = 0;
         let dailySalesAmount = 0;
         let dailyCostsAmount = 0;
-        let dailyDiscountsAmount = 0;
         const today = new Date().toISOString().split('T')[0];
 
-        data.forEach(row => {
+        salesData.forEach(row => {
             const saleDate = row.tarix;
-            const saleAmount = parseFloat(row.satisQiymeti);
+            const saleAmount = parseFloat(row.satisQiymeti) - parseFloat(row.endirim || 0);
             const costAmount = parseFloat(row.xerc);
-            const discountAmount = row.endirim ? parseFloat(row.endirim) : 0;
 
-            totalSales += (saleAmount - discountAmount);
+            totalSales += saleAmount;
             totalCosts += costAmount;
-            totalDiscounts += discountAmount;
 
             if (saleDate === today) {
-                dailySalesAmount += (saleAmount - discountAmount);
+                dailySalesAmount += saleAmount;
                 dailyCostsAmount += costAmount;
-                dailyDiscountsAmount += discountAmount;
             }
         });
 
         const totalProfit = totalSales - totalCosts;
         const dailyProfitAmount = dailySalesAmount - dailyCostsAmount;
 
-        monthlySales.textContent = `Satışlar: ${totalSales}`;
-        monthlyCosts.textContent = `Xərclər: ${totalCosts}`;
-        monthlyProfit.textContent = `Gəlir: ${totalProfit}`;
-        dailySales.textContent = `Satışlar: ${dailySalesAmount}`;
-        dailyCosts.textContent = `Xərclər: ${dailyCostsAmount}`;
-        dailyProfit.textContent = `Gəlir: ${dailyProfitAmount}`;
+        // Update the totals in the UI
+        monthlySales.textContent = `Satışlar: ${totalSales.toFixed(2)}`;
+        monthlyCosts.textContent = `Xərclər: ${totalCosts.toFixed(2)}`;
+        monthlyProfit.textContent = `Gəlir: ${totalProfit.toFixed(2)}`;
+        dailySales.textContent = `Satışlar: ${dailySalesAmount.toFixed(2)}`;
+        dailyCosts.textContent = `Xərclər: ${dailyCostsAmount.toFixed(2)}`;
+        dailyProfit.textContent = `Gəlir: ${dailyProfitAmount.toFixed(2)}`;
     }
 
+    // Function to fetch data from Google Sheets and update the UI
     function fetchDataFromGoogleSheet() {
+        // Fetch products from Google Sheets
         fetch(`${GOOGLE_SCRIPT_URL}?action=getProducts`)
             .then(response => response.json())
             .then(data => {
@@ -77,11 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => console.error('Error fetching product data:', error));
 
+        // Fetch sales data from Google Sheets for the selected month
         fetch(`${GOOGLE_SCRIPT_URL}?action=getSales&month=${monthSelect.value}`)
             .then(response => response.json())
             .then(data => {
+                salesData = data;
                 salesTableBody.innerHTML = '';
-                data.forEach(row => {
+                salesData.forEach(row => {
                     const rowElement = document.createElement('tr');
                     rowElement.innerHTML = `
                         <td>${row.tarix}</td>
@@ -94,11 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     salesTableBody.appendChild(rowElement);
                 });
 
-                calculateTotals(data);
+                calculateTotals(); // Update totals after sales data is loaded
             })
             .catch(error => console.error('Error fetching sales data:', error));
     }
 
+    // Event listener for the product form submission
     productForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const malAdi = document.getElementById('malAdi').value;
@@ -108,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         products.push({ name: malAdi, xerc, satisQiymeti, miqdar });
 
+        // Send the product data to Google Sheets (App Script)
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             body: JSON.stringify({
@@ -119,14 +126,15 @@ document.addEventListener('DOMContentLoaded', () => {
             })
         })
         .then(response => response.json())
-        .then(data => {
-            populateProductDropdown();
+        .then(() => {
+            populateProductDropdown(); // Refresh product dropdown after adding
         })
         .catch(error => console.error('Error:', error));
 
         productForm.reset();
     });
 
+    // Event listener for the sales form submission
     salesForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const tarix = document.getElementById('tarix').value;
@@ -148,6 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         salesTableBody.appendChild(row);
 
+        // Send the sales data to Google Sheets (App Script)
         fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             body: JSON.stringify({
@@ -161,15 +170,19 @@ document.addEventListener('DOMContentLoaded', () => {
             })
         })
         .then(response => response.json())
+        .then(() => {
+            fetchDataFromGoogleSheet(); // Refresh sales data after adding a sale
+        })
         .catch(error => console.error('Error:', error));
 
         salesForm.reset();
     });
 
+    // Event listener for when the user selects a different month
     monthSelect.addEventListener('change', function() {
-        fetchDataFromGoogleSheet();
+        fetchDataFromGoogleSheet(); // Fetch data for the selected month
     });
 
+    // Fetch all data from Google Sheets when the page is loaded
     fetchDataFromGoogleSheet();
 });
-
