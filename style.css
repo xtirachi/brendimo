@@ -4,6 +4,7 @@ body {
     background-color: #f4f4f9;
     color: #333;
     padding: 20px;
+    margin: 0;
 }
 
 h1 {
@@ -29,6 +30,7 @@ input, select, button {
     margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 button {
@@ -45,6 +47,7 @@ button:hover {
 table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
 
 table, th, td {
@@ -58,4 +61,20 @@ th, td {
 
 th {
     background-color: #f1f1f1;
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    input, select, button {
+        padding: 8px;
+    }
+
+    table, th, td {
+        font-size: 14px;
+        padding: 8px;
+    }
 }
