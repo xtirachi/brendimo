@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const products = [];
 
     // Placeholder for Google Apps Script URL (Replace with actual URL)
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiwaqsioF5lyTJjsmvZvqGioFBn37fUMrl7By4V5UqFPB4fN0g8HyryEcEDpeFYdg/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzd4idxtI9u6Y2Tv5TbCz4Q1A1wZVKSf8QM_hZnuzAwJ8w3Y1QApwbrkOhP0o3WwCI/exec';
 
     // Function to populate product dropdown from available products
     function populateProductDropdown() {
