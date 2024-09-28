@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let products = [];
     let salesData = [];
 
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwPn0DwHkE1gZ-0pmMTpDXcCO4iN1VRAgE3p6LsiHINWcfZd7cd3PziZ7_a0XiaEjQ/exec';
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyfXYx_RA38fJ1Q8NdoO2c6wTSUHrfrJEx8mGZWcWN2v8tpfD7VV64MFnHzav64EuY/exec';
 
     // Set the current month by default in the month selector
     const currentMonth = new Date().toISOString().slice(0, 7);
