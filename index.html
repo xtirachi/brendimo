@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gəlir Hesabatı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Gəlir Hesabatı</h1>
+
+        <!-- Section to add daily sales -->
+        <div class="form-section">
+            <h2>Günlük Satış Əlavə Et</h2>
+            <form id="salesForm">
+                <label for="tarix">Tarix:</label>
+                <input type="date" id="tarix" name="tarix" required>
+                
+                <label for="malAdiSelect">Malın Adı:</label>
+                <select id="malAdiSelect" name="malAdiSelect" required>
+                    <!-- Options will be populated dynamically -->
+                </select>
+
+                <label for="satisMeblegi">Satış Qiyməti:</label>
+                <input type="number" id="satisMeblegi" name="satisMeblegi" required>
+                
+                <label for="gelir">Gəlir:</label>
+                <input type="number" id="gelir" name="gelir" required>
+                
+                <label for="sehifeAdi">Səhifə Adı:</label>
+                <select id="sehifeAdi" name="sehifeAdi" required>
+                    <option value="Brendimoaz">Brendimoaz</option>
+                    <option value="Brendimo.az">Brendimo.az</option>
+                    <option value="İdealhediyyeler">İdealhediyyeler</option>
+                    <option value="idealhediyyeler.az">idealhediyyeler.az</option>
+                </select>
+
+                <button type="submit">Satışı Əlavə Et</button>
+            </form>
+        </div>
+
+        <!-- Section to view sales (Daily/Monthly) -->
+        <div class="table-section">
+            <h2>Aylıq və Günlük Satışlar</h2>
+            <table id="salesTable">
+                <thead>
+                    <tr>
+                        <th>Tarix</th>
+                        <th>Malın Adı</th>
+                        <th>Xərc</th>
+                        <th>Satış Qiyməti</th>
+                        <th>Gəlir</th>
+                        <th>Səhifə Adı</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Sales data will be populated dynamically -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Section to add product -->
+        <div class="form-section" id="product-section">
+            <h2>Yeni Məhsul Əlavə Et</h2>
+            <form id="productForm">
+                <label for="malAdi">Malın Adı:</label>
+                <input type="text" id="malAdi" name="malAdi" required>
+                
+                <label for="xerc">Xərc:</label>
+                <input type="number" id="xerc" name="xerc" required>
+                
+                <label for="satisQiymeti">Satış Qiyməti:</label>
+                <input type="number" id="satisQiymeti" name="satisQiymeti" required>
+                
+                <label for="miqdar">Anbar Miqdarı:</label>
+                <input type="number" id="miqdar" name="miqdar" required>
+                
+                <button type="submit">Məhsulu Əlavə Et</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
