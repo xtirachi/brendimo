@@ -70,72 +70,70 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Function to fetch data from Google Sheets and update the UI
-    function fetchDataFromGoogleSheet() {
-        // Fetch products from Google Sheets
-        fetch(`${GOOGLE_SCRIPT_URL}?action=getProducts`)
-            .then(response => response.json())
-            .then(data => {
-                products = data;
-                populateProductDropdown();
-            })
-            .catch(error => console.error('Error fetching product data:', error));
+    async function fetchDataFromGoogleSheet() {
+        try {
+            // Fetch products from Google Sheets
+            const productsResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=getProducts`);
+            const productsData = await productsResponse.json();
+            products = productsData;
+            populateProductDropdown();
 
-        // Fetch sales data from Google Sheets for the selected month
-        fetch(`${GOOGLE_SCRIPT_URL}?action=getSales&month=${monthSelect.value}`)
-            .then(response => response.json())
-            .then(data => {
-                salesData = data;
-                salesTableBody.innerHTML = '';
-                salesData.forEach(row => {
-                    const rowElement = document.createElement('tr');
-                    rowElement.innerHTML = `
-                        <td>${row.tarix}</td>
-                        <td>${row.malAdi}</td>
-                        <td>${row.xerc}</td>
-                        <td>${row.satisQiymeti}</td>
-                        <td>${row.endirim || 0}</td>
-                        <td>${row.sehifeAdi}</td>
-                    `;
-                    salesTableBody.appendChild(rowElement);
-                });
+            // Fetch sales data from Google Sheets for the selected month
+            const salesResponse = await fetch(`${GOOGLE_SCRIPT_URL}?action=getSales&month=${monthSelect.value}`);
+            const salesDataResponse = await salesResponse.json();
+            salesData = salesDataResponse;
 
-                calculateTotals(); // Update totals after sales data is loaded
-            })
-            .catch(error => console.error('Error fetching sales data:', error));
+            salesTableBody.innerHTML = '';
+            salesData.forEach(row => {
+                const rowElement = document.createElement('tr');
+                rowElement.innerHTML = `
+                    <td>${row.tarix}</td>
+                    <td>${row.malAdi}</td>
+                    <td>${row.xerc}</td>
+                    <td>${row.satisQiymeti}</td>
+                    <td>${row.endirim || 0}</td>
+                    <td>${row.sehifeAdi}</td>
+                `;
+                salesTableBody.appendChild(rowElement);
+            });
+
+            calculateTotals(); // Update totals after sales data is loaded
+
+        } catch (error) {
+            console.error('Error fetching data from Google Sheets:', error);
+        }
     }
 
     // Event listener for the product form submission
-    productForm.addEventListener('submit', function(event) {
+    productForm.addEventListener('submit', async function(event) {
         event.preventDefault();
         const malAdi = document.getElementById('malAdi').value;
         const xerc = document.getElementById('xerc').value;
         const satisQiymeti = document.getElementById('satisQiymeti').value;
         const miqdar = document.getElementById('miqdar').value;
 
-        products.push({ name: malAdi, xerc, satisQiymeti, miqdar });
+        try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'addProduct',
+                    malAdi,
+                    xerc,
+                    satisQiymeti,
+                    miqdar
+                })
+            });
 
-        // Send the product data to Google Sheets (App Script)
-        fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                action: 'addProduct',
-                malAdi,
-                xerc,
-                satisQiymeti,
-                miqdar
-            })
-        })
-        .then(response => response.json())
-        .then(() => {
-            populateProductDropdown(); // Refresh product dropdown after adding
-        })
-        .catch(error => console.error('Error:', error));
+            fetchDataFromGoogleSheet(); // Refresh products data after adding
+        } catch (error) {
+            console.error('Error adding product:', error);
+        }
 
         productForm.reset();
     });
 
     // Event listener for the sales form submission
-    salesForm.addEventListener('submit', function(event) {
+    salesForm.addEventListener('submit', async function(event) {
         event.preventDefault();
         const tarix = document.getElementById('tarix').value;
         const malAdi = document.getElementById('malAdiSelect').value;
@@ -145,43 +143,30 @@ document.addEventListener('DOMContentLoaded', () => {
         const sehifeAdi = document.getElementById('sehifeAdi').value;
         const discount = document.getElementById('discount').value || 0;
 
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${tarix}</td>
-            <td>${malAdi}</td>
-            <td>${xerc}</td>
-            <td>${satisQiymeti}</td>
-            <td>${discount}</td>
-            <td>${sehifeAdi}</td>
-        `;
-        salesTableBody.appendChild(row);
+        try {
+            await fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                body: JSON.stringify({
+                    action: 'addSale',
+                    tarix,
+                    malAdi,
+                    satisQiymeti,
+                    xerc,
+                    discount,
+                    sehifeAdi
+                })
+            });
 
-        // Send the sales data to Google Sheets (App Script)
-        fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                action: 'addSale',
-                tarix,
-                malAdi,
-                satisQiymeti,
-                xerc,
-                discount,
-                sehifeAdi
-            })
-        })
-        .then(response => response.json())
-        .then(() => {
             fetchDataFromGoogleSheet(); // Refresh sales data after adding a sale
-        })
-        .catch(error => console.error('Error:', error));
+        } catch (error) {
+            console.error('Error adding sale:', error);
+        }
 
         salesForm.reset();
     });
 
     // Event listener for when the user selects a different month
-    monthSelect.addEventListener('change', function() {
-        fetchDataFromGoogleSheet(); // Fetch data for the selected month
-    });
+    monthSelect.addEventListener('change', fetchDataFromGoogleSheet);
 
     // Fetch all data from Google Sheets when the page is loaded
     fetchDataFromGoogleSheet();
