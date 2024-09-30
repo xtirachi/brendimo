@@ -1,29 +1,21 @@
-// Fetch sales data for the selected date range
+// Fetch sales data for the selected date range and display in the table
 document.getElementById('salesSummaryForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
-    
-// Clear table and reset totals before fetching new data
-    const salesTableBody = document.getElementById('salesTable').querySelector('tbody');
-    salesTableBody.innerHTML = '';
-    document.getElementById('totalSales').innerText = "0";
-    document.getElementById('totalCost').innerText = "0";
-    document.getElementById('totalProfit').innerText = "0";
-    
-    fetch(`https://script.google.com/macros/s/AKfycbyd3LN0TAor3EDORWdloZhgbl1V5FFqWNpMibqY_kNRHWfulqK8yhzjg1XpjVDM1Q/exec?action=getSales&startDate=${startDate}&endDate=${endDate}`)
+
+    fetch(`https://script.google.com/macros/s/AKfycbyd3LN0TAor3EDORWdloZhgbl1V5FFqWNpMibqY_kNRHWfulqK8yhzjg1XpjVDM1Q/exec?action=getSalesInRange&startDate=${startDate}&endDate=${endDate}`)
         .then(response => response.json())
         .then(data => {
-            if (!data.sales || data.sales.length === 0) {
-                alert('Bu tarix aralığında satış yoxdur!');
-                return;
-            }
+            const salesTableBody = document.getElementById('salesTable').querySelector('tbody');
+            salesTableBody.innerHTML = '';  // Clear previous results
 
             let totalSales = 0;
             let totalCost = 0;
             let totalProfit = 0;
 
+            // Populate the table with sales data
             data.sales.forEach(sale => {
                 const row = document.createElement('tr');
 
@@ -40,19 +32,15 @@ document.getElementById('salesSummaryForm').addEventListener('submit', function 
                 salesTableBody.appendChild(row);
 
                 // Update totals
-                totalSales += parseFloat(sale.salesPrice);
                 totalCost += parseFloat(sale.cost);
+                totalSales += parseFloat(sale.salesPrice);
                 totalProfit += parseFloat(sale.profit);
             });
 
-            // Display totals
-            document.getElementById('totalSales').innerText = totalSales.toFixed(2);
+            // Update the total row in the table
             document.getElementById('totalCost').innerText = totalCost.toFixed(2);
+            document.getElementById('totalSales').innerText = totalSales.toFixed(2);
             document.getElementById('totalProfit').innerText = totalProfit.toFixed(2);
-      })
-        .catch(err => {
-            alert('Satış məlumatlarını almaq mümkün olmadı. Xahiş edirik, yenidən cəhd edin.');
-            console.error(err);
         });
 });
 
