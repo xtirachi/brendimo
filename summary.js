@@ -5,7 +5,7 @@ document.getElementById('salesSummaryForm').addEventListener('submit', function 
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
 
-    fetch(`https://script.google.com/macros/s/<AKfycbyd3LN0TAor3EDORWdloZhgbl1V5FFqWNpMibqY_kNRHWfulqK8yhzjg1XpjVDM1Q>/exec?action=getSales&startDate=${startDate}&endDate=${endDate}`)
+    fetch(`https://script.google.com/macros/s/AKfycbyd3LN0TAor3EDORWdloZhgbl1V5FFqWNpMibqY_kNRHWfulqK8yhzjg1XpjVDM1Q/exec?action=getSales&startDate=${startDate}&endDate=${endDate}`)
         .then(response => response.json())
         .then(data => {
             const salesTableBody = document.getElementById('salesTable').querySelector('tbody');
