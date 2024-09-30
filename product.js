@@ -10,24 +10,29 @@ document.getElementById('productForm').addEventListener('submit', async function
     };
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwhgQs5TUbxA_drzSOVZwR_MU11LGfCQV7ZGMG5cMwBwynvwnFq9bKs-M5E9sjd5w/exec?action=addProduct', {
+        // Check the productData structure before sending
+        console.log("Sending product data:", productData);
+
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwVWYK8YY7zEqCD_7Ajm6ObALQXgJPirUR-XXG9Kt8FaNS9Er2igN82eSpv7Fjsxrc/exec?action=addProduct', {
             method: 'POST',
-            body: JSON.stringify(productData),  // Ensure it's JSON formatted
+            body: JSON.stringify(productData),
             headers: {
                 'Content-Type': 'application/json'
             }
         });
 
         const result = await response.json();
+        console.log("Response from server:", result);
 
         if (result.status === 'success') {
             alert('Məhsul uğurla əlavə edildi!');
-            document.getElementById('productForm').reset();  // Reset the form
+            document.getElementById('productForm').reset();
         } else {
-            alert(`Xəta baş verdi! ${result.message}`);  // Show specific error message
+            console.error('Server returned an error:', result.message);
+            alert('Xəta baş verdi: ' + result.message);  // Show the detailed server error
         }
     } catch (error) {
-        console.error('Error:', error);
-        alert('Xəta baş verdi!');
+        console.error('Error in fetch request:', error);
+        alert('Xəta baş verdi! Fetch error: ' + error.message);
     }
 });
