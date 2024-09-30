@@ -4,12 +4,21 @@ document.getElementById('salesSummaryForm').addEventListener('submit', function 
 
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
-
+    
+// Clear table and reset totals before fetching new data
+    const salesTableBody = document.getElementById('salesTable').querySelector('tbody');
+    salesTableBody.innerHTML = '';
+    document.getElementById('totalSales').innerText = "0";
+    document.getElementById('totalCost').innerText = "0";
+    document.getElementById('totalProfit').innerText = "0";
+    
     fetch(`https://script.google.com/macros/s/AKfycbyd3LN0TAor3EDORWdloZhgbl1V5FFqWNpMibqY_kNRHWfulqK8yhzjg1XpjVDM1Q/exec?action=getSales&startDate=${startDate}&endDate=${endDate}`)
         .then(response => response.json())
         .then(data => {
-            const salesTableBody = document.getElementById('salesTable').querySelector('tbody');
-            salesTableBody.innerHTML = '';  // Clear previous results
+            if (!data.sales || data.sales.length === 0) {
+                alert('Bu tarix aralığında satış yoxdur!');
+                return;
+            }
 
             let totalSales = 0;
             let totalCost = 0;
@@ -40,6 +49,10 @@ document.getElementById('salesSummaryForm').addEventListener('submit', function 
             document.getElementById('totalSales').innerText = totalSales.toFixed(2);
             document.getElementById('totalCost').innerText = totalCost.toFixed(2);
             document.getElementById('totalProfit').innerText = totalProfit.toFixed(2);
+      })
+        .catch(err => {
+            alert('Satış məlumatlarını almaq mümkün olmadı. Xahiş edirik, yenidən cəhd edin.');
+            console.error(err);
         });
 });
 
