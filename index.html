@@ -13,7 +13,7 @@
     <h1>Günlük Satış Əlavə Et</h1>
     <form id="dailySalesForm">
       <label for="tarix">Tarix:</label>
-      <input type="date" id="tarix" name="tarix" value="" required>
+      <input type="date" id="tarix" name="tarix" required>
       
       <label for="malinAdi">Malın Adı:</label>
       <select id="malinAdi" name="malinAdi" required></select>
@@ -30,10 +30,10 @@
       <input type="number" id="endirim" name="endirim">
       
       <label for="xerc">Xərc:</label>
-      <input type="text" id="xerc" name="xerc" readonly>
+      <input type="number" id="xerc" name="xerc" required>
       
       <label for="satisQiymeti">Satış Qiyməti:</label>
-      <input type="text" id="satisQiymeti" name="satisQiymeti" readonly>
+      <input type="number" id="satisQiymeti" name="satisQiymeti" required>
       
       <button type="submit">Satış Əlavə Et</button>
     </form>
