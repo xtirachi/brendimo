@@ -1,5 +1,5 @@
 // Submit the new product data to Google Sheets
-document.getElementById('productForm').addEventListener('submit', function (e) {
+document.getElementById('productForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
     const formData = new FormData(this);
