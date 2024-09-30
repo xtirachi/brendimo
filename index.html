@@ -3,78 +3,115 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Günlük Satışlar</title>
+  <title>İncome Statement App</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
-  <!-- Günlük Satış Əlavə Et Section -->
-  <section id="add-sales">
-    <h2>Günlük Satış Əlavə Et</h2>
-    <form id="sales-form">
-      <label for="sale-date">Tarix:</label>
-      <input type="date" id="sale-date" name="sale-date" value="" required>
-
-      <label for="product">Məhsul Adı:</label>
-      <select id="product-dropdown" name="product-dropdown" required></select>
-
-      <label for="source">Sehife Adı (Source):</label>
-      <select id="source-dropdown" name="source-dropdown" required>
-        <option value="Brendimo">Brendimo</option>
+  <!-- Page 1: Günlük Satış Əlavə Et (Daily Sales Addition) -->
+  <div id="dailySales" class="page">
+    <h1>Günlük Satış Əlavə Et</h1>
+    <form id="dailySalesForm">
+      <label for="tarix">Tarix:</label>
+      <input type="date" id="tarix" name="tarix" value="" required>
+      
+      <label for="malinAdi">Malın Adı:</label>
+      <select id="malinAdi" name="malinAdi" required></select>
+      
+      <label for="sehifeAdi">Səhifə Adı:</label>
+      <select id="sehifeAdi" name="sehifeAdi" required>
+        <option value="Brendimoaz">Brendimoaz</option>
         <option value="Brendimo.az">Brendimo.az</option>
-        <option value="Idealhediyye">Idealhediyye</option>
+        <option value="İdealhediyyeler">İdealhediyyeler</option>
         <option value="Idealhediyye.az">Idealhediyye.az</option>
       </select>
-
-      <label for="discount">Endirim (optional):</label>
-      <input type="number" id="discount" name="discount" min="0" step="0.01">
-
+      
+      <label for="endirim">Endirim (AZN):</label>
+      <input type="number" id="endirim" name="endirim">
+      
+      <label for="xerc">Xərc:</label>
+      <input type="text" id="xerc" name="xerc" readonly>
+      
+      <label for="satisQiymeti">Satış Qiyməti:</label>
+      <input type="text" id="satisQiymeti" name="satisQiymeti" readonly>
+      
       <button type="submit">Satış Əlavə Et</button>
     </form>
-  </section>
+    
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+      <button onclick="navigateTo('salesSummary')">Aylıq və Günlük Satışlar</button>
+      <button onclick="navigateTo('addProduct')">Yeni Məhsul Əlavə Et</button>
+    </div>
+  </div>
 
-  <!-- Aylıq və Günlük Satışlar Section -->
-  <section id="sales-overview">
-    <h2>Aylıq və Günlük Satışlar</h2>
-    <label for="date-range">Tarix Aralığı Seç:</label>
-    <input type="date" id="start-date" name="start-date">
-    <input type="date" id="end-date" name="end-date">
-    <button id="filter-sales">Satışları Göstər</button>
-
-    <table id="sales-table">
+  <!-- Page 2: Aylıq və Günlük Satışlar (Monthly and Daily Sales Summary) -->
+  <div id="salesSummary" class="page" style="display:none;">
+    <h1>Aylıq və Günlük Satışlar</h1>
+    <form id="summaryForm">
+      <label for="startDate">Başlanğıc Tarix:</label>
+      <input type="date" id="startDate" name="startDate" value="">
+      
+      <label for="endDate">Son Tarix:</label>
+      <input type="date" id="endDate" name="endDate" value="">
+      
+      <button type="submit">Satışları Göstər</button>
+    </form>
+    
+    <!-- Sales Table -->
+    <table id="salesTable">
       <thead>
         <tr>
           <th>Tarix</th>
-          <th>Məhsul Adı</th>
+          <th>Malın Adı</th>
           <th>Xərc</th>
           <th>Satış Qiyməti</th>
-          <th>Səhifə Adı</th>
           <th>Endirim</th>
+          <th>Səhifə Adı</th>
+          <th>Gəlir</th>
         </tr>
       </thead>
       <tbody></tbody>
     </table>
-  </section>
 
-  <!-- Yeni Məhsul Əlavə Et Section -->
-  <section id="add-product">
-    <h2>Yeni Məhsul Əlavə Et</h2>
-    <form id="product-form">
-      <label for="product-name">Məhsul Adı:</label>
-      <input type="text" id="product-name" name="product-name" required>
+    <div class="totals">
+      <p>Ümumi Satışlar: <span id="totalSales"></span></p>
+      <p>Ümumi Xərc: <span id="totalCosts"></span></p>
+      <p>Ümumi Gəlir: <span id="totalProfit"></span></p>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+      <button onclick="navigateTo('dailySales')">Günlük Satış Əlavə Et</button>
+      <button onclick="navigateTo('addProduct')">Yeni Məhsul Əlavə Et</button>
+    </div>
+  </div>
 
-      <label for="cost">Xərc:</label>
-      <input type="number" id="cost" name="cost" min="0" required>
-
-      <label for="sales-price">Satış Qiyməti:</label>
-      <input type="number" id="sales-price" name="sales-price" min="0" required>
-
-      <label for="stock">Anbar Miqdarı:</label>
-      <input type="number" id="stock" name="stock" min="0" required>
-
+  <!-- Page 3: Yeni Məhsul Əlavə Et (Add New Product) -->
+  <div id="addProduct" class="page" style="display:none;">
+    <h1>Yeni Məhsul Əlavə Et</h1>
+    <form id="addProductForm">
+      <label for="productName">Malın Adı:</label>
+      <input type="text" id="productName" name="productName" required>
+      
+      <label for="productCost">Xərc:</label>
+      <input type="number" id="productCost" name="productCost" required>
+      
+      <label for="salesPrice">Satış Qiyməti:</label>
+      <input type="number" id="salesPrice" name="salesPrice" required>
+      
+      <label for="stockQty">Anbar Miqdarı:</label>
+      <input type="number" id="stockQty" name="stockQty" required>
+      
       <button type="submit">Məhsul Əlavə Et</button>
     </form>
-  </section>
+    
+    <!-- Navigation Buttons -->
+    <div class="nav-buttons">
+      <button onclick="navigateTo('dailySales')">Günlük Satış Əlavə Et</button>
+      <button onclick="navigateTo('salesSummary')">Aylıq və Günlük Satışlar</button>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
