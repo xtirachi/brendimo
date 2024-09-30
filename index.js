@@ -3,7 +3,7 @@ document.getElementById('tarix').value = new Date().toISOString().split('T')[0];
 
 // Fetch product data from Google Sheets
 function loadProducts() {
-    fetch('https://script.google.com/macros/s/AKfycbyd3LN0TAor3EDORWdloZhgbl1V5FFqWNpMibqY_kNRHWfulqK8yhzjg1XpjVDM1Q/exec?action=getProducts')
+    fetch('https://script.google.com/macros/s/AKfycbxjjH5hZYsgMAaMlAIiX_lXJyTEOs3XKc71YdRuZhFbutEWRY083_ugfNXP2o-9ECo/exec?action=getProducts')
         .then(response => response.json())
         .then(data => {
             const productDropdown = document.getElementById('malAdi');
@@ -19,7 +19,7 @@ function loadProducts() {
 // When a product is selected, fetch the cost and sales price
 document.getElementById('malAdi').addEventListener('change', function () {
     const selectedProduct = this.value;
-    fetch(`https://script.google.com/macros/s/AKfycbyd3LN0TAor3EDORWdloZhgbl1V5FFqWNpMibqY_kNRHWfulqK8yhzjg1XpjVDM1Q/exec?action=getProductDetails&productName=${selectedProduct}`)
+    fetch(`https://script.google.com/macros/s/AKfycbxjjH5hZYsgMAaMlAIiX_lXJyTEOs3XKc71YdRuZhFbutEWRY083_ugfNXP2o-9ECo/exec?action=getProductDetails&productName=${selectedProduct}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('xerc').value = data.cost;
@@ -41,7 +41,7 @@ document.getElementById('salesForm').addEventListener('submit', function (e) {
         satisQiymeti: formData.get('satisQiymeti')
     };
 
-    fetch('https://script.google.com/macros/s/AKfycbyd3LN0TAor3EDORWdloZhgbl1V5FFqWNpMibqY_kNRHWfulqK8yhzjg1XpjVDM1Q/exec?action=addSale', {
+    fetch('https://script.google.com/macros/s/AKfycbxjjH5hZYsgMAaMlAIiX_lXJyTEOs3XKc71YdRuZhFbutEWRY083_ugfNXP2o-9ECo/exec?action=addSale', {
         method: 'POST',
         body: JSON.stringify(salesData)
     })
