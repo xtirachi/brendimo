@@ -11,7 +11,7 @@ document.getElementById('productForm').addEventListener('submit', function (e) {
     };
 
     // Send product data to Google Apps Script
-    fetch('https://script.google.com/macros/s/AKfycbxjjH5hZYsgMAaMlAIiX_lXJyTEOs3XKc71YdRuZhFbutEWRY083_ugfNXP2o-9ECo/exec?action=addProduct', {
+    fetch('https://script.google.com/macros/s/AKfycbyVgBbD8KejFxWblQmBVqZR5IA15NoQgv5g707GjIgo0epORO8AxTYn2hvdK6zPA34/exec?action=addProduct', {
         method: 'POST',
         body: JSON.stringify(productData),
         headers: {
