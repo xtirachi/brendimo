@@ -10,7 +10,7 @@ document.getElementById('productForm').addEventListener('submit', function (e) {
         anbarMiqdari: formData.get('anbarMiqdari')
     };
 
-    fetch('https://script.google.com/macros/s/AKfycbyd3LN0TAor3EDORWdloZhgbl1V5FFqWNpMibqY_kNRHWfulqK8yhzjg1XpjVDM1Q/exec?action=addProduct', {
+    fetch('https://script.google.com/macros/s/AKfycbxjjH5hZYsgMAaMlAIiX_lXJyTEOs3XKc71YdRuZhFbutEWRY083_ugfNXP2o-9ECo/exec?action=addProduct', {
         method: 'POST',
         body: JSON.stringify(productData)
     })
