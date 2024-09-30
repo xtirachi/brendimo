@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aylıq və Günlük Satışlar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Aylıq və Günlük Satışlar</h1>
+
+    <form id="salesSummaryForm">
+        <label for="startDate">Başlanğıc Tarixi:</label>
+        <input type="date" id="startDate" name="startDate" required>
+
+        <label for="endDate">Bitiş Tarixi:</label>
+        <input type="date" id="endDate" name="endDate" required>
+
+        <button type="submit">Satışları Göstər</button>
+    </form>
+
+    <table id="salesTable">
+        <thead>
+            <tr>
+                <th>Tarix</th>
+                <th>Malın Adı</th>
+                <th>Xərc</th>
+                <th>Satış Qiyməti</th>
+                <th>Endirim</th>
+                <th>Səhifə Adı</th>
+                <th>Gəlir</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Dynamic sales rows will be added here -->
+        </tbody>
+    </table>
+
+    <div id="totals">
+        <p>Ümumi Satış: <span id="totalSales">0</span> AZN</p>
+        <p>Ümumi Xərc: <span id="totalCost">0</span> AZN</p>
+        <p>Ümumi Gəlir: <span id="totalProfit">0</span> AZN</p>
+    </div>
+
+    <div class="navigation">
+        <button onclick="navigate('index.html')">Günlük Satış Əlavə Et</button>
+        <button onclick="navigate('product.html')">Yeni Məhsul Əlavə Et</button>
+    </div>
+
+    <script src="summary.js"></script>
+</body>
+</html>
