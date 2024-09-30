@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   loadProducts();
 });
 
+
 // Fetch product names from Google Sheets
 function loadProducts() {
   fetch(GET_PRODUCTS_URL)
