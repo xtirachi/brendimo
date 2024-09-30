@@ -11,10 +11,10 @@
 
     <form id="salesSummaryForm">
         <label for="startDate">Başlanğıc Tarixi:</label>
-        <input type="date" id="startDate" name="startDate" required>
+        <input type="date" id="startDate" required>
 
         <label for="endDate">Bitiş Tarixi:</label>
-        <input type="date" id="endDate" name="endDate" required>
+        <input type="date" id="endDate" required>
 
         <button type="submit">Satışları Göstər</button>
     </form>
@@ -32,15 +32,19 @@
             </tr>
         </thead>
         <tbody>
-            <!-- Dynamic sales rows will be added here -->
+            <!-- Sales data will be dynamically added here -->
         </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="2"><strong>Cəmi</strong></td>
+                <td id="totalCost">0</td>
+                <td id="totalSales">0</td>
+                <td></td>
+                <td></td>
+                <td id="totalProfit">0</td>
+            </tr>
+        </tfoot>
     </table>
-
-    <div id="totals">
-        <p>Ümumi Satış: <span id="totalSales">0</span> AZN</p>
-        <p>Ümumi Xərc: <span id="totalCost">0</span> AZN</p>
-        <p>Ümumi Gəlir: <span id="totalProfit">0</span> AZN</p>
-    </div>
 
     <div class="navigation">
         <button onclick="navigate('index.html')">Günlük Satış Əlavə Et</button>
