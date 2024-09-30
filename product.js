@@ -10,7 +10,7 @@ document.getElementById('productForm').addEventListener('submit', async function
     };
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwUzqRKH2oe7aRfcQFbZk9G8IdZTZ9TUl0aE1px4JxiENIOaldzgg6OtutcIVKakvA/exec?action=addProduct', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwhgQs5TUbxA_drzSOVZwR_MU11LGfCQV7ZGMG5cMwBwynvwnFq9bKs-M5E9sjd5w/exec?action=addProduct', {
             method: 'POST',
             body: JSON.stringify(productData),  // Ensure it's JSON formatted
             headers: {
