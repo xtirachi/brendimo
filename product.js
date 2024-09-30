@@ -16,6 +16,7 @@ document.getElementById('productForm').addEventListener('submit', function (e) {
     })
     .then(response => response.json())
     .then(data => {
+         console.log(data);  // <-- Add this line to check response
         alert('Məhsul uğurla əlavə edildi!');
         // Reset form
         document.getElementById('productForm').reset();
