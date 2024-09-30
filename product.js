@@ -10,27 +10,27 @@ document.getElementById('productForm').addEventListener('submit', async function
         anbarMiqdari: formData.get('anbarMiqdari')
     };
 
-    // Send product data to Google Apps Script
-    fetch('https://script.google.com/macros/s/AKfycbyVgBbD8KejFxWblQmBVqZR5IA15NoQgv5g707GjIgo0epORO8AxTYn2hvdK6zPA34/exec?action=addProduct', {
-        method: 'POST',
-        body: JSON.stringify(productData),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'success') {
+    try {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwsSdY5BztAzoO0z4Ex9lNPSu5IIxTZ1YNOeLwvuUYtR-sIFNd0CGdGzLRyh8iUYCM/exec?action=addProduct', {
+            method: 'POST',
+            body: JSON.stringify(productData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
             alert('Məhsul uğurla əlavə edildi!');
             document.getElementById('productForm').reset();  // Reset the form
         } else {
             alert('Xəta baş verdi! Məhsul əlavə edilə bilmədi.');
         }
-    })
-    .catch(error => {
+    } catch (error) {
         console.error('Error:', error);
         alert('Xəta baş verdi!');
-    });
+    }
 });
 
 // Navigation function
