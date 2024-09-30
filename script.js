@@ -5,10 +5,10 @@ function navigateTo(pageId) {
 }
 
 // Google Apps Script URLs
-const ADD_SALES_URL = 'https://script.google.com/macros/s/AKfycbxxtcT_jBVq0Gq8PpznZfmbEwtsGR_iMKUce5Mf82Kz8vTAtekdsYHbX1khR-LhWw/exec?action=addSales'; // ADD YOUR SCRIPT ID
-const GET_PRODUCTS_URL = 'https://script.google.com/macros/s/AKfycbxxtcT_jBVq0Gq8PpznZfmbEwtsGR_iMKUce5Mf82Kz8vTAtekdsYHbX1khR-LhWw/exec?action=getProducts'; // ADD YOUR SCRIPT ID
-const ADD_PRODUCT_URL = 'https://script.google.com/macros/s/AKfycbxxtcT_jBVq0Gq8PpznZfmbEwtsGR_iMKUce5Mf82Kz8vTAtekdsYHbX1khR-LhWw/exec?action=addProduct'; // ADD YOUR SCRIPT ID
-const GET_SALES_URL = 'https://script.google.com/macros/s/AKfycbxxtcT_jBVq0Gq8PpznZfmbEwtsGR_iMKUce5Mf82Kz8vTAtekdsYHbX1khR-LhWw/exec?action=getSales'; // ADD YOUR SCRIPT ID
+const ADD_SALES_URL = 'https://script.google.com/macros/s/AKfycbyZCfhouGGaAWohl9j0YdfiHJvFc46sw8DISgKRXMucDGY8c8NuM-EVlFgB8LD7HsE/exec?action=addSales'; // ADD YOUR SCRIPT ID
+const GET_PRODUCTS_URL = 'https://script.google.com/macros/s/AKfycbyZCfhouGGaAWohl9j0YdfiHJvFc46sw8DISgKRXMucDGY8c8NuM-EVlFgB8LD7HsE/exec?action=getProducts'; // ADD YOUR SCRIPT ID
+const ADD_PRODUCT_URL = 'https://script.google.com/macros/s/AKfycbyZCfhouGGaAWohl9j0YdfiHJvFc46sw8DISgKRXMucDGY8c8NuM-EVlFgB8LD7HsE/exec?action=addProduct'; // ADD YOUR SCRIPT ID
+const GET_SALES_URL = 'https://script.google.com/macros/s/AKfycbyZCfhouGGaAWohl9j0YdfiHJvFc46sw8DISgKRXMucDGY8c8NuM-EVlFgB8LD7HsE/exec?action=getSales'; // ADD YOUR SCRIPT ID
 
 // Load product names into dropdown dynamically
 document.addEventListener('DOMContentLoaded', () => {
