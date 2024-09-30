@@ -1,4 +1,3 @@
-// Submit the new product data to Google Sheets
 document.getElementById('productForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -11,9 +10,9 @@ document.getElementById('productForm').addEventListener('submit', async function
     };
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbwsSdY5BztAzoO0z4Ex9lNPSu5IIxTZ1YNOeLwvuUYtR-sIFNd0CGdGzLRyh8iUYCM/exec?action=addProduct', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbwUzqRKH2oe7aRfcQFbZk9G8IdZTZ9TUl0aE1px4JxiENIOaldzgg6OtutcIVKakvA/exec?action=addProduct', {
             method: 'POST',
-            body: JSON.stringify(productData),
+            body: JSON.stringify(productData),  // Ensure it's JSON formatted
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -25,15 +24,10 @@ document.getElementById('productForm').addEventListener('submit', async function
             alert('Məhsul uğurla əlavə edildi!');
             document.getElementById('productForm').reset();  // Reset the form
         } else {
-            alert('Xəta baş verdi! Məhsul əlavə edilə bilmədi.');
+            alert(`Xəta baş verdi! ${result.message}`);  // Show specific error message
         }
     } catch (error) {
         console.error('Error:', error);
         alert('Xəta baş verdi!');
     }
 });
-
-// Navigation function
-function navigate(page) {
-    window.location.href = page;
-}
