@@ -5,7 +5,7 @@ let productList = [];
 
 // Fetch product data from Google Sheets
 function loadProducts() {
-    fetch('https://script.google.com/macros/s/AKfycbyNQJTe-gDrwCs2NDnQHGkjZe8UsO5TLX-FDI3yETXfmr4I9rzauw0XZEVaesDiaA/exec?action=getProducts')
+    fetch('https://script.google.com/macros/s/AKfycbxbS0Z_YUAsvdSaHs1StXi2KNsGJT8fdiC650tTK8ZSKycLsWvVX-bt6VMnQr0Rhos/exec?action=getProducts')
         .then(response => response.json())
         .then(data => {
             productList = data.products;  // Save the product list for search functionality
@@ -28,7 +28,7 @@ function populateProductDropdown(products) {
 // When a product is selected, fetch the cost, sales price, and stock left
 document.getElementById('malAdi').addEventListener('change', function () {
     const selectedProduct = this.value;
-    fetch(`https://script.google.com/macros/s/AKfycbyNQJTe-gDrwCs2NDnQHGkjZe8UsO5TLX-FDI3yETXfmr4I9rzauw0XZEVaesDiaA/exec?action=getProductDetails&productName=${selectedProduct}`)
+    fetch(`https://script.google.com/macros/s/AKfycbxbS0Z_YUAsvdSaHs1StXi2KNsGJT8fdiC650tTK8ZSKycLsWvVX-bt6VMnQr0Rhos/exec?action=getProductDetails&productName=${selectedProduct}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('xerc').value = data.cost;
@@ -52,7 +52,7 @@ document.getElementById('salesForm').addEventListener('submit', function (e) {
         anbarQaligi: formData.get('anbarQaligi')
     };
 
-    fetch('https://script.google.com/macros/s/AKfycbyNQJTe-gDrwCs2NDnQHGkjZe8UsO5TLX-FDI3yETXfmr4I9rzauw0XZEVaesDiaA/exec?action=addSaleAndUpdateStock', {
+    fetch('https://script.google.com/macros/s/AKfycbxbS0Z_YUAsvdSaHs1StXi2KNsGJT8fdiC650tTK8ZSKycLsWvVX-bt6VMnQr0Rhos/exec?action=addSaleAndUpdateStock', {
         method: 'POST',
         body: JSON.stringify(salesData)
     })
