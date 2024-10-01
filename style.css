@@ -21,6 +21,12 @@ h1 {
     text-align: center;
 }
 
+h2, h3 {
+    font-size: 20px;
+    margin-top: 20px;
+    color: #007bff;
+}
+
 form {
     background: white;
     padding: 20px;
@@ -100,7 +106,26 @@ button:hover {
     background-color: #5a6268;
 }
 
-/* Mobile Responsive Styles */
+/* Summary Section */
+#summaryResults {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+#summaryResults p {
+    font-size: 16px;
+    margin: 10px 0;
+}
+
+#summaryResults strong {
+    color: #007bff;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     body {
         padding: 10px;
@@ -108,6 +133,10 @@ button:hover {
 
     h1 {
         font-size: 22px;
+    }
+
+    h2, h3 {
+        font-size: 18px;
     }
 
     form {
@@ -131,6 +160,15 @@ button:hover {
     .navigation button {
         font-size: 14px;
         padding: 8px 16px;
+    }
+
+    #summaryResults {
+        padding: 15px;
+        max-width: 100%;
+    }
+
+    #summaryResults p {
+        font-size: 14px;
     }
 }
 
@@ -160,6 +198,14 @@ button:hover {
     .navigation button {
         font-size: 12px;
         padding: 8px 14px;
+    }
+
+    #summaryResults {
+        padding: 10px;
+    }
+
+    #summaryResults p {
+        font-size: 12px;
     }
 }
 
