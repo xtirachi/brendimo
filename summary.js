@@ -10,7 +10,7 @@ document.getElementById('summaryForm').addEventListener('submit', function (e) {
     }
 
     // Fetch the sales summary from Google Sheets via Google Apps Script
-    fetch(`https://script.google.com/macros/s/AKfycby2edjXQ8-trpxQzmuDktYwGWkWKLeYvmThZcPGO1h2KzOHknBPKYx0Ih2ie5LRuVg/exec?action=getSalesSummary&startDate=${startDate}&endDate=${endDate}`)
+    fetch(`https://script.google.com/macros/s/AKfycbz6vHnmWTELNxornOPhCpyMuYXzG1By37EGzOKgUWvCsUR7LLLRLULR_LpLCYh2Jw/exec?action=getSalesSummary&startDate=${startDate}&endDate=${endDate}`)
         .then(response => response.json())
         .then(data => {
             // Populate the results
