@@ -1,11 +1,8 @@
-// Load the current date by default
-document.getElementById('tarix').value = new Date().toISOString().split('T')[0];
-
 let productList = [];
 
 // Fetch product data from Google Sheets and remove blanks and duplicates
 function loadProducts() {
-    fetch('https://script.google.com/macros/s/AKfycbxM5rvin3HnEIkbS4CwtThj_LRgnEdVkI2U_9Q992xT8oj3JXIa-tU0FoxJrvWy9V4/exec?action=getProducts')
+    fetch('https://script.google.com/macros/s/AKfycbx8KWzvg6BvUdFamHRQjGBmp9Sw9TN3E0XibslKEGS4HRD95ojkznhExC4icEBbLDY/exec?action=getProducts')
         .then(response => response.json())
         .then(data => {
             productList = [...new Set(data.products.filter(product => product.name.trim() !== ""))];  // Remove duplicates and blanks
@@ -28,26 +25,10 @@ function populateProductDropdown(products) {
     });
 }
 
-// Search functionality for products with debouncing
-let searchTimeout;
-document.getElementById('productSearch').addEventListener('input', function () {
-    const searchTerm = this.value.toLowerCase();
-
-    if (searchTimeout) {
-        clearTimeout(searchTimeout);  // Clear previous timeout
-    }
-
-    // Debounce search: wait 300ms after the last keystroke to perform search
-    searchTimeout = setTimeout(() => {
-        const filteredProducts = productList.filter(product => product.name.toLowerCase().includes(searchTerm));
-        populateProductDropdown(filteredProducts);
-    }, 300);
-});
-
 // When a product is selected, fetch the cost, sales price, and stock left
 document.getElementById('malAdi').addEventListener('change', function () {
     const selectedProduct = this.value;
-    fetch(`https://script.google.com/macros/s/AKfycbxM5rvin3HnEIkbS4CwtThj_LRgnEdVkI2U_9Q992xT8oj3JXIa-tU0FoxJrvWy9V4/exec?action=getProductDetails&productName=${encodeURIComponent(selectedProduct)}`)
+    fetch(`https://script.google.com/macros/s/AKfycbx8KWzvg6BvUdFamHRQjGBmp9Sw9TN3E0XibslKEGS4HRD95ojkznhExC4icEBbLDY/exec?action=getProductDetails&productName=${encodeURIComponent(selectedProduct)}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('xerc').value = data.cost;
@@ -55,6 +36,22 @@ document.getElementById('malAdi').addEventListener('change', function () {
             document.getElementById('anbarQaligi').value = data.stockLeft;  // Display the stock left
         });
 });
+
+// Update fields when Endirim or manual cost adjustment is changed
+function updateFields() {
+    const baseCost = parseFloat(document.getElementById('xerc').value) || 0;
+    const baseSalesPrice = parseFloat(document.getElementById('satisQiymeti').value) || 0;
+    
+    const manualCostAdjustment = parseFloat(document.getElementById('manualXerc').value) || baseCost;
+    const discount = parseFloat(document.getElementById('endirim').value) || 0;
+
+    // Update Xərc based on the manual adjustment
+    document.getElementById('xerc').value = manualCostAdjustment.toFixed(2);
+
+    // Update Satış Qiyməti based on the discount
+    const finalSalesPrice = baseSalesPrice - discount;
+    document.getElementById('satisQiymeti').value = finalSalesPrice.toFixed(2);
+}
 
 // Submit the sales data and update stock in both Sales and Products sheets
 document.getElementById('salesForm').addEventListener('submit', function (e) {
@@ -75,7 +72,7 @@ document.getElementById('salesForm').addEventListener('submit', function (e) {
         anbarQaligi: formData.get('anbarQaligi')
     };
 
-    fetch('https://script.google.com/macros/s/AKfycbxM5rvin3HnEIkbS4CwtThj_LRgnEdVkI2U_9Q992xT8oj3JXIa-tU0FoxJrvWy9V4/exec?action=addSaleAndUpdateStock', {
+    fetch('https://script.google.com/macros/s/AKfycbx8KWzvg6BvUdFamHRQjGBmp9Sw9TN3E0XibslKEGS4HRD95ojkznhExC4icEBbLDY/exec?action=addSaleAndUpdateStock', {
         method: 'POST',
         body: JSON.stringify(salesData)
     })
