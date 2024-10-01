@@ -33,14 +33,22 @@ function populateProductDropdown(products) {
     }
 }
 
-// Search functionality for products
-document.getElementById('productSearch').addEventListener('input', function () {
-    const searchTerm = this.value.toLowerCase();  // Get the search term and convert it to lowercase
 
-    // Filter products based on search term
-    const filteredProducts = productList.filter(product => 
-        product.name.toLowerCase().includes(searchTerm)
-    );
+// Search functionality for products with debouncing
+let searchTimeout;
+document.getElementById('productSearch').addEventListener('input', function () {
+    const searchTerm = this.value.toLowerCase();
+
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);  // Clear previous timeout
+    }
+
+    // Debounce search: wait 300ms after the last keystroke to perform search
+    searchTimeout = setTimeout(() => {
+        const filteredProducts = productList.filter(product => product.name.toLowerCase().includes(searchTerm));
+        populateProductDropdown(filteredProducts);
+    }, 300);
+});
 
 // When a product is selected, fetch the cost, sales price, and stock left
 document.getElementById('malAdi').addEventListener('change', function () {
