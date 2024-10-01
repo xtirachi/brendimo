@@ -4,14 +4,24 @@ document.getElementById('tarix').value = new Date().toISOString().split('T')[0];
 let productList = [];
 
 // Fetch product data from Google Sheets
+// Fetch product data from Google Sheets
 function loadProducts() {
     fetch('https://script.google.com/macros/s/AKfycbyvX-gNYItutpIlxTHeQFOREXqz_7O23r_v07qiko1slzEUBXcItdsJqvhToSLA0c8/exec?action=getProducts')
         .then(response => response.json())
         .then(data => {
-            productList = data.products;  // Save the product list for search functionality
-            populateProductDropdown(productList);
+            const productDropdown = document.getElementById('malAdi');
+            data.products.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.name;
+                option.text = product.name;
+                productDropdown.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error('Error fetching products:', error);
         });
 }
+
 
 // Populate product dropdown
 function populateProductDropdown(products) {
