@@ -11,7 +11,10 @@
 
     <form id="salesForm">
         <label for="tarix">Tarix:</label>
-        <input type="date" id="tarix" name="tarix" value="" required>
+        <input type="date" id="tarix" name="tarix" required>
+
+        <label for="productSearch">Məhsul axtar (Search Product):</label>
+        <input type="text" id="productSearch" placeholder="Məhsul adı ilə axtar...">
 
         <label for="malAdi">Malın Adı:</label>
         <select id="malAdi" name="malAdi" required></select>
@@ -32,6 +35,9 @@
 
         <label for="satisQiymeti">Satış Qiyməti:</label>
         <input type="number" id="satisQiymeti" name="satisQiymeti" readonly>
+
+        <label for="anbarQaligi">Anbar Qalığı (Stock Left):</label>
+        <input type="number" id="anbarQaligi" name="anbarQaligi" readonly>
 
         <button type="submit">Satışı Əlavə Et</button>
     </form>
