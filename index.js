@@ -1,3 +1,6 @@
+// Load the current date by default
+document.getElementById('tarix').value = new Date().toISOString().split('T')[0];
+
 let productList = [];
 
 // Fetch product data from Google Sheets and remove blanks and duplicates
