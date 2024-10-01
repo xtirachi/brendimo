@@ -1,32 +1,22 @@
-// Load the current date by default
-document.getElementById('tarix').value = new Date().toISOString().split('T')[0];
-
 let productList = [];
 
-// Fetch product data from Google Sheets
-// Fetch product data from Google Sheets
+// Fetch product data from Google Sheets and remove blanks and duplicates
 function loadProducts() {
-    fetch('https://script.google.com/macros/s/AKfycbzTxe2C3DtGYyKXr9xpeyFbzJKfO8kQNv3INpr1F5jkXszj0_UiQrSQyT2aSMhucnU/exec?action=getProducts')
+    fetch('https://script.google.com/macros/s/AKfycbxQPXdMVRUfUsEVNnnzNw9p4l9B-jt2wfhZj40VBUlKXa2x7Dl01HrUXr2QfGdRcCU/exec?action=getProducts')
         .then(response => response.json())
         .then(data => {
-            const productDropdown = document.getElementById('malAdi');
-            data.products.forEach(product => {
-                const option = document.createElement('option');
-                option.value = product.name;
-                option.text = product.name;
-                productDropdown.appendChild(option);
-            });
+            productList = [...new Set(data.products.filter(product => product.name.trim() !== ""))];  // Remove duplicates and blanks
+            populateProductDropdown(productList);
         })
         .catch(error => {
             console.error('Error fetching products:', error);
         });
 }
 
-
-// Populate product dropdown
+// Populate product dropdown with filtered list
 function populateProductDropdown(products) {
     const productDropdown = document.getElementById('malAdi');
-    productDropdown.innerHTML = ''; // Clear current options
+    productDropdown.innerHTML = '';  // Clear current options
     products.forEach(product => {
         const option = document.createElement('option');
         option.value = product.name;
@@ -35,10 +25,26 @@ function populateProductDropdown(products) {
     });
 }
 
+// Search functionality for products with debouncing
+let searchTimeout;
+document.getElementById('productSearch').addEventListener('input', function () {
+    const searchTerm = this.value.toLowerCase();
+
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);  // Clear previous timeout
+    }
+
+    // Debounce search: wait 300ms after the last keystroke to perform search
+    searchTimeout = setTimeout(() => {
+        const filteredProducts = productList.filter(product => product.name.toLowerCase().includes(searchTerm));
+        populateProductDropdown(filteredProducts);
+    }, 300);
+});
+
 // When a product is selected, fetch the cost, sales price, and stock left
 document.getElementById('malAdi').addEventListener('change', function () {
     const selectedProduct = this.value;
-    fetch(`https://script.google.com/macros/s/AKfycbzTxe2C3DtGYyKXr9xpeyFbzJKfO8kQNv3INpr1F5jkXszj0_UiQrSQyT2aSMhucnU/exec?action=getProductDetails&productName=${selectedProduct}`)
+    fetch(`https://script.google.com/macros/s/AKfycbxQPXdMVRUfUsEVNnnzNw9p4l9B-jt2wfhZj40VBUlKXa2x7Dl01HrUXr2QfGdRcCU/exec?action=getProductDetails&productName=${encodeURIComponent(selectedProduct)}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('xerc').value = data.cost;
@@ -62,7 +68,7 @@ document.getElementById('salesForm').addEventListener('submit', function (e) {
         anbarQaligi: formData.get('anbarQaligi')
     };
 
-    fetch('https://script.google.com/macros/s/AKfycbzTxe2C3DtGYyKXr9xpeyFbzJKfO8kQNv3INpr1F5jkXszj0_UiQrSQyT2aSMhucnU/exec?action=addSaleAndUpdateStock', {
+    fetch('https://script.google.com/macros/s/AKfycbxQPXdMVRUfUsEVNnnzNw9p4l9B-jt2wfhZj40VBUlKXa2x7Dl01HrUXr2QfGdRcCU/exec?action=addSaleAndUpdateStock', {
         method: 'POST',
         body: JSON.stringify(salesData)
     })
@@ -73,13 +79,6 @@ document.getElementById('salesForm').addEventListener('submit', function (e) {
         document.getElementById('tarix').value = new Date().toISOString().split('T')[0];
         loadProducts();  // Reload the products to refresh stock amounts
     });
-});
-
-// Search functionality for products
-document.getElementById('productSearch').addEventListener('input', function () {
-    const searchTerm = this.value.toLowerCase();
-    const filteredProducts = productList.filter(product => product.name.toLowerCase().includes(searchTerm));
-    populateProductDropdown(filteredProducts);
 });
 
 // Navigation function
