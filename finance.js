@@ -1,19 +1,19 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Fetch financial data from Google Sheets and display it
-    fetch('https://script.google.com/macros/s/AKfycbyc746jGC43oEsUhT0mhJOt9KtIntTe-_1LU0tg5Ja1hUBhjjashJ_MDpqUGmr8og/exec?action=getFinancialData')
+ // Fetch financial data from Google Sheets and display it
+    fetch('https://script.google.com/macros/s/AKfycbwxbYQ_UuusOFunyYh63ptT0ZmE7l_eI6oORxjbJqEVz8mvFgWt395KQqBEFOhJYeg/exec?action=getFinancialData')
         .then(response => response.json())
         .then(data => {
-            document.getElementById('leoBankValue').innerText = data.leoBank;
-            document.getElementById('kapitalBankValue').innerText = data.kapitalBank;
-            document.getElementById('investmentFundValue').innerText = data.investmentFund;
-            document.getElementById('inventoryValue').innerText = data.inventoryValue;
-            document.getElementById('turnoverValue').innerText = data.turnover;
+            document.getElementById('leoBankValue').innerText = data.leoBank + ' AZN';
+            document.getElementById('kapitalBankValue').innerText = data.kapitalBank + ' AZN';
+            document.getElementById('investmentFundValue').innerText = data.investmentFund + ' AZN';
+            document.getElementById('inventoryValue').innerText = data.inventoryValue + ' AZN';  // Display Ümumi Anbar Qiyməti
+            document.getElementById('turnoverValue').innerText = data.turnover + ' AZN';
             updateCurrentCash(data.currentCash);
         })
         .catch(error => {
             console.error('Error fetching financial data:', error);
         });
-
+});
     // Handle the withdrawal form submission
     document.getElementById('withdrawForm').addEventListener('submit', function (e) {
         e.preventDefault();
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (amount > 0) {
             // Submit the withdrawal data to Google Sheets
-            fetch('https://script.google.com/macros/s/AKfycbyc746jGC43oEsUhT0mhJOt9KtIntTe-_1LU0tg5Ja1hUBhjjashJ_MDpqUGmr8og/exec?action=withdraw', {
+            fetch('https://script.google.com/macros/s/AKfycbwxbYQ_UuusOFunyYh63ptT0ZmE7l_eI6oORxjbJqEVz8mvFgWt395KQqBEFOhJYeg/exec?action=withdraw', {
                 method: 'POST',
                 body: JSON.stringify({ source, amount, reason })
             })
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
 // Update current cash value, apply styles for positive/negative amounts
 function updateCurrentCash(cashValue) {
     const cashElement = document.getElementById('currentCash');
-    cashElement.innerText = cashValue.toFixed(2);
+    cashElement.innerText = cashValue.toFixed(2) + ' AZN';
 
     if (cashValue >= 0) {
         cashElement.style.color = 'green';
@@ -57,7 +57,7 @@ function adjustTurnover() {
     const newTurnover = prompt("Yeni Dövriyyəni daxil et (Enter new Turnover amount):");
     if (newTurnover) {
         // Update turnover in Google Sheets
-        fetch('https://script.google.com/macros/s/AKfycbyc746jGC43oEsUhT0mhJOt9KtIntTe-_1LU0tg5Ja1hUBhjjashJ_MDpqUGmr8og/exec?action=updateTurnover', {
+        fetch('https://script.google.com/macros/s/AKfycbwxbYQ_UuusOFunyYh63ptT0ZmE7l_eI6oORxjbJqEVz8mvFgWt395KQqBEFOhJYeg/exec?action=updateTurnover', {
             method: 'POST',
             body: JSON.stringify({ newTurnover: parseFloat(newTurnover) })
         })
