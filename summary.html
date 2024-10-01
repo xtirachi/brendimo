@@ -3,48 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aylıq və Günlük Satışlar</title>
+    <title>Satış Xülasəsi (Sales Summary)</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Aylıq və Günlük Satışlar</h1>
+    <h1>Satış Xülasəsi</h1>
 
-    <form id="salesSummaryForm">
-        <label for="startDate">Başlanğıc Tarixi:</label>
-        <input type="date" id="startDate" required>
+    <form id="summaryForm">
+        <label for="startDate">Başlanğıc Tarix (Start Date):</label>
+        <input type="date" id="startDate" name="startDate" required>
 
-        <label for="endDate">Bitiş Tarixi:</label>
-        <input type="date" id="endDate" required>
+        <label for="endDate">Bitmə Tarix (End Date):</label>
+        <input type="date" id="endDate" name="endDate" required>
 
-        <button type="submit">Satışları Göstər</button>
+        <button type="submit">Xülasəni Göstər (Show Summary)</button>
     </form>
 
-    <table id="salesTable">
-        <thead>
-            <tr>
-                <th>Tarix</th>
-                <th>Malın Adı</th>
-                <th>Xərc</th>
-                <th>Satış Qiyməti</th>
-                <th>Endirim</th>
-                <th>Səhifə Adı</th>
-                <th>Gəlir</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Sales data will be dynamically added here -->
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="2"><strong>Cəmi</strong></td>
-                <td id="totalCost">0</td>
-                <td id="totalSales">0</td>
-                <td></td>
-                <td></td>
-                <td id="totalProfit">0</td>
-            </tr>
-        </tfoot>
-    </table>
+    <div id="summaryResults">
+        <h2>Nəticələr (Results)</h2>
+        <p><strong>Ümumi Satışlar Sayı:</strong> <span id="totalSalesCount"></span></p>
+        <p><strong>Ümumi Satış Qiyməti (AZN):</strong> <span id="totalSalesAmount"></span></p>
+        <p><strong>Ümumi Xərc (AZN):</strong> <span id="totalCost"></span></p>
+        <p><strong>Ümumi Gəlir (AZN):</strong> <span id="totalProfit"></span></p>
+
+        <h3>Satış Mənbələrinə Görə (By Sales Sources)</h3>
+        <div id="sourceSummary">
+            <!-- This section will be populated dynamically -->
+        </div>
+    </div>
 
     <div class="navigation">
         <button onclick="navigate('index.html')">Günlük Satış Əlavə Et</button>
