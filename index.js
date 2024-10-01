@@ -5,7 +5,7 @@ let productList = [];
 
 // Fetch product data from Google Sheets and remove blanks and duplicates
 function loadProducts() {
-    fetch('https://script.google.com/macros/s/AKfycbyZ6te0uPN8UADZzQSHoWMP2-MDzGyUD9czEqkG592gTSd1FNH5us6IcKY0Th8oBBg/exec?action=getProducts')
+    fetch('https://script.google.com/macros/s/AKfycby2edjXQ8-trpxQzmuDktYwGWkWKLeYvmThZcPGO1h2KzOHknBPKYx0Ih2ie5LRuVg/exec?action=getProducts')
         .then(response => response.json())
         .then(data => {
             productList = [...new Set(data.products.filter(product => product.name.trim() !== ""))];  // Remove duplicates and blanks
@@ -53,7 +53,7 @@ document.getElementById('productSearch').addEventListener('input', function () {
 // When a product is selected, fetch the cost, sales price, and stock left
 document.getElementById('malAdi').addEventListener('change', function () {
     const selectedProduct = this.value;
-    fetch(`https://script.google.com/macros/s/AKfycbyZ6te0uPN8UADZzQSHoWMP2-MDzGyUD9czEqkG592gTSd1FNH5us6IcKY0Th8oBBg/exec?action=getProductDetails&productName=${encodeURIComponent(selectedProduct)}`)
+    fetch(`https://script.google.com/macros/s/AKfycby2edjXQ8-trpxQzmuDktYwGWkWKLeYvmThZcPGO1h2KzOHknBPKYx0Ih2ie5LRuVg/exec?action=getProductDetails&productName=${encodeURIComponent(selectedProduct)}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('xerc').value = data.cost;
@@ -99,7 +99,7 @@ document.getElementById('salesForm').addEventListener('submit', function (e) {
         anbarQaligi: formData.get('anbarQaligi')
     };
 
-    fetch('https://script.google.com/macros/s/AKfycbyZ6te0uPN8UADZzQSHoWMP2-MDzGyUD9czEqkG592gTSd1FNH5us6IcKY0Th8oBBg/exec?action=addSaleAndUpdateStock', {
+    fetch('https://script.google.com/macros/s/AKfycby2edjXQ8-trpxQzmuDktYwGWkWKLeYvmThZcPGO1h2KzOHknBPKYx0Ih2ie5LRuVg/exec?action=addSaleAndUpdateStock', {
         method: 'POST',
         body: JSON.stringify(salesData)
     })
