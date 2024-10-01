@@ -1,37 +1,40 @@
-document.getElementById('productForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+document.addEventListener('DOMContentLoaded', function () {
+    // Fetch the inventory data from Google Apps Script
+    fetch('https://script.google.com/macros/s/AKfycbweqivU8BVaWco3IYTb39ER8JSozCcMKR6Q3NPM3uhazuVEX5cQbOqCgUdav-TXrHk/exec?action=getInventory')
+        .then(response => response.json())
+        .then(data => {
+            const productList = document.getElementById('productList');
+            const totalInventoryValue = document.getElementById('totalInventoryValue');
+            let totalValue = 0;
 
-    const formData = new FormData(this);
-    const productData = {
-        malAdi: formData.get('malAdi'),
-        xerc: formData.get('xerc'),
-        satisQiymeti: formData.get('satisQiymeti'),
-        anbarMiqdari: formData.get('anbarMiqdari')
-    };
+            // Clear the list before populating
+            productList.innerHTML = '';
 
-    try {
-        console.log("Sending product data:", productData);  // Log product data before sending
+            // Populate the product list
+            data.inventory.forEach(product => {
+                const li = document.createElement('li');
+                li.innerHTML = `${product.name} - Anbar Miqdarı: ${product.stock}`;
 
-        const response = await fetch('https://script.google.com/macros/s/AKfycbyzDp8qIcZrl-9vObGfW46ArDV_xDhY6Z9uLTzKIjCE8ucjwC4UrpNqOvvIGhnaeG4/exec?action=addProduct', {
-            method: 'POST',
-            body: JSON.stringify(productData),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+                // Change color to red if stock is less than 5
+                if (product.stock < 5) {
+                    li.style.color = 'red';
+                }
+
+                productList.appendChild(li);
+
+                // Calculate total inventory value
+                totalValue += product.stock * product.cost;
+            });
+
+            // Display total inventory value
+            totalInventoryValue.innerHTML = totalValue.toFixed(2);  // Display the sum
+        })
+        .catch(error => {
+            console.error('Error fetching inventory:', error);
         });
-
-        const result = await response.json();
-        console.log("Response from server:", result);  // Log the server response
-
-        if (result.status === 'success') {
-            alert('Məhsul uğurla əlavə edildi!');
-            document.getElementById('productForm').reset();  // Reset the form after success
-        } else {
-            console.error('Error from server:', result.message);
-            alert('Xəta baş verdi: ' + result.message);  // Display error message returned by the server
-        }
-    } catch (error) {
-        console.error('Fetch error:', error);
-        alert('Xəta baş verdi! Fetch error: ' + error.message);
-    }
 });
+
+// Navigation function
+function navigate(page) {
+    window.location.href = page;
+}
