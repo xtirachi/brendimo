@@ -5,7 +5,7 @@ let productList = [];
 
 // Fetch product data from Google Sheets and remove blanks and duplicates
 function loadProducts() {
-    fetch('https://script.google.com/macros/s/AKfycbx8KWzvg6BvUdFamHRQjGBmp9Sw9TN3E0XibslKEGS4HRD95ojkznhExC4icEBbLDY/exec?action=getProducts')
+    fetch('https://script.google.com/macros/s/AKfycbyZ6te0uPN8UADZzQSHoWMP2-MDzGyUD9czEqkG592gTSd1FNH5us6IcKY0Th8oBBg/exec?action=getProducts')
         .then(response => response.json())
         .then(data => {
             productList = [...new Set(data.products.filter(product => product.name.trim() !== ""))];  // Remove duplicates and blanks
@@ -31,7 +31,7 @@ function populateProductDropdown(products) {
 // When a product is selected, fetch the cost, sales price, and stock left
 document.getElementById('malAdi').addEventListener('change', function () {
     const selectedProduct = this.value;
-    fetch(`https://script.google.com/macros/s/AKfycbx8KWzvg6BvUdFamHRQjGBmp9Sw9TN3E0XibslKEGS4HRD95ojkznhExC4icEBbLDY/exec?action=getProductDetails&productName=${encodeURIComponent(selectedProduct)}`)
+    fetch(`https://script.google.com/macros/s/AKfycbyZ6te0uPN8UADZzQSHoWMP2-MDzGyUD9czEqkG592gTSd1FNH5us6IcKY0Th8oBBg/exec?action=getProductDetails&productName=${encodeURIComponent(selectedProduct)}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('xerc').value = data.cost;
@@ -40,19 +40,20 @@ document.getElementById('malAdi').addEventListener('change', function () {
         });
 });
 
-// Update fields when Endirim or manual cost adjustment is changed
+// Update fields when Endirim, manual cost adjustment, or sales price adjustment is changed
 function updateFields() {
     const baseCost = parseFloat(document.getElementById('xerc').value) || 0;
     const baseSalesPrice = parseFloat(document.getElementById('satisQiymeti').value) || 0;
-    
+
     const manualCostAdjustment = parseFloat(document.getElementById('manualXerc').value) || baseCost;
+    const manualSalesPriceAdjustment = parseFloat(document.getElementById('adjustSatisQiymeti').value) || baseSalesPrice;
     const discount = parseFloat(document.getElementById('endirim').value) || 0;
 
     // Update Xərc based on the manual adjustment
     document.getElementById('xerc').value = manualCostAdjustment.toFixed(2);
 
-    // Update Satış Qiyməti based on the discount
-    const finalSalesPrice = baseSalesPrice - discount;
+    // Update Satış Qiyməti based on the manual adjustment and the discount
+    const finalSalesPrice = manualSalesPriceAdjustment - discount;
     document.getElementById('satisQiymeti').value = finalSalesPrice.toFixed(2);
 }
 
@@ -62,8 +63,9 @@ document.getElementById('salesForm').addEventListener('submit', function (e) {
 
     const formData = new FormData(this);
 
-    // Get the manual cost adjustment (if provided), otherwise use the default cost
+    // Get the manual cost adjustment and sales price adjustment (if provided), otherwise use the default values
     let xerc = formData.get('manualXerc') || formData.get('xerc');
+    let satisQiymeti = formData.get('adjustSatisQiymeti') || formData.get('satisQiymeti');
 
     const salesData = {
         tarix: formData.get('tarix'),
@@ -71,11 +73,11 @@ document.getElementById('salesForm').addEventListener('submit', function (e) {
         sehifeAdi: formData.get('sehifeAdi'),
         endirim: formData.get('endirim') || 0,
         xerc: xerc,
-        satisQiymeti: formData.get('satisQiymeti'),
+        satisQiymeti: satisQiymeti,
         anbarQaligi: formData.get('anbarQaligi')
     };
 
-    fetch('https://script.google.com/macros/s/AKfycbx8KWzvg6BvUdFamHRQjGBmp9Sw9TN3E0XibslKEGS4HRD95ojkznhExC4icEBbLDY/exec?action=addSaleAndUpdateStock', {
+    fetch('https://script.google.com/macros/s/AKfycbyZ6te0uPN8UADZzQSHoWMP2-MDzGyUD9czEqkG592gTSd1FNH5us6IcKY0Th8oBBg/exec?action=addSaleAndUpdateStock', {
         method: 'POST',
         body: JSON.stringify(salesData)
     })
