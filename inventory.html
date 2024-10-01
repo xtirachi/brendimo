@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anbar Siyahısı (Inventory List)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Anbar Siyahısı</h1>
+
+    <div id="inventoryResults">
+        <h2>Məhsullar (Products)</h2>
+        <ul id="productList">
+            <!-- Inventory items will be populated here -->
+        </ul>
+        <p><strong>Ümumi Anbar Qiyməti (Total Inventory Value):</strong> <span id="totalInventoryValue"></span> AZN</p>
+    </div>
+
+    <div class="navigation">
+        <button onclick="navigate('index.html')">Günlük Satış Əlavə Et</button>
+        <button onclick="navigate('summary.html')">Satış Xülasəsi</button>
+    </div>
+
+    <script src="inventory.js"></script>
+</body>
+</html>
