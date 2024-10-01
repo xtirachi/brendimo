@@ -5,7 +5,7 @@ let productList = [];
 
 // Fetch product data from Google Sheets and remove blanks and duplicates
 function loadProducts() {
-    fetch('https://script.google.com/macros/s/AKfycbzZzOWP_ovnFBPS4i-nFUa2XKfyA0LZajFcmMmWRJfwOP6yC3mbDHLzq5_cQxMVBjU/exec?action=getProducts')
+    fetch('https://script.google.com/macros/s/AKfycbxM5rvin3HnEIkbS4CwtThj_LRgnEdVkI2U_9Q992xT8oj3JXIa-tU0FoxJrvWy9V4/exec?action=getProducts')
         .then(response => response.json())
         .then(data => {
             productList = [...new Set(data.products.filter(product => product.name.trim() !== ""))];  // Remove duplicates and blanks
@@ -47,7 +47,7 @@ document.getElementById('productSearch').addEventListener('input', function () {
 // When a product is selected, fetch the cost, sales price, and stock left
 document.getElementById('malAdi').addEventListener('change', function () {
     const selectedProduct = this.value;
-    fetch(`https://script.google.com/macros/s/AKfycbzZzOWP_ovnFBPS4i-nFUa2XKfyA0LZajFcmMmWRJfwOP6yC3mbDHLzq5_cQxMVBjU/exec?action=getProductDetails&productName=${encodeURIComponent(selectedProduct)}`)
+    fetch(`https://script.google.com/macros/s/AKfycbxM5rvin3HnEIkbS4CwtThj_LRgnEdVkI2U_9Q992xT8oj3JXIa-tU0FoxJrvWy9V4/exec?action=getProductDetails&productName=${encodeURIComponent(selectedProduct)}`)
         .then(response => response.json())
         .then(data => {
             document.getElementById('xerc').value = data.cost;
@@ -61,17 +61,21 @@ document.getElementById('salesForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
     const formData = new FormData(this);
+
+    // Get the manual cost adjustment (if provided), otherwise use the default cost
+    let xerc = formData.get('manualXerc') || formData.get('xerc');
+
     const salesData = {
         tarix: formData.get('tarix'),
         malAdi: formData.get('malAdi'),
         sehifeAdi: formData.get('sehifeAdi'),
         endirim: formData.get('endirim') || 0,
-        xerc: formData.get('xerc'),
+        xerc: xerc,
         satisQiymeti: formData.get('satisQiymeti'),
         anbarQaligi: formData.get('anbarQaligi')
     };
 
-    fetch('https://script.google.com/macros/s/AKfycbzZzOWP_ovnFBPS4i-nFUa2XKfyA0LZajFcmMmWRJfwOP6yC3mbDHLzq5_cQxMVBjU/exec?action=addSaleAndUpdateStock', {
+    fetch('https://script.google.com/macros/s/AKfycbxM5rvin3HnEIkbS4CwtThj_LRgnEdVkI2U_9Q992xT8oj3JXIa-tU0FoxJrvWy9V4/exec?action=addSaleAndUpdateStock', {
         method: 'POST',
         body: JSON.stringify(salesData)
     })
