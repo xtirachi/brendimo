@@ -26,7 +26,21 @@ function populateProductDropdown(products) {
         option.text = product.name;
         productDropdown.appendChild(option);
     });
+ if (products.length === 0) {
+        const option = document.createElement('option');
+        option.text = 'Məhsul tapılmadı';  // Show a message if no product matches
+        productDropdown.appendChild(option);
+    }
 }
+
+// Search functionality for products
+document.getElementById('productSearch').addEventListener('input', function () {
+    const searchTerm = this.value.toLowerCase();  // Get the search term and convert it to lowercase
+
+    // Filter products based on search term
+    const filteredProducts = productList.filter(product => 
+        product.name.toLowerCase().includes(searchTerm)
+    );
 
 // When a product is selected, fetch the cost, sales price, and stock left
 document.getElementById('malAdi').addEventListener('change', function () {
