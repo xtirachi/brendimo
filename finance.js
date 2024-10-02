@@ -52,6 +52,7 @@ function updateCurrentCash(cashValue) {
     }
 }
 
+
 // Adjust turnover manually (this can open a prompt or a modal for input)
 function adjustTurnover() {
     const newTurnover = prompt("Yeni Dövriyyəni daxil et (Enter new Turnover amount):");
