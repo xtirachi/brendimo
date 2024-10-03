@@ -15,27 +15,30 @@
             <li><strong>Leo Bank:</strong> <span id="leoBankValue"></span> AZN</li>
             <li><strong>Kapital Bank:</strong> <span id="kapitalBankValue"></span> AZN</li>
             <li><strong>Investment Fund:</strong> <span id="investmentFundValue"></span> AZN</li>
-            <li><strong>Ümumi Anbar Qiyməti:</strong> <span id="inventoryValue"></span> AZN</li>
-            <li><strong>Dövriyyə:</strong> <span id="turnoverValue"></span> AZN <button onclick="adjustTurnover()">Düzəlt (Adjust)</button></li>
-            <li><strong>Əldəki Pul (Today's Cash):</strong> <span id="currentCash"></span> AZN</li>
+            <li><strong>Ümumi Anbar Qiyməti:</strong> <span id="totalStockValue"></span> AZN</li>
+            <li><strong>Əldəki Pul (Today's Cash):</strong> <span id="eldekiPul"></span> AZN</li>
         </ul>
 
-        <h2>Pul Çıxart (Withdraw Money)</h2>
-        <form id="withdrawForm">
-            <label for="withdrawSource">Mənbə Seç (Select Source):</label>
-            <select id="withdrawSource" required>
+        <h2>Pul Əməliyyatları (Transactions)</h2>
+        <form id="transactionForm">
+            <label for="transactionType">Əməliyyat Seç (Transaction Type):</label><br>
+            <input type="radio" id="deposit" name="transactionType" value="deposit" required> Əmanət (Deposit)<br>
+            <input type="radio" id="withdrawal" name="transactionType" value="withdrawal" required> Çıxart (Withdraw)<br>
+
+            <label for="transactionSource">Mənbə Seç (Select Source):</label>
+            <select id="transactionSource" required>
                 <option value="leoBank">Leo Bank</option>
                 <option value="kapitalBank">Kapital Bank</option>
                 <option value="investmentFund">Investment Fund</option>
             </select>
 
-            <label for="withdrawAmount">Məbləğ (Amount):</label>
-            <input type="number" id="withdrawAmount" placeholder="Məbləği daxil et" required>
+            <label for="transactionAmount">Məbləğ (Amount):</label>
+            <input type="number" id="transactionAmount" placeholder="Məbləği daxil et" required>
 
-            <label for="withdrawReason">Səbəb (Reason):</label>
-            <input type="text" id="withdrawReason" placeholder="Səbəbi daxil et" required>
+            <label for="transactionReason">Səbəb (Reason):</label>
+            <input type="text" id="transactionReason" placeholder="Səbəbi daxil et" required>
 
-            <button type="submit">Çıxart (Withdraw)</button>
+            <button type="submit">Göndər (Submit)</button>
         </form>
     </div>
 
