@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Fetch financial data from Google Sheets and display it
-    fetch('https://script.google.com/macros/s/AKfycbxwq7u0s6W2UQjhaeGLRPRHVr6xL-yRwOv2U4oQK_jUAJw-DG9bkuz5TPQbl2c8eOU/exec?action=getFinancialData')
+    fetch('https://script.google.com/macros/s/AKfycbzUkr-4fAFK1W8rsjkYh_kVYU_cgqecsdPVQzGhehxQ3untkkV-XAWW96KTOpNrVMM/exec?action=getFinancialData')
         .then(response => response.json())
         .then(data => {
             document.getElementById('leoBankValue').innerText = data.leoBank + ' AZN';
@@ -30,22 +30,27 @@ document.addEventListener('DOMContentLoaded', function () {
             date: new Date().toISOString().slice(0, 10)
         };
 
-        // Send transaction to Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycbxwq7u0s6W2UQjhaeGLRPRHVr6xL-yRwOv2U4oQK_jUAJw-DG9bkuz5TPQbl2c8eOU/exec?action=addTransaction', {
-            method: 'POST',
-            body: JSON.stringify(transactionData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert('Transaction added successfully!');
-                window.location.reload();  // Reload the page to update values
-            }
-        })
-        .catch(error => {
-            console.error('Error adding transaction:', error);
-        });
-    });
+       // Send transaction to Google Apps Script
+fetch('https://script.google.com/macros/s/AKfycbzUkr-4fAFK1W8rsjkYh_kVYU_cgqecsdPVQzGhehxQ3untkkV-XAWW96KTOpNrVMM/exec?action=addTransaction', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'  // Ensure the payload is interpreted as JSON
+    },
+    body: JSON.stringify(transactionData)  // Send the transaction data as a JSON string
+})
+.then(response => response.json())
+.then(data => {
+    if (data.status === 'success') {
+        alert('Transaction added successfully!');
+        window.location.reload();  // Reload the page to update values
+    } else {
+        console.error('Error in response:', data);
+    }
+})
+.catch(error => {
+    console.error('Error adding transaction:', error);
+});
+
 
 
 // Update current cash value, apply styles for positive/negative amounts
@@ -66,7 +71,7 @@ function adjustTurnover() {
     const newTurnover = prompt("Yeni Dövriyyəni daxil et (Enter new Turnover amount):");
     if (newTurnover) {
         // Update turnover in Google Sheets
-        fetch('https://script.google.com/macros/s/AKfycbxwq7u0s6W2UQjhaeGLRPRHVr6xL-yRwOv2U4oQK_jUAJw-DG9bkuz5TPQbl2c8eOU/exec?action=updateTurnover', {
+        fetch('https://script.google.com/macros/s/AKfycbzUkr-4fAFK1W8rsjkYh_kVYU_cgqecsdPVQzGhehxQ3untkkV-XAWW96KTOpNrVMM/exec?action=updateTurnover', {
             method: 'POST',
             body: JSON.stringify({ newTurnover: parseFloat(newTurnover) })
         })
