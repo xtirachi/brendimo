@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Fetch financial data from Google Sheets and display it
-    fetch('https://script.google.com/macros/s/YOUR_GOOGLE_APP_SCRIPT_DEPLOYMENT_ID/exec?action=getFinancialData')
+    fetch('https://script.google.com/macros/s/AKfycbye_Tl9FP47Ux2YYjeOrqyTc84Grsou8n2NG6aiQxLTIeqxPJ5qQIwxoD_D7yL7_x0/exec?action=getFinancialData')
         .then(response => response.json())
         .then(data => {
             document.getElementById('leoBankValue').innerText = data.leoBank + ' AZN';
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         // Send transaction to Google Apps Script
-        fetch('https://script.google.com/macros/s/YOUR_GOOGLE_APP_SCRIPT_DEPLOYMENT_ID/exec?action=addTransaction', {
+        fetch('https://script.google.com/macros/s/AKfycbye_Tl9FP47Ux2YYjeOrqyTc84Grsou8n2NG6aiQxLTIeqxPJ5qQIwxoD_D7yL7_x0/exec?action=addTransaction', {
             method: 'POST',
             body: JSON.stringify(transactionData)
         })
@@ -66,7 +66,7 @@ function adjustTurnover() {
     const newTurnover = prompt("Yeni Dövriyyəni daxil et (Enter new Turnover amount):");
     if (newTurnover) {
         // Update turnover in Google Sheets
-        fetch('https://script.google.com/macros/s/AKfycbySP7kFHMRzxYR5rGuRf_kZSHz60Ypn1gNwI4ANe9k8u_1he1dddydHUrAnmy4qNbM/exec?action=updateTurnover', {
+        fetch('https://script.google.com/macros/s/AKfycbye_Tl9FP47Ux2YYjeOrqyTc84Grsou8n2NG6aiQxLTIeqxPJ5qQIwxoD_D7yL7_x0/exec?action=updateTurnover', {
             method: 'POST',
             body: JSON.stringify({ newTurnover: parseFloat(newTurnover) })
         })
