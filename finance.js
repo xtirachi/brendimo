@@ -1,45 +1,52 @@
 document.addEventListener('DOMContentLoaded', function () {
- // Fetch financial data from Google Sheets and display it
-    fetch('https://script.google.com/macros/s/AKfycbySP7kFHMRzxYR5rGuRf_kZSHz60Ypn1gNwI4ANe9k8u_1he1dddydHUrAnmy4qNbM/exec?action=getFinancialData')
-       .then(response => response.json())
-    .then(data => {
-        // Display the values
-        console.log('Financial Data:', data);  // Debugging: Check if data is received
-        document.getElementById('leoBankValue').innerText = data.leoBank + ' AZN';
-        document.getElementById('kapitalBankValue').innerText = data.kapitalBank + ' AZN';
-        document.getElementById('investmentFundValue').innerText = data.investmentFund + ' AZN';
-        document.getElementById('inventoryValue').innerText = data.inventoryValue + ' AZN';
-        document.getElementById('turnoverValue').innerText = data.turnover + ' AZN';
-        updateCurrentCash(data.currentCash);
-    })
-    .catch(error => {
-        console.error('Error fetching financial data:', error);  // Debugging: Log the error
-    });
-  });
-    // Handle the withdrawal form submission
-    document.getElementById('withdrawForm').addEventListener('submit', function (e) {
+    // Fetch financial data from Google Sheets and display it
+    fetch('https://script.google.com/macros/s/YOUR_GOOGLE_APP_SCRIPT_DEPLOYMENT_ID/exec?action=getFinancialData')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('leoBankValue').innerText = data.leoBank + ' AZN';
+            document.getElementById('kapitalBankValue').innerText = data.kapitalBank + ' AZN';
+            document.getElementById('investmentFundValue').innerText = data.investmentFund + ' AZN';
+            document.getElementById('totalStockValue').innerText = data.totalStockValue + ' AZN';  // Display Total Stock Value
+            document.getElementById('eldekiPul').innerText = data.eldekiPul + ' AZN';  // Display Əldəki Pul
+        })
+        .catch(error => {
+            console.error('Error fetching financial data:', error);
+        });
+    
+    // Handle Deposit and Withdrawal Form Submission
+    document.getElementById('transactionForm').addEventListener('submit', function (e) {
         e.preventDefault();
 
-        const source = document.getElementById('withdrawSource').value;
-        const amount = parseFloat(document.getElementById('withdrawAmount').value);
-        const reason = document.getElementById('withdrawReason').value;
+        const transactionType = document.querySelector('input[name="transactionType"]:checked').value;
+        const source = document.getElementById('transactionSource').value;
+        const amount = parseFloat(document.getElementById('transactionAmount').value);
+        const reason = document.getElementById('transactionReason').value;
 
-        if (amount > 0) {
-            // Submit the withdrawal data to Google Sheets
-            fetch('https://script.google.com/macros/s/AKfycbySP7kFHMRzxYR5rGuRf_kZSHz60Ypn1gNwI4ANe9k8u_1he1dddydHUrAnmy4qNbM/exec?action=withdraw', {
-                method: 'POST',
-                body: JSON.stringify({ source, amount, reason })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert('Pul uğurla çıxarıldı! (Money successfully withdrawn)');
-                location.reload(); // Reload the page to fetch updated data
-            })
-            .catch(error => {
-                console.error('Error processing withdrawal:', error);
-            });
+        const transactionData = {
+            type: transactionType,
+            source: source,
+            amount: amount,
+            reason: reason,
+            date: new Date().toISOString().slice(0, 10)
+        };
+
+        // Send transaction to Google Apps Script
+        fetch('https://script.google.com/macros/s/YOUR_GOOGLE_APP_SCRIPT_DEPLOYMENT_ID/exec?action=addTransaction', {
+            method: 'POST',
+            body: JSON.stringify(transactionData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Transaction added successfully!');
+                window.location.reload();  // Reload the page to update values
+            }
+        })
+        .catch(error => {
+            console.error('Error adding transaction:', error);
+        });
     });
-});
+
 
 // Update current cash value, apply styles for positive/negative amounts
 function updateCurrentCash(cashValue) {
