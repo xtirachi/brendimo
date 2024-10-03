@@ -1,18 +1,16 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Fetch financial data from Google Sheets and display it
-    fetch('https://script.google.com/macros/s/AKfycbzUkr-4fAFK1W8rsjkYh_kVYU_cgqecsdPVQzGhehxQ3untkkV-XAWW96KTOpNrVMM/exec?action=getFinancialData')
+    // Fetch financial data and display it
+    fetch('https://script.google.com/macros/s/AKfycbyH2oTxrFVLLDrRQY0iBIyBRjwQSSEzy5sY0227koNo-eav4YJrOWS7K6fsIES-3iA/exec?action=getFinancialData')
         .then(response => response.json())
         .then(data => {
             document.getElementById('leoBankValue').innerText = data.leoBank + ' AZN';
             document.getElementById('kapitalBankValue').innerText = data.kapitalBank + ' AZN';
             document.getElementById('investmentFundValue').innerText = data.investmentFund + ' AZN';
-            document.getElementById('totalStockValue').innerText = data.totalStockValue + ' AZN';  // Display Total Stock Value
-            document.getElementById('eldekiPul').innerText = data.eldekiPul + ' AZN';  // Display Əldəki Pul
+            document.getElementById('totalStockValue').innerText = data.totalStockValue + ' AZN';
+            document.getElementById('eldekiPul').innerText = data.eldekiPul + ' AZN';
         })
-        .catch(error => {
-            console.error('Error fetching financial data:', error);
-        });
-    
+        .catch(error => console.error('Error fetching financial data:', error));
+
     // Handle Deposit and Withdrawal Form Submission
     document.getElementById('transactionForm').addEventListener('submit', function (e) {
         e.preventDefault();
@@ -27,62 +25,28 @@ document.addEventListener('DOMContentLoaded', function () {
             source: source,
             amount: amount,
             reason: reason,
-            date: new Date().toISOString().slice(0, 10)
+            date: new Date().toISOString().split('T')[0]  // Send the current date
         };
 
-       // Send transaction to Google Apps Script
-fetch('https://script.google.com/macros/s/AKfycbzUkr-4fAFK1W8rsjkYh_kVYU_cgqecsdPVQzGhehxQ3untkkV-XAWW96KTOpNrVMM/exec?action=addTransaction', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'  // Ensure the payload is interpreted as JSON
-    },
-    body: JSON.stringify(transactionData)  // Send the transaction data as a JSON string
-})
-.then(response => response.json())
-.then(data => {
-    if (data.status === 'success') {
-        alert('Transaction added successfully!');
-        window.location.reload();  // Reload the page to update values
-    } else {
-        console.error('Error in response:', data);
-    }
-})
-.catch(error => {
-    console.error('Error adding transaction:', error);
-});
-
-
-
-// Update current cash value, apply styles for positive/negative amounts
-function updateCurrentCash(cashValue) {
-    const cashElement = document.getElementById('currentCash');
-    cashElement.innerText = cashValue.toFixed(2) + ' AZN';
-
-    if (cashValue >= 0) {
-        cashElement.style.color = 'green';
-    } else {
-        cashElement.style.color = 'red';
-    }
-}
-
-
-// Adjust turnover manually (this can open a prompt or a modal for input)
-function adjustTurnover() {
-    const newTurnover = prompt("Yeni Dövriyyəni daxil et (Enter new Turnover amount):");
-    if (newTurnover) {
-        // Update turnover in Google Sheets
-        fetch('https://script.google.com/macros/s/AKfycbzUkr-4fAFK1W8rsjkYh_kVYU_cgqecsdPVQzGhehxQ3untkkV-XAWW96KTOpNrVMM/exec?action=updateTurnover', {
+        // Send transaction to Google Apps Script
+        fetch('https://script.google.com/macros/s/AKfycbyH2oTxrFVLLDrRQY0iBIyBRjwQSSEzy5sY0227koNo-eav4YJrOWS7K6fsIES-3iA/exec?action=addTransaction', {
             method: 'POST',
-            body: JSON.stringify({ newTurnover: parseFloat(newTurnover) })
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(transactionData)  // Send the transaction data
         })
         .then(response => response.json())
         .then(data => {
-            alert('Dövriyyə yeniləndi! (Turnover updated)');
-            location.reload(); // Reload the page to fetch updated data
+            if (data.status === 'success') {
+                alert('Transaction added successfully!');
+                window.location.reload();  // Reload the page to update values
+            } else {
+                console.error('Error in transaction:', data);
+            }
         })
         .catch(error => {
-            console.error('Error updating turnover:', error);
+            console.error('Error adding transaction:', error);
         });
-    }
-}
-     });
+    });
+});
