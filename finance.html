@@ -15,8 +15,11 @@
             <li><strong>Leo Bank:</strong> <span id="leoBankValue"></span> AZN</li>
             <li><strong>Kapital Bank:</strong> <span id="kapitalBankValue"></span> AZN</li>
             <li><strong>Investment Fund:</strong> <span id="investmentFundValue"></span> AZN</li>
+            <li><strong>Qutu:</strong> <span id="qutuValue"></span> AZN</li>
+            <li><strong>Bazar:</strong> <span id="bazarValue"></span> AZN</li>
             <li><strong>Ümumi Anbar Qiyməti:</strong> <span id="totalStockValue"></span> AZN</li>
             <li><strong>Əldəki Pul (Today's Cash):</strong> <span id="eldekiPul"></span> AZN</li>
+            <li><strong>Toplam Profit:</strong> <span id="totalProfit"></span> AZN</li>
         </ul>
 
         <h2>Pul Əməliyyatları (Transactions)</h2>
@@ -30,6 +33,8 @@
                 <option value="leoBank">Leo Bank</option>
                 <option value="kapitalBank">Kapital Bank</option>
                 <option value="investmentFund">Investment Fund</option>
+                <option value="qutu">Qutu</option>
+                <option value="bazar">Bazar</option>
             </select>
 
             <label for="transactionAmount">Məbləğ (Amount):</label>
@@ -40,6 +45,10 @@
 
             <button type="submit">Göndər (Submit)</button>
         </form>
+
+        <h2>Günlük Diger Xercler</h2>
+        <input type="date" id="dailyExpenseDate" value="" />
+        <button id="fetchExpenses">Fetch Expenses</button>
     </div>
 
     <script src="finance.js"></script>
