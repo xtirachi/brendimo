@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
+    const today = new Date().toISOString().split('T')[0];
+
     // Fetch financial data and display it
     fetch('https://script.google.com/macros/s/AKfycbyH2oTxrFVLLDrRQY0iBIyBRjwQSSEzy5sY0227koNo-eav4YJrOWS7K6fsIES-3iA/exec?action=getFinancialData')
         .then(response => response.json())
@@ -6,15 +8,18 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('leoBankValue').innerText = data.leoBank + ' AZN';
             document.getElementById('kapitalBankValue').innerText = data.kapitalBank + ' AZN';
             document.getElementById('investmentFundValue').innerText = data.investmentFund + ' AZN';
-            document.getElementById('totalStockValue').innerText = data.totalStockValue + ' AZN';
+            document.getElementById('qutuValue').innerText = data.qutu + ' AZN';
+            document.getElementById('bazarValue').innerText = data.bazar + ' AZN';
+            document.getElementById('digerXerclerValue').innerText = data.digerXercler + ' AZN';
             document.getElementById('eldekiPul').innerText = data.eldekiPul + ' AZN';
+            document.getElementById('totalProfit').innerText = data.totalProfit + ' AZN';
         })
         .catch(error => console.error('Error fetching financial data:', error));
 
-    // Handle Deposit and Withdrawal Form Submission
+    // Handle transaction form submission
     document.getElementById('transactionForm').addEventListener('submit', function (e) {
         e.preventDefault();
-
+        
         const transactionType = document.querySelector('input[name="transactionType"]:checked').value;
         const source = document.getElementById('transactionSource').value;
         const amount = parseFloat(document.getElementById('transactionAmount').value);
@@ -28,13 +33,13 @@ document.addEventListener('DOMContentLoaded', function () {
             date: new Date().toISOString().split('T')[0]  // Send the current date
         };
 
-        // Send transaction to Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycbyH2oTxrFVLLDrRQY0iBIyBRjwQSSEzy5sY0227koNo-eav4YJrOWS7K6fsIES-3iA/exec?action=addTransaction', {
+        // Send the transaction data to Google Apps Script
+        fetch('https://script.google.com/macros/s/AKfycby4oQzhgi0xX_QenrktR-kW5k9On_TVZk5c4C1cus0Oe_EuuilEGTGVgY2HvliigSY/exec?action=addTransaction', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(transactionData)  // Send the transaction data
+            body: JSON.stringify(transactionData)
         })
         .then(response => response.json())
         .then(data => {
