@@ -9,6 +9,13 @@
 <body>
     <h1>Maliyyə Xülasəsi</h1>
 
+    <!-- Date Selection for Filtering Financial Data -->
+    <div>
+        <label for="filterDate">Tarixi Seçin (Select Date):</label>
+        <input type="date" id="filterDate" value="">
+        <button id="filterButton">Filter</button>
+    </div>
+
     <div id="financialData">
         <h2>Maliyyə Mənbələri (Financial Sources)</h2>
         <ul>
@@ -23,36 +30,28 @@
         </ul>
 
         <h2>Pul Əməliyyatları (Transactions)</h2>
-      <form id="transactionForm">
-    <label for="transactionType">Əməliyyat Seç (Transaction Type):</label><br>
-    <input type="radio" id="deposit" name="transactionType" value="deposit" required> Əlavə et (Deposit)<br>
-    <input type="radio" id="withdrawal" name="transactionType" value="withdrawal" required> Çıxart (Withdraw)<br>
+        <form id="transactionForm">
+            <label for="transactionType">Əməliyyat Seç (Transaction Type):</label><br>
+            <input type="radio" id="deposit" name="transactionType" value="deposit" required> Əlavə et (Deposit)<br>
+            <input type="radio" id="withdrawal" name="transactionType" value="withdrawal" required> Çıxart (Withdraw)<br>
 
-    <label for="transactionSource">Mənbə Seç (Select Source):</label>
-    <select id="transactionSource" required>
-        <option value="leoBank">Leo Bank</option>
-        <option value="kapitalBank">Kapital Bank</option>
-        <option value="investmentFund">Investment Fund</option>
-        <option value="qutu">Qutu</option>
-        <option value="bazar">Bazar</option>
-    </select>
+            <label for="transactionSource">Mənbə Seç (Select Source):</label>
+            <select id="transactionSource" required>
+                <option value="leoBank">Leo Bank</option>
+                <option value="kapitalBank">Kapital Bank</option>
+                <option value="investmentFund">Investment Fund</option>
+                <option value="qutu">Qutu</option>
+                <option value="bazar">Bazar</option>
+            </select>
 
-    <label for="transactionAmount">Məbləğ (Amount):</label>
-    <input type="number" id="transactionAmount" placeholder="Məbləği daxil et" required>
+            <label for="transactionAmount">Məbləğ (Amount):</label>
+            <input type="number" id="transactionAmount" placeholder="Məbləği daxil et" required>
 
-    <label for="transactionReason">Səbəb (Reason):</label>
-    <input type="text" id="transactionReason" placeholder="Səbəbi daxil et" required>
+            <label for="transactionReason">Səbəb (Reason):</label>
+            <input type="text" id="transactionReason" placeholder="Səbəbi daxil et" required>
 
-    <!-- Date range selection -->
-    <label for="startDate">Başlanğıc Tarixi (Start Date):</label>
-    <input type="date" id="startDate" value="" required>
-
-    <label for="endDate">Son Tarixi (End Date):</label>
-    <input type="date" id="endDate" value="" required>
-
-    <button type="submit">Göndər (Submit)</button>
-</form>
-
+            <button type="submit">Göndər (Submit)</button>
+        </form>
     </div>
 
     <script src="finance.js"></script>
