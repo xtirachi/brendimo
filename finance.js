@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const today = new Date().toISOString().split('T')[0];
 
     // Fetch financial data and display it
-    fetch('https://script.google.com/macros/s/AKfycbyH2oTxrFVLLDrRQY0iBIyBRjwQSSEzy5sY0227koNo-eav4YJrOWS7K6fsIES-3iA/exec?action=getFinancialData')
+    fetch('https://script.google.com/macros/s/AKfycbzvJTAxakkYNdH2Oz6OQwR-vlCBAd4Zpmu-yEsEORoZmW8vE64rcWwwoZ3C5TkdoVc/exec?action=getFinancialData')
         .then(response => response.json())
         .then(data => {
             document.getElementById('leoBankValue').innerText = data.leoBank + ' AZN';
