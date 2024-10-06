@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const today = new Date().toISOString().split('T')[0];
 
     // Fetch financial data and display it
-    fetch('https://script.google.com/macros/s/AKfycbzvJTAxakkYNdH2Oz6OQwR-vlCBAd4Zpmu-yEsEORoZmW8vE64rcWwwoZ3C5TkdoVc/exec?action=getFinancialData')
+    fetch('https://script.google.com/macros/s/AKfycbwtMYFXWUo6lx4QSgW6Gl9A4QN4TqCzh2A-53Hu1CAhvU0gqwgm2LLsN4Zsju-ZKPk/exec?action=getFinancialData')
         .then(response => response.json())
         .then(data => {
             document.getElementById('leoBankValue').innerText = data.leoBank + ' AZN';
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         // Send the transaction data to Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycbzvJTAxakkYNdH2Oz6OQwR-vlCBAd4Zpmu-yEsEORoZmW8vE64rcWwwoZ3C5TkdoVc/exec?action=addTransaction', {
+        fetch('https://script.google.com/macros/s/AKfycbwtMYFXWUo6lx4QSgW6Gl9A4QN4TqCzh2A-53Hu1CAhvU0gqwgm2LLsN4Zsju-ZKPk/exec?action=addTransaction', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
