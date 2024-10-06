@@ -1,4 +1,29 @@
-<form id="transactionForm">
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maliyyə Xülasəsi (Financial Overview)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Maliyyə Xülasəsi</h1>
+
+    <div id="financialData">
+        <h2>Maliyyə Mənbələri (Financial Sources)</h2>
+        <ul>
+            <li><strong>Leo Bank:</strong> <span id="leoBankValue"></span> AZN</li>
+            <li><strong>Kapital Bank:</strong> <span id="kapitalBankValue"></span> AZN</li>
+            <li><strong>Investment Fund:</strong> <span id="investmentFundValue"></span> AZN</li>
+            <li><strong>Qutu:</strong> <span id="qutuValue"></span> AZN</li>
+            <li><strong>Bazar:</strong> <span id="bazarValue"></span> AZN</li>
+            <li><strong>Günlük Diger Xercler:</strong> <span id="digerXerclerValue"></span> AZN</li>
+            <li><strong>Əldəki Pul (Today's Cash):</strong> <span id="eldekiPul"></span> AZN</li>
+            <li><strong>Total Profit:</strong> <span id="totalProfit"></span> AZN</li>
+        </ul>
+
+        <h2>Pul Əməliyyatları (Transactions)</h2>
+      <form id="transactionForm">
     <label for="transactionType">Əməliyyat Seç (Transaction Type):</label><br>
     <input type="radio" id="deposit" name="transactionType" value="deposit" required> Əlavə et (Deposit)<br>
     <input type="radio" id="withdrawal" name="transactionType" value="withdrawal" required> Çıxart (Withdraw)<br>
@@ -27,3 +52,9 @@
 
     <button type="submit">Göndər (Submit)</button>
 </form>
+
+    </div>
+
+    <script src="finance.js"></script>
+</body>
+</html>
