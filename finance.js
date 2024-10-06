@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         };
 
         // Send the transaction data to Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycby4oQzhgi0xX_QenrktR-kW5k9On_TVZk5c4C1cus0Oe_EuuilEGTGVgY2HvliigSY/exec?action=addTransaction', {
+        fetch('https://script.google.com/macros/s/AKfycbzvJTAxakkYNdH2Oz6OQwR-vlCBAd4Zpmu-yEsEORoZmW8vE64rcWwwoZ3C5TkdoVc/exec?action=addTransaction', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
