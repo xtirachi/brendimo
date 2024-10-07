@@ -2,57 +2,55 @@
 <html lang="az">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maliyyə Xülasəsi (Financial Overview)</title>
+    <title>Maliyyə İdarəetmə Sistemi</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Maliyyə Xülasəsi</h1>
+    <h1>Maliyyə İdarəetmə Sistemi</h1>
 
-    <!-- Date Selection for Filtering Financial Data -->
-    <div>
-        <label for="filterDate">Tarixi Seçin (Select Date):</label>
-        <input type="date" id="filterDate" value="">
-        <button id="filterButton">Filter</button>
-    </div>
+    <label for="datePicker">Tarix seçin:</label>
+    <input type="date" id="datePicker">
 
+    <h2>Maliyyə Məlumatları</h2>
     <div id="financialData">
-        <h2>Maliyyə Mənbələri (Financial Sources)</h2>
-        <ul>
-            <li><strong>Leo Bank:</strong> <span id="leoBankValue"></span> AZN</li>
-            <li><strong>Kapital Bank:</strong> <span id="kapitalBankValue"></span> AZN</li>
-            <li><strong>Investment Fund:</strong> <span id="investmentFundValue"></span> AZN</li>
-            <li><strong>Qutu:</strong> <span id="qutuValue"></span> AZN</li>
-            <li><strong>Bazar:</strong> <span id="bazarValue"></span> AZN</li>
-            <li><strong>Günlük Diger Xercler:</strong> <span id="digerXerclerValue"></span> AZN</li>
-            <li><strong>Əldəki Pul (Today's Cash):</strong> <span id="eldekiPul"></span> AZN</li>
-            <li><strong>Total Profit:</strong> <span id="totalProfit"></span> AZN</li>
-        </ul>
-
-        <h2>Pul Əməliyyatları (Transactions)</h2>
-        <form id="transactionForm">
-            <label for="transactionType">Əməliyyat Seç (Transaction Type):</label><br>
-            <input type="radio" id="deposit" name="transactionType" value="deposit" required> Əlavə et (Deposit)<br>
-            <input type="radio" id="withdrawal" name="transactionType" value="withdrawal" required> Çıxart (Withdraw)<br>
-
-            <label for="transactionSource">Mənbə Seç (Select Source):</label>
-            <select id="transactionSource" required>
-                <option value="leoBank">Leo Bank</option>
-                <option value="kapitalBank">Kapital Bank</option>
-                <option value="investmentFund">Investment Fund</option>
-                <option value="qutu">Qutu</option>
-                <option value="bazar">Bazar</option>
-            </select>
-
-            <label for="transactionAmount">Məbləğ (Amount):</label>
-            <input type="number" id="transactionAmount" placeholder="Məbləği daxil et" required>
-
-            <label for="transactionReason">Səbəb (Reason):</label>
-            <input type="text" id="transactionReason" placeholder="Səbəbi daxil et" required>
-
-            <button type="submit">Göndər (Submit)</button>
-        </form>
+        <p>Leo Bank: <span id="leoBankBalance">0</span></p>
+        <p>Kapital Bank: <span id="kapitalBankBalance">0</span></p>
+        <p>İnvestisiya Fondu: <span id="investmentFundBalance">0</span></p>
+        <p>Qutu (Nağd Pul Ehtiyatı): <span id="qutuBalance">0</span></p>
+        <p>Bazar (Market Ehtiyatı): <span id="bazarBalance">0</span></p>
+        <p>Günlük Digər Xərclər: <span id="dailyExpenses">0</span></p>
+        <p>Əldəki Pul (Bugünkü Pul): <span id="todayCash">0</span></p>
+        <p>Ümumi Mənfəət: <span id="totalProfit">0</span></p>
     </div>
+
+    <h2>Əməliyyat Girişi</h2>
+    <form id="transactionForm">
+        <label for="transactionType">Əməliyyat Növü:</label>
+        <select id="transactionType" required>
+            <option value="">Seçin</option>
+            <option value="deposit">Əlavə et</option>
+            <option value="withdrawal">Çıxart</option>
+        </select><br>
+
+        <label for="transactionSource">Əməliyyat Mənbəyi:</label>
+        <select id="transactionSource" required>
+            <option value="">Seçin</option>
+            <option value="leoBank">Leo Bank</option>
+            <option value="kapitalBank">Kapital Bank</option>
+            <option value="investmentFund">İnvestisiya Fondu</option>
+            <option value="qutu">Qutu (Nağd Pul Ehtiyatı)</option>
+            <option value="bazar">Bazar (Market Ehtiyatı)</option>
+            <option value="dailyExpenses">Günlük Digər Xərclər</option>
+        </select><br>
+
+        <label for="transactionAmount">Məbləğ:</label>
+        <input type="number" id="transactionAmount" required min="0" step="0.01"><br>
+
+        <label for="transactionReason">Səbəb:</label>
+        <input type="text" id="transactionReason" required><br>
+
+        <button type="submit">Əməliyyatı Göndər</button>
+    </form>
 
     <script src="finance.js"></script>
 </body>
