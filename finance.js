@@ -1,70 +1,90 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const today = new Date().toISOString().split('T')[0];
+document.addEventListener('DOMContentLoaded', function() {
+    // Set the date picker to today's date by default
+    const datePicker = document.getElementById('datePicker');
+    const today = new Date().toISOString().substr(0, 10);
+    datePicker.value = today;
 
-    // Default: Load financial data for today's date
+    // Fetch and display financial data for today on page load
     fetchFinancialData(today);
 
-    // Handle filtering financial data based on the selected date
-    document.getElementById('filterButton').addEventListener('click', function () {
-        const filterDate = document.getElementById('filterDate').value;
-        if (filterDate) {
-            fetchFinancialData(filterDate);
-        }
+    // Add event listener for date change
+    datePicker.addEventListener('change', function() {
+        const selectedDate = this.value;
+        fetchFinancialData(selectedDate);
     });
 
-    // Fetch financial data for the given date
-    function fetchFinancialData(date) {
-        fetch(`https://script.google.com/macros/s/AKfycbzOz3jIb1Y8Bj0IZBD3kGI5jTNW65_W0yjMYuN9lXTdVl_M0f_zSvB9JbB1fNEMH9c/exec?action=getFinancialData&date=${date}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('leoBankValue').innerText = data.leoBank + ' AZN';
-                document.getElementById('kapitalBankValue').innerText = data.kapitalBank + ' AZN';
-                document.getElementById('investmentFundValue').innerText = data.investmentFund + ' AZN';
-                document.getElementById('qutuValue').innerText = data.qutu + ' AZN';
-                document.getElementById('bazarValue').innerText = data.bazar + ' AZN';
-                document.getElementById('digerXerclerValue').innerText = data.digerXercler + ' AZN';
-                document.getElementById('eldekiPul').innerText = data.eldekiPul + ' AZN';
-                document.getElementById('totalProfit').innerText = data.totalProfit + ' AZN';
-            })
-            .catch(error => console.error('Error fetching financial data:', error));
-    }
-
-    // Handle transaction form submission
-    document.getElementById('transactionForm').addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const transactionType = document.querySelector('input[name="transactionType"]:checked').value;
-        const source = document.getElementById('transactionSource').value;
-        const amount = parseFloat(document.getElementById('transactionAmount').value);
-        const reason = document.getElementById('transactionReason').value;
-
-        const transactionData = {
-            type: transactionType,
-            source: source,
-            amount: amount,
-            reason: reason,
-            date: new Date().toISOString().split('T')[0]  // Always use the current date for transactions
-        };
-
-        // Send the transaction data to Google Apps Script
-        fetch('https://script.google.com/macros/s/AKfycbzOz3jIb1Y8Bj0IZBD3kGI5jTNW65_W0yjMYuN9lXTdVl_M0f_zSvB9JbB1fNEMH9c/exec?action=addTransaction', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(transactionData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                alert('Transaction added successfully!');
-                window.location.reload();  // Reload the page to update values
-            } else {
-                console.error('Error in transaction:', data);
-            }
-        })
-        .catch(error => {
-            console.error('Error adding transaction:', error);
-        });
+    // Add event listener for form submission
+    const transactionForm = document.getElementById('transactionForm');
+    transactionForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        submitTransactionForm();
     });
 });
+
+function fetchFinancialData(selectedDate) {
+    // Replace 'YOUR_SCRIPT_URL' with your actual Google Apps Script Web App URL
+    fetch(`https://script.google.com/macros/s/AKfycbwm-KIQtLmcww0bVD0Z_t1T78qL5g6r-zVTigDhZHNNibl7IP5t20GS_op09loC6w/exec?action=getFinancialData&date=${selectedDate}`)
+        .then(response => response.json())
+        .then(data => {
+            // Update the UI with the received data
+            document.getElementById('leoBankBalance').textContent = data.leoBankBalance.toFixed(2);
+            document.getElementById('kapitalBankBalance').textContent = data.kapitalBankBalance.toFixed(2);
+            document.getElementById('investmentFundBalance').textContent = data.investmentFundBalance.toFixed(2);
+            document.getElementById('qutuBalance').textContent = data.qutuBalance.toFixed(2);
+            document.getElementById('bazarBalance').textContent = data.bazarBalance.toFixed(2);
+            document.getElementById('dailyExpenses').textContent = data.dailyExpenses.toFixed(2);
+            document.getElementById('todayCash').textContent = data.todayCash.toFixed(2);
+            document.getElementById('totalProfit').textContent = data.totalProfit.toFixed(2);
+        })
+        .catch(error => {
+            console.error('Error fetching financial data:', error);
+            alert('Maliyyə məlumatlarını əldə etmək zamanı səhv baş verdi.');
+        });
+}
+
+function submitTransactionForm() {
+    // Collect form data
+    const transactionType = document.getElementById('transactionType').value;
+    const transactionSource = document.getElementById('transactionSource').value;
+    const transactionAmount = parseFloat(document.getElementById('transactionAmount').value);
+    const transactionReason = document.getElementById('transactionReason').value;
+
+    if (!transactionType || !transactionSource || !transactionAmount || !transactionReason) {
+        alert('Zəhmət olmasa, bütün sahələri doldurun.');
+        return;
+    }
+
+    // Prepare data to send
+    const data = {
+        transactionType: transactionType,
+        transactionSource: transactionSource,
+        transactionAmount: transactionAmount,
+        transactionReason: transactionReason
+    };
+
+    // Replace 'YOUR_SCRIPT_URL' with your actual Google Apps Script Web App URL
+    fetch('https://script.google.com/macros/s/AKfycbwm-KIQtLmcww0bVD0Z_t1T78qL5g6r-zVTigDhZHNNibl7IP5t20GS_op09loC6w/exec', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            alert('Əməliyyat uğurla yerinə yetirildi.');
+            // Refresh the financial data
+            const selectedDate = document.getElementById('datePicker').value;
+            fetchFinancialData(selectedDate);
+            // Reset the form
+            document.getElementById('transactionForm').reset();
+        } else {
+            alert('Əməliyyat zamanı səhv baş verdi: ' + result.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error submitting transaction:', error);
+        alert('Əməliyyatı göndərmək zamanı səhv baş verdi.');
+    });
+}
