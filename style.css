@@ -461,25 +461,6 @@ button:focus {
     box-sizing: border-box;
 }
 
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    color: #333;
-    padding: 20px;
-}
-
-h1, h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #2c3e50;
-}
-
-label {
-    display: block;
-    margin-top: 10px;
-    font-weight: bold;
-    color: #34495e;
-}
 
 input[type="date"],
 input[type="number"],
@@ -498,23 +479,6 @@ input[type="number"]::-webkit-outer-spin-button {
     margin: 0;
 }
 
-button {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    margin-top: 20px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-button:hover {
-    background-color: #2980b9;
-}
 
 #financialData {
     background-color: #ffffff;
@@ -542,16 +506,6 @@ button:hover {
     color: #27ae60;
 }
 
-form {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-form label {
-    margin-top: 15px;
-}
 
 @media (min-width: 768px) {
     body {
@@ -585,21 +539,3 @@ form label {
     border-radius: 4px;
 }
 
-form {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-}
-
-form input,
-form select {
-    font-size: 16px;
-}
-
-button {
-    background-color: #2ecc71;
-}
-
-button:hover {
-    background-color: #27ae60;
-}
