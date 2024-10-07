@@ -63,7 +63,7 @@ function submitTransactionForm() {
     };
 
     // Replace 'YOUR_SCRIPT_URL' with your actual Google Apps Script Web App URL
-    fetch('https://script.google.com/macros/s/AKfycbwWf55jzyIt_KyjxcVpbpTZxtLSGqYx6py8VQWwtdxrhec2ck0LeqWWE928xltJNLU/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbyJyA04vD_r6iHVpM6E55y1O3r13ev9DFueRqMpesaDXWEVOrM2XvzKU40Eepz9KQ/exec', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
