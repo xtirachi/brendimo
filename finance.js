@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function fetchFinancialData(selectedDate) {
     // Replace 'YOUR_SCRIPT_URL' with your actual Google Apps Script Web App URL
-    fetch(`https://script.google.com/macros/s/AKfycbxOLpZJduFPzXvnb7ALpt5Xk3MGW0pqAcZOKvtxTvXQc412Yi11oMkW4vgLlf-Ssg/exec?action=getFinancialData&date=${selectedDate}`)
+    fetch(`https://script.google.com/macros/s/AKfycbySyxs5BVNMxvvW7WWoRZBspM-qzTDzj-oNVX60qb7PIi9VMRR9OjmxGZP0KXbAeGw/exec?action=getFinancialData&date=${selectedDate}`)
         .then(response => response.json())
         .then(data => {
             // Update the UI with the received data
@@ -63,7 +63,7 @@ function submitTransactionForm() {
     };
 
     // Replace 'YOUR_SCRIPT_URL' with your actual Google Apps Script Web App URL
-    fetch('https://script.google.com/macros/s/AKfycbxOLpZJduFPzXvnb7ALpt5Xk3MGW0pqAcZOKvtxTvXQc412Yi11oMkW4vgLlf-Ssg/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbySyxs5BVNMxvvW7WWoRZBspM-qzTDzj-oNVX60qb7PIi9VMRR9OjmxGZP0KXbAeGw/exec', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
