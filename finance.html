@@ -1,56 +1,87 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Maliyyə İdarəetmə Sistemi</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Financial Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
 </head>
-<body>
-    <h1>Maliyyə İdarəetmə Sistemi</h1>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center mb-4">Daily Financial Information</h1>
 
-    <label for="datePicker">Tarix seçin:</label>
-    <input type="date" id="datePicker">
+        <!-- Date Picker -->
+        <div class="flex justify-center mb-6">
+            <input id="selectedDate" type="date" class="border p-2 rounded" value="">
+            <button id="fetchDataBtn" class="ml-4 bg-blue-500 text-white px-4 py-2 rounded">Fetch Data</button>
+        </div>
 
-    <h2>Maliyyə Məlumatları</h2>
-    <div id="financialData">
-        <p>Leo Bank: <span id="leoBankBalance">0</span></p>
-        <p>Kapital Bank: <span id="kapitalBankBalance">0</span></p>
-        <p>İnvestisiya Fondu: <span id="investmentFundBalance">0</span></p>
-        <p>Qutu (Nağd Pul Ehtiyatı): <span id="qutuBalance">0</span></p>
-        <p>Bazar (Market Ehtiyatı): <span id="bazarBalance">0</span></p>
-        <p>Günlük Digər Xərclər: <span id="dailyExpenses">0</span></p>
-        <p>Əldəki Pul (Bugünkü Pul): <span id="todayCash">0</span></p>
-        <p>Ümumi Mənfəət: <span id="totalProfit">0</span></p>
+        <!-- Financial Data Display -->
+        <div id="financialData" class="grid grid-cols-2 gap-4 mb-8">
+            <div class="p-4 bg-white rounded shadow">
+                <h2 class="text-xl font-bold">Leo Bank</h2>
+                <p id="leoBankBalance">Balance: 0 AZN</p>
+            </div>
+            <div class="p-4 bg-white rounded shadow">
+                <h2 class="text-xl font-bold">Kapital Bank</h2>
+                <p id="kapitalBankBalance">Balance: 0 AZN</p>
+            </div>
+            <div class="p-4 bg-white rounded shadow">
+                <h2 class="text-xl font-bold">Investisiya Fondu</h2>
+                <p id="investmentFundBalance">Balance: 0 AZN</p>
+            </div>
+            <div class="p-4 bg-white rounded shadow">
+                <h2 class="text-xl font-bold">Qutu (Nağd Pul)</h2>
+                <p id="qutuBalance">Balance: 0 AZN</p>
+            </div>
+            <div class="p-4 bg-white rounded shadow">
+                <h2 class="text-xl font-bold">Bazar (Market)</h2>
+                <p id="bazarBalance">Balance: 0 AZN</p>
+            </div>
+        </div>
+
+        <!-- Daily Specifics -->
+        <div class="p-4 bg-white rounded shadow mb-8">
+            <h2 class="text-xl font-bold">Günlük Specifics</h2>
+            <p id="digerXercler">Günlük Digər Xərclər: 0 AZN</p>
+            <p id="eldekiPul">Əldəki Pul (Bugünkü Pul): 0 AZN</p>
+            <p id="gunlukGelir">Günlük Gəlir: 0 AZN</p>
+        </div>
+
+        <!-- Transaction Form -->
+        <div class="p-4 bg-white rounded shadow">
+            <h2 class="text-xl font-bold mb-4">Adjust Financial Information</h2>
+            <form id="transactionForm">
+                <div class="mb-4">
+                    <label for="transactionType" class="block text-sm font-medium">Transaction Type</label>
+                    <select id="transactionType" class="border p-2 rounded w-full">
+                        <option value="Deposit">Deposit</option>
+                        <option value="Withdrawal">Withdrawal</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="transactionSource" class="block text-sm font-medium">Transaction Source</label>
+                    <select id="transactionSource" class="border p-2 rounded w-full">
+                        <option value="Leo Bank">Leo Bank</option>
+                        <option value="Kapital Bank">Kapital Bank</option>
+                        <option value="Investisiya Fondu">Investisiya Fondu</option>
+                        <option value="Qutu">Qutu (Nağd Pul)</option>
+                        <option value="Bazar">Bazar (Market)</option>
+                        <option value="Diger Xercler">Günlük Digər Xərclər</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="transactionAmount" class="block text-sm font-medium">Transaction Amount</label>
+                    <input id="transactionAmount" type="number" class="border p-2 rounded w-full">
+                </div>
+                <div class="mb-4">
+                    <label for="transactionReason" class="block text-sm font-medium">Transaction Reason</label>
+                    <input id="transactionReason" type="text" class="border p-2 rounded w-full">
+                </div>
+                <button id="submitTransaction" type="submit" class="bg-green-500 text-white px-4 py-2 rounded">Submit Transaction</button>
+            </form>
+        </div>
     </div>
-
-    <h2>Əməliyyat Girişi</h2>
-    <form id="transactionForm">
-        <label for="transactionType">Əməliyyat Növü:</label>
-        <select id="transactionType" required>
-            <option value="">Seçin</option>
-            <option value="deposit">Əlavə et</option>
-            <option value="withdrawal">Çıxart</option>
-        </select><br>
-
-        <label for="transactionSource">Əməliyyat Mənbəyi:</label>
-        <select id="transactionSource" required>
-            <option value="">Seçin</option>
-            <option value="leoBank">Leo Bank</option>
-            <option value="kapitalBank">Kapital Bank</option>
-            <option value="investmentFund">İnvestisiya Fondu</option>
-            <option value="qutu">Qutu (Nağd Pul Ehtiyatı)</option>
-            <option value="bazar">Bazar (Market Ehtiyatı)</option>
-            <option value="dailyExpenses">Günlük Digər Xərclər</option>
-        </select><br>
-
-        <label for="transactionAmount">Məbləğ:</label>
-        <input type="number" id="transactionAmount" required min="0" step="0.01"><br>
-
-        <label for="transactionReason">Səbəb:</label>
-        <input type="text" id="transactionReason" required><br>
-
-        <button type="submit">Əməliyyatı Göndər</button>
-    </form>
 
     <script src="finance.js"></script>
 </body>
