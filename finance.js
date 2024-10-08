@@ -1,19 +1,15 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Set the date picker to today's date by default
     const datePicker = document.getElementById('datePicker');
     const today = new Date().toISOString().substr(0, 10);
     datePicker.value = today;
 
-    // Fetch and display financial data for today on page load
     fetchFinancialData(today);
 
-    // Add event listener for date change
     datePicker.addEventListener('change', function() {
         const selectedDate = this.value;
         fetchFinancialData(selectedDate);
     });
 
-    // Add event listener for form submission
     const transactionForm = document.getElementById('transactionForm');
     transactionForm.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -22,11 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function fetchFinancialData(selectedDate) {
-    // Replace 'YOUR_SCRIPT_URL' with your actual Google Apps Script Web App URL
-    fetch(`https://script.google.com/macros/s/AKfycbySyxs5BVNMxvvW7WWoRZBspM-qzTDzj-oNVX60qb7PIi9VMRR9OjmxGZP0KXbAeGw/exec?action=getFinancialData&date=${selectedDate}`)
+    fetch(`https://script.google.com/macros/s/AKfycbxoLnkqabNC_8sLUo4R19mDIEBqA5tgQONColGxHu72vvKAtFgSlYfUnoLWQE1QZPs/exec?action=getFinancialData&date=${selectedDate}`)
         .then(response => response.json())
         .then(data => {
-            // Update the UI with the received data
             document.getElementById('leoBankBalance').textContent = data.leoBankBalance.toFixed(2);
             document.getElementById('kapitalBankBalance').textContent = data.kapitalBankBalance.toFixed(2);
             document.getElementById('investmentFundBalance').textContent = data.investmentFundBalance.toFixed(2);
@@ -43,7 +37,6 @@ function fetchFinancialData(selectedDate) {
 }
 
 function submitTransactionForm() {
-    // Collect form data
     const transactionType = document.getElementById('transactionType').value;
     const transactionSource = document.getElementById('transactionSource').value;
     const transactionAmount = parseFloat(document.getElementById('transactionAmount').value);
@@ -54,7 +47,6 @@ function submitTransactionForm() {
         return;
     }
 
-    // Prepare data to send
     const data = {
         transactionType: transactionType,
         transactionSource: transactionSource,
@@ -62,8 +54,7 @@ function submitTransactionForm() {
         transactionReason: transactionReason
     };
 
-    // Replace 'YOUR_SCRIPT_URL' with your actual Google Apps Script Web App URL
-    fetch('https://script.google.com/macros/s/AKfycbySyxs5BVNMxvvW7WWoRZBspM-qzTDzj-oNVX60qb7PIi9VMRR9OjmxGZP0KXbAeGw/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbxoLnkqabNC_8sLUo4R19mDIEBqA5tgQONColGxHu72vvKAtFgSlYfUnoLWQE1QZPs/exec?action=addTransaction', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -74,10 +65,8 @@ function submitTransactionForm() {
     .then(result => {
         if (result.success) {
             alert('Əməliyyat uğurla yerinə yetirildi.');
-            // Refresh the financial data
             const selectedDate = document.getElementById('datePicker').value;
             fetchFinancialData(selectedDate);
-            // Reset the form
             document.getElementById('transactionForm').reset();
         } else {
             alert('Əməliyyat zamanı səhv baş verdi: ' + result.message);
