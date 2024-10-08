@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Function to fetch financial data for a specific date
 function fetchFinancialData(selectedDate) {
-    fetch(`https://script.google.com/macros/s/AKfycbygRRFp4a8kajlG4fJrIaB6TSTjoqZVY5ZMMzb0G7UPOLT-iChn47iliqvU-RBBVFY/exec?action=getFinancialData&date=${selectedDate}`)
+    fetch(`https://script.google.com/macros/s/AKfycbz8yHQYbLTNxNNo9pufCfqoTUKfcse6MqnQt3r6N9Az80PUJssJaOqvbokmL36etQ/exec?action=getFinancialData&date=${selectedDate}`)
         .then(response => response.json())
         .then(data => {
             // Update the UI with the received data
@@ -64,7 +64,7 @@ function submitTransactionForm() {
     };
 
     // Send the POST request to log the transaction
-    fetch('https://script.google.com/macros/s/AKfycbygRRFp4a8kajlG4fJrIaB6TSTjoqZVY5ZMMzb0G7UPOLT-iChn47iliqvU-RBBVFY/exec?action=addTransaction', {
+    fetch('https://script.google.com/macros/s/AKfycbz8yHQYbLTNxNNo9pufCfqoTUKfcse6MqnQt3r6N9Az80PUJssJaOqvbokmL36etQ/exec?action=addTransaction', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
