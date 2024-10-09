@@ -4,91 +4,74 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Financial Management System</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css">
+    <link rel="stylesheet" href="finance.css">
 </head>
-<body class="bg-gray-100 p-5">
-    <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
-        <h1 class="text-2xl font-bold mb-5">Financial Management System</h1>
+<body>
+    <div class="container">
+        <h1>Financial Management System</h1>
 
         <!-- Part 1: Add New Transaction -->
-        <section>
-            <h2 class="text-xl font-semibold mb-4">Add New Transaction</h2>
-            <form id="transactionForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium">Transaction Type</label>
-                    <select id="transactionType" class="w-full p-2 border rounded">
-                        <option value="Deposit">Deposit (Mədaxil)</option>
-                        <option value="Withdrawal">Withdrawal (Məxaric)</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium">Transaction Source</label>
-                    <select id="transactionSource" class="w-full p-2 border rounded">
-                        <option value="Leo Bank">Leo Bank</option>
-                        <option value="Kapital Bank">Kapital Bank</option>
-                        <option value="Investment Fund">Investment Fund</option>
-                        <option value="Qutu">Qutu</option>
-                        <option value="Bazar">Bazar</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium">Amount</label>
-                    <input type="number" id="transactionAmount" class="w-full p-2 border rounded">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium">Reason (Optional)</label>
-                    <input type="text" id="transactionReason" class="w-full p-2 border rounded">
-                </div>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Submit Transaction</button>
+        <section id="add-transaction">
+            <h2>Add New Transaction</h2>
+            <form id="transaction-form">
+                <label for="transaction-type">Transaction Type</label>
+                <select id="transaction-type">
+                    <option value="Deposit">Mədaxil (Deposit)</option>
+                    <option value="Withdrawal">Məxaric (Withdrawal)</option>
+                </select>
+
+                <label for="transaction-source">Transaction Source</label>
+                <select id="transaction-source">
+                    <option value="Leo Bank">Leo Bank</option>
+                    <option value="Kapital Bank">Kapital Bank</option>
+                    <option value="İnv. Fund">İnv. Fund</option>
+                    <option value="Qutu">Qutu</option>
+                    <option value="Bazar">Bazar</option>
+                    <option value="Günlük Digər Xərclər">Günlük Digər Xərclər</option>
+                </select>
+
+                <label for="transaction-amount">Transaction Amount</label>
+                <input type="number" id="transaction-amount" required>
+
+                <label for="transaction-reason">Transaction Reason (optional)</label>
+                <input type="text" id="transaction-reason">
+
+                <button type="submit">Add Transaction</button>
             </form>
         </section>
 
         <!-- Part 2: Today's Transactions -->
-        <section class="mt-8">
-            <h2 class="text-xl font-semibold mb-4">Today's Transactions</h2>
-            <table class="w-full border rounded">
+        <section id="todays-transactions">
+            <h2>Today's Transactions</h2>
+            <table id="transactions-table">
                 <thead>
-                    <tr class="bg-gray-200">
-                        <th class="p-2">Date</th>
-                        <th class="p-2">Type</th>
-                        <th class="p-2">Source</th>
-                        <th class="p-2">Amount</th>
-                        <th class="p-2">Reason</th>
+                    <tr>
+                        <th>Tarix</th>
+                        <th>Növ</th>
+                        <th>Mənbə</th>
+                        <th>Məbləğ</th>
+                        <th>Səbəb</th>
                     </tr>
                 </thead>
-                <tbody id="transactionList">
-                    <!-- Transactions will be populated here dynamically -->
+                <tbody id="transactions-body">
+                    <!-- Transactions will be populated here by JavaScript -->
                 </tbody>
             </table>
         </section>
 
         <!-- Part 3: Bank and Fund Balances -->
-        <section class="mt-8">
-            <h2 class="text-xl font-semibold mb-4">Bank and Fund Balances</h2>
-            <ul id="balancesList" class="space-y-2">
-                <!-- Balances will be populated here dynamically -->
+        <section id="balances">
+            <h2>Bank and Fund Balances</h2>
+            <ul id="balances-list">
+                <!-- Balances will be populated here by JavaScript -->
             </ul>
         </section>
 
         <!-- Part 4: Daily Changing Values -->
-        <section class="mt-8">
-            <h2 class="text-xl font-semibold mb-4">Daily Changing Values</h2>
-            <div>
-                <p><strong>Günlük Digər Xərclər:</strong> <span id="dailyExpenses">0 AZN</span></p>
-                <p><strong>Əldəki Pul:</strong> <span id="cashInHand">0 AZN</span></p>
-            </div>
-        </section>
-
-        <!-- New Section: Adjust Günlük Digər Xərclər -->
-        <section class="mt-8">
-            <h2 class="text-xl font-semibold mb-4">Adjust Günlük Digər Xərclər</h2>
-            <form id="adjustDailyExpensesForm" class="space-y-4">
-                <div>
-                    <label class="block text-sm font-medium">New Günlük Digər Xərclər Amount</label>
-                    <input type="number" id="newDailyExpenses" class="w-full p-2 border rounded">
-                </div>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Adjust Expenses</button>
-            </form>
+        <section id="daily-values">
+            <h2>Daily Values</h2>
+            <p>Günlük Digər Xərclər: <span id="daily-expenses"></span></p>
+            <p>Əldəki Pul: <span id="cash-in-hand"></span></p>
         </section>
     </div>
 
