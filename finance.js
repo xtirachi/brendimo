@@ -9,6 +9,16 @@ document.getElementById('transaction-form').addEventListener('submit', function(
     const transactionAmount = parseFloat(document.getElementById('transaction-amount').value);
     const transactionReason = document.getElementById('transaction-reason').value;
 
+      // Logging the request payload to verify correctness
+    console.log({
+        action: 'addTransaction',
+        transactionType,
+        transactionSource,
+        transactionAmount,
+        transactionReason
+    });
+
+
     fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         body: JSON.stringify({
@@ -31,7 +41,10 @@ document.getElementById('transaction-form').addEventListener('submit', function(
             alert('Error: ' + data.message);
         }
     })
-    .catch(error => console.error('Error:', error));
+     .catch(error => {
+        console.error('Fetch error:', error);
+        alert('Error adding transaction: ' + error.message);
+    });
 });
 
 // Load Today's Transactions
