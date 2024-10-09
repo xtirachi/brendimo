@@ -1,29 +1,59 @@
-// Gündəlik maliyyə məlumatlarını gətirir
-function fetchDailyData() {
-  const selectedDate = document.getElementById('selectedDate').value;
-
-  google.script.run.withSuccessHandler(function(data) {
-    document.getElementById('leoBankBalance').textContent = data.balances.leoBank + ' AZN';
-    document.getElementById('kapitalBankBalance').textContent = data.balances.kapitalBank + ' AZN';
-    document.getElementById('investmentFundBalance').textContent = data.balances.investmentFund + ' AZN';
-    document.getElementById('qutuBalance').textContent = data.balances.qutu + ' AZN';
-    document.getElementById('bazarBalance').textContent = data.balances.bazar + ' AZN';
-    document.getElementById('otherExpenses').textContent = data.otherExpenses + ' AZN';
-    document.getElementById('cashInHand').textContent = data.cashInHand + ' AZN';
-  }).getDailyData(selectedDate);
+// Fetch today's financial data from Google Apps Script and update the UI
+function fetchFinancialData() {
+    // Call the Google Apps Script function
+    google.script.run.withSuccessHandler(function(data) {
+        // Handle the data returned from Google Apps Script
+        updateTransactionTable(data.transactions);
+        updateBalances(data.balances);
+        updateDailyValues(data.dailyValues);
+    }).getFinancialData();  // Calls the backend `getFinancialData` function
 }
 
-// Yeni əməliyyatı qeyd edir
-function submitTransaction() {
-  const formData = {
-    transactionDate: document.getElementById('transactionDate').value,
-    transactionType: document.getElementById('transactionType').value,
-    transactionSource: document.getElementById('transactionSource').value,
-    transactionAmount: document.getElementById('transactionAmount').value,
-    transactionReason: document.getElementById('transactionReason').value
-  };
+// Update the transactions table with today's data
+function updateTransactionTable(transactions) {
+    const tableBody = document.getElementById('todaysTransactionsTable').getElementsByTagName('tbody')[0];
+    tableBody.innerHTML = '';  // Clear existing rows
 
-  google.script.run.withSuccessHandler(function(response) {
-    document.getElementById('statusMessage').textContent = response;
-  }).logTransaction(formData);
+    transactions.forEach(transaction => {
+        const newRow = tableBody.insertRow();
+        transaction.forEach(data => {
+            const newCell = newRow.insertCell();
+            newCell.textContent = data;
+        });
+    });
 }
+
+// Update the bank and fund balances
+function updateBalances(balances) {
+    document.getElementById('leoBankBalance').textContent = balances.leoBank;
+    document.getElementById('kapitalBankBalance').textContent = balances.kapitalBank;
+    document.getElementById('investmentFundBalance').textContent = balances.investmentFund;
+    document.getElementById('qutuBalance').textContent = balances.qutu;
+    document.getElementById('bazarBalance').textContent = balances.bazar;
+}
+
+// Update the daily values like expenses and cash in hand
+function updateDailyValues(dailyValues) {
+    document.getElementById('dailyExpenses').textContent = dailyValues.dailyExpenses;
+    document.getElementById('cashInHand').textContent = dailyValues.cashInHand;
+}
+
+// Add a new transaction by calling Google Apps Script's addTransaction function
+function addTransaction() {
+    const transactionData = {
+        transactionType: document.getElementById('transactionType').value,
+        transactionSource: document.getElementById('transactionSource').value,
+        transactionAmount: document.getElementById('transactionAmount').value,
+        transactionReason: document.getElementById('transactionReason').value
+    };
+
+    google.script.run.withSuccessHandler(function() {
+        alert('Əməliyyat uğurla əlavə olundu!');  // Transaction added successfully
+        fetchFinancialData();  // Refresh the data after adding the transaction
+    }).addTransaction(transactionData);  // Calls the backend `addTransaction` function
+}
+
+// Initialize the page by fetching today's financial data
+window.onload = function() {
+    fetchFinancialData();
+};
