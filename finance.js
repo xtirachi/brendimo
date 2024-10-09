@@ -1,4 +1,4 @@
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyolVl3sprXlKJ4NEmG7CK5RBnVal-_udd6bdVtlG-qTezfJlKOhbYJ0wcjMg1sZrgivg/exec';  // Replace with your Google Apps Script URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwcuVBLNU3jFAOGgpfsRaZmx2qZgbO315UrCczuld2-OzF6rksnTKWDxuEY_8G4JD7IhQ/exec';  // Replace with your Google Apps Script URL
 
 // Add Transaction
 document.getElementById('transaction-form').addEventListener('submit', function(event) {
