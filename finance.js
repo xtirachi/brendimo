@@ -35,7 +35,8 @@ document.getElementById('transaction-form').addEventListener('submit', function(
 .then(response => response.json())
 .then(data => {
     if (data.status === 'success') {
-        alert('Transaction added successfully and balances updated!');
+        alert('Əlavə olundu və balans dəyişildi');
+                window.location.reload();  // This will refresh the page
     } else {
         alert('Error: ' + data.message);
     }
