@@ -1,15 +1,51 @@
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxhCBChw5NjGTruyOiNPdG1f4OTFYd08ufGY-Umgjb6FcsukcbGSZvpCHqz6n2mqg/exec';  // Replace with your Google Apps Script Web App URL
+
+// Add a new transaction
+function addTransaction() {
+    const transactionData = {
+        action: 'addTransaction',
+        transactionType: document.getElementById('transactionType').value,
+        transactionSource: document.getElementById('transactionSource').value,
+        transactionAmount: document.getElementById('transactionAmount').value,
+        transactionReason: document.getElementById('transactionReason').value
+    };
+
+    // Send POST request to Google Apps Script
+    fetch(GOOGLE_APPS_SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(transactionData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'Transaction added successfully!') {
+            alert('Əməliyyat uğurla əlavə olundu!');
+            fetchFinancialData();  // Refresh the data after adding the transaction
+        } else {
+            alert('Əməliyyat əlavə olunmadı, xahiş edirik yenidən yoxlayın.');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
 // Fetch today's financial data from Google Apps Script and update the UI
 function fetchFinancialData() {
-    // Call the Google Apps Script function
-    google.script.run.withSuccessHandler(function(data) {
+    // Send GET request to fetch financial data
+    fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=getFinancialData`)
+    .then(response => response.json())
+    .then(data => {
         // Handle the data returned from Google Apps Script
         updateTransactionTable(data.transactions);
         updateBalances(data.balances);
         updateDailyValues(data.dailyValues);
-    }).getFinancialData();  // Calls the backend `getFinancialData` function
+    })
+    .catch(error => console.error('Error fetching financial data:', error));
 }
 
-// Update the transactions table with today's data
+// Update transaction table, balances, and daily values
+// These functions update the UI with the fetched data
 function updateTransactionTable(transactions) {
     const tableBody = document.getElementById('todaysTransactionsTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = '';  // Clear existing rows
@@ -23,7 +59,6 @@ function updateTransactionTable(transactions) {
     });
 }
 
-// Update the bank and fund balances
 function updateBalances(balances) {
     document.getElementById('leoBankBalance').textContent = balances.leoBank;
     document.getElementById('kapitalBankBalance').textContent = balances.kapitalBank;
@@ -32,25 +67,9 @@ function updateBalances(balances) {
     document.getElementById('bazarBalance').textContent = balances.bazar;
 }
 
-// Update the daily values like expenses and cash in hand
 function updateDailyValues(dailyValues) {
     document.getElementById('dailyExpenses').textContent = dailyValues.dailyExpenses;
     document.getElementById('cashInHand').textContent = dailyValues.cashInHand;
-}
-
-// Add a new transaction by calling Google Apps Script's addTransaction function
-function addTransaction() {
-    const transactionData = {
-        transactionType: document.getElementById('transactionType').value,
-        transactionSource: document.getElementById('transactionSource').value,
-        transactionAmount: document.getElementById('transactionAmount').value,
-        transactionReason: document.getElementById('transactionReason').value
-    };
-
-    google.script.run.withSuccessHandler(function() {
-        alert('Əməliyyat uğurla əlavə olundu!');  // Transaction added successfully
-        fetchFinancialData();  // Refresh the data after adding the transaction
-    }).addTransaction(transactionData);  // Calls the backend `addTransaction` function
 }
 
 // Initialize the page by fetching today's financial data
