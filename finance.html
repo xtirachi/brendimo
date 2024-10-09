@@ -1,78 +1,97 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Maliyyə İdarəetmə Sistemi</title>
-  <script src="finance.js"></script>  <!-- Link to your JavaScript file hosted on GitHub -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Management System</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css">
 </head>
-<body>
-  <h1>Maliyyə İdarəetmə Sistemi</h1>
+<body class="bg-gray-100 p-5">
+    <div class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-5">Financial Management System</h1>
 
-  <!-- Part 1: Add Transaction -->
-  <section>
-    <h2>Əməliyyat Əlavə et</h2>
-    <form id="transactionForm">
-      <label for="transactionType">Əməliyyat Növü:</label>
-      <select id="transactionType" required>
-        <option value="Deposit">Mədaxil</option>
-        <option value="Withdrawal">Məxaric</option>
-      </select><br>
+        <!-- Part 1: Add New Transaction -->
+        <section>
+            <h2 class="text-xl font-semibold mb-4">Add New Transaction</h2>
+            <form id="transactionForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium">Transaction Type</label>
+                    <select id="transactionType" class="w-full p-2 border rounded">
+                        <option value="Deposit">Deposit (Mədaxil)</option>
+                        <option value="Withdrawal">Withdrawal (Məxaric)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Transaction Source</label>
+                    <select id="transactionSource" class="w-full p-2 border rounded">
+                        <option value="Leo Bank">Leo Bank</option>
+                        <option value="Kapital Bank">Kapital Bank</option>
+                        <option value="Investment Fund">Investment Fund</option>
+                        <option value="Qutu">Qutu</option>
+                        <option value="Bazar">Bazar</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Amount</label>
+                    <input type="number" id="transactionAmount" class="w-full p-2 border rounded">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Reason (Optional)</label>
+                    <input type="text" id="transactionReason" class="w-full p-2 border rounded">
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Submit Transaction</button>
+            </form>
+        </section>
 
-      <label for="transactionSource">Mənbə:</label>
-      <select id="transactionSource" required>
-        <option value="Leo Bank">Leo Bank</option>
-        <option value="Kapital Bank">Kapital Bank</option>
-        <option value="İnvestisiya Fondu">İnvestisiya Fondu</option>
-        <option value="Qutu">Qutu</option>
-        <option value="Bazar">Bazar</option>
-        <option value="Günlük Digər Xərclər">Günlük Digər Xərclər</option>
-      </select><br>
+        <!-- Part 2: Today's Transactions -->
+        <section class="mt-8">
+            <h2 class="text-xl font-semibold mb-4">Today's Transactions</h2>
+            <table class="w-full border rounded">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="p-2">Date</th>
+                        <th class="p-2">Type</th>
+                        <th class="p-2">Source</th>
+                        <th class="p-2">Amount</th>
+                        <th class="p-2">Reason</th>
+                    </tr>
+                </thead>
+                <tbody id="transactionList">
+                    <!-- Transactions will be populated here dynamically -->
+                </tbody>
+            </table>
+        </section>
 
-      <label for="transactionAmount">Məbləğ:</label>
-      <input type="number" id="transactionAmount" required><br>
+        <!-- Part 3: Bank and Fund Balances -->
+        <section class="mt-8">
+            <h2 class="text-xl font-semibold mb-4">Bank and Fund Balances</h2>
+            <ul id="balancesList" class="space-y-2">
+                <!-- Balances will be populated here dynamically -->
+            </ul>
+        </section>
 
-      <label for="transactionReason">Səbəb:</label>
-      <input type="text" id="transactionReason"><br>
+        <!-- Part 4: Daily Changing Values -->
+        <section class="mt-8">
+            <h2 class="text-xl font-semibold mb-4">Daily Changing Values</h2>
+            <div>
+                <p><strong>Günlük Digər Xərclər:</strong> <span id="dailyExpenses">0 AZN</span></p>
+                <p><strong>Əldəki Pul:</strong> <span id="cashInHand">0 AZN</span></p>
+            </div>
+        </section>
 
-      <button type="button" onclick="addTransaction()">Əməliyyatı Yerləşdir</button>
-    </form>
-  </section>
+        <!-- New Section: Adjust Günlük Digər Xərclər -->
+        <section class="mt-8">
+            <h2 class="text-xl font-semibold mb-4">Adjust Günlük Digər Xərclər</h2>
+            <form id="adjustDailyExpensesForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium">New Günlük Digər Xərclər Amount</label>
+                    <input type="number" id="newDailyExpenses" class="w-full p-2 border rounded">
+                </div>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Adjust Expenses</button>
+            </form>
+        </section>
+    </div>
 
-  <!-- Part 2: Today's Transactions -->
-  <section>
-    <h2>Bugünkü Əməliyyatlar</h2>
-    <table id="todaysTransactionsTable">
-      <thead>
-        <tr>
-          <th>Tarix</th>
-          <th>Növ</th>
-          <th>Mənbə</th>
-          <th>Məbləğ</th>
-          <th>Səbəb</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
-  </section>
-
-  <!-- Part 3: Bank and Fund Balances -->
-  <section>
-    <h2>Bankların və Fondların Balansı</h2>
-    <ul>
-      <li>Leo Bank: <span id="leoBankBalance"></span> AZN</li>
-      <li>Kapital Bank: <span id="kapitalBankBalance"></span> AZN</li>
-      <li>İnvestisiya Fondu: <span id="investmentFundBalance"></span> AZN</li>
-      <li>Qutu: <span id="qutuBalance"></span> AZN</li>
-      <li>Bazar: <span id="bazarBalance"></span> AZN</li>
-    </ul>
-  </section>
-
-  <!-- Part 4: Daily Values -->
-  <section>
-    <h2>Bugünkü Göstəricilər</h2>
-    <p>Günlük Digər Xərclər: <span id="dailyExpenses"></span> AZN</p>
-    <p>Əldəki Pul (Bugünkü Pul): <span id="cashInHand"></span> AZN</p>
-  </section>
+    <script src="finance.js"></script>
 </body>
 </html>
