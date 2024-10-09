@@ -1,78 +1,101 @@
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgm5MKw1yKNJCWqkaic83sUkwKrIOiBLblSvX-YN8RjQvT3NiWsXwuyD2_iH0xcRc/exec';  // Replace with your Google Apps Script Web App URL
+document.getElementById('transactionForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const transactionType = document.getElementById('transactionType').value;
+    const transactionSource = document.getElementById('transactionSource').value;
+    const transactionAmount = parseFloat(document.getElementById('transactionAmount').value);
+    const transactionReason = document.getElementById('transactionReason').value;
 
-// Add a new transaction
-function addTransaction() {
     const transactionData = {
         action: 'addTransaction',
-        transactionType: document.getElementById('transactionType').value,
-        transactionSource: document.getElementById('transactionSource').value,
-        transactionAmount: document.getElementById('transactionAmount').value,
-        transactionReason: document.getElementById('transactionReason').value
+        transactionType,
+        transactionSource,
+        transactionAmount,
+        transactionReason,
     };
 
-    // Send POST request to Google Apps Script
-    fetch(GOOGLE_APPS_SCRIPT_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(transactionData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === 'Transaction added successfully!') {
-            alert('Əməliyyat uğurla əlavə olundu!');
-            fetchFinancialData();  // Refresh the data after adding the transaction
-        } else {
-            alert('Əməliyyat əlavə olunmadı, xahiş edirik yenidən yoxlayın.');
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
-
-// Fetch today's financial data from Google Apps Script and update the UI
-function fetchFinancialData() {
-    // Send GET request to fetch financial data
-    fetch(`${GOOGLE_APPS_SCRIPT_URL}?action=getFinancialData`)
-    .then(response => response.json())
-    .then(data => {
-        // Handle the data returned from Google Apps Script
-        updateTransactionTable(data.transactions);
-        updateBalances(data.balances);
-        updateDailyValues(data.dailyValues);
-    })
-    .catch(error => console.error('Error fetching financial data:', error));
-}
-
-// Update transaction table, balances, and daily values
-// These functions update the UI with the fetched data
-function updateTransactionTable(transactions) {
-    const tableBody = document.getElementById('todaysTransactionsTable').getElementsByTagName('tbody')[0];
-    tableBody.innerHTML = '';  // Clear existing rows
-
-    transactions.forEach(transaction => {
-        const newRow = tableBody.insertRow();
-        transaction.forEach(data => {
-            const newCell = newRow.insertCell();
-            newCell.textContent = data;
+    try {
+        const response = await fetch('https://script.google.com/macros/s/YOUR_SCRIPT_URL/exec', {
+            method: 'POST',
+            body: JSON.stringify(transactionData),
+            headers: { 'Content-Type': 'application/json' },
         });
-    });
+        const result = await response.json();
+        alert('Transaction added successfully');
+        loadTodaysTransactions();
+        loadBalances();
+        loadDailyValues();
+    } catch (error) {
+        console.error('Error adding transaction:', error);
+        alert('Error adding transaction');
+    }
+});
+
+async function loadTodaysTransactions() {
+    const response = await fetch('https://script.google.com/macros/s/YOUR_SCRIPT_URL/exec?action=getTodaysTransactions');
+    const transactions = await response.json();
+
+    const transactionList = document.getElementById('transactionList');
+    transactionList.innerHTML = transactions.map(trx => `
+        <tr>
+            <td class="p-2">${trx.transactionDate}</td>
+            <td class="p-2">${trx.transactionType}</td>
+            <td class="p-2">${trx.transactionSource}</td>
+            <td class="p-2">${trx.transactionAmount} AZN</td>
+            <td class="p-2">${trx.transactionReason || ''}</td>
+        </tr>
+    `).join('');
 }
 
-function updateBalances(balances) {
-    document.getElementById('leoBankBalance').textContent = balances.leoBank;
-    document.getElementById('kapitalBankBalance').textContent = balances.kapitalBank;
-    document.getElementById('investmentFundBalance').textContent = balances.investmentFund;
-    document.getElementById('qutuBalance').textContent = balances.qutu;
-    document.getElementById('bazarBalance').textContent = balances.bazar;
+async function loadBalances() {
+    const response = await fetch('https://script.google.com/macros/s/YOUR_SCRIPT_URL/exec?action=getBankAndFundBalances');
+    const balances = await response.json();
+
+    const balancesList = document.getElementById('balancesList');
+    balancesList.innerHTML = `
+        <li>Leo Bank: ${balances.leoBankBalance} AZN</li>
+        <li>Kapital Bank: ${balances.kapitalBankBalance} AZN</li>
+        <li>Investment Fund: ${balances.investmentFundBalance} AZN</li>
+        <li>Qutu: ${balances.qutuBalance} AZN</li>
+        <li>Bazar: ${balances.bazarBalance} AZN</li>
+    `;
 }
 
-function updateDailyValues(dailyValues) {
-    document.getElementById('dailyExpenses').textContent = dailyValues.dailyExpenses;
-    document.getElementById('cashInHand').textContent = dailyValues.cashInHand;
+async function loadDailyValues() {
+    const response = await fetch('https://script.google.com/macros/s/YOUR_SCRIPT_URL/exec?action=getDailyValues');
+    const values = await response.json();
+
+    document.getElementById('dailyExpenses').innerText = `${values.dailyExpenses} AZN`;
+    document.getElementById('cashInHand').innerText = `${values.cashInHand} AZN`;
 }
 
-// Initialize the page by fetching today's financial data
+// Adjust daily expenses
+document.getElementById('adjustDailyExpensesForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const newDailyExpenses = parseFloat(document.getElementById('newDailyExpenses').value);
+
+    const expensesData = {
+        action: 'adjustDailyExpenses',
+        newDailyExpenses: newDailyExpenses
+    };
+
+    try {
+        const response = await fetch('https://script.google.com/macros/s/YOUR_SCRIPT_URL/exec', {
+            method: 'POST',
+            body: JSON.stringify(expensesData),
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const result = await response.json();
+        alert(result.message);
+        loadDailyValues();  // Reload daily values to reflect the changes
+    } catch (error) {
+        console.error('Error adjusting daily expenses:', error);
+        alert('Error adjusting daily expenses');
+    }
+});
+
+// Load data on page load
 window.onload = function() {
-    fetchFinancialData();
+    loadTodaysTransactions();
+    loadBalances();
+    loadDailyValues();
 };
