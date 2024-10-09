@@ -1,101 +1,91 @@
-document.getElementById('transactionForm').addEventListener('submit', async function(event) {
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyolVl3sprXlKJ4NEmG7CK5RBnVal-_udd6bdVtlG-qTezfJlKOhbYJ0wcjMg1sZrgivg/exec';  // Replace with your Google Apps Script URL
+
+// Add Transaction
+document.getElementById('transaction-form').addEventListener('submit', function(event) {
     event.preventDefault();
-    const transactionType = document.getElementById('transactionType').value;
-    const transactionSource = document.getElementById('transactionSource').value;
-    const transactionAmount = parseFloat(document.getElementById('transactionAmount').value);
-    const transactionReason = document.getElementById('transactionReason').value;
 
-    const transactionData = {
-        action: 'addTransaction',
-        transactionType,
-        transactionSource,
-        transactionAmount,
-        transactionReason,
-    };
+    const transactionType = document.getElementById('transaction-type').value;
+    const transactionSource = document.getElementById('transaction-source').value;
+    const transactionAmount = parseFloat(document.getElementById('transaction-amount').value);
+    const transactionReason = document.getElementById('transaction-reason').value;
 
-    try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxdi6n6ODb1UU_4w3Z0PYrrAvXh9tCmmKpbH-5_yeO7259P3iVVUcKq8CSgNR2C9Ho/exec', {
-            method: 'POST',
-            body: JSON.stringify(transactionData),
-            headers: { 'Content-Type': 'application/json' },
-        });
-        const result = await response.json();
-        alert('Transaction added successfully');
-        loadTodaysTransactions();
-        loadBalances();
-        loadDailyValues();
-    } catch (error) {
-        console.error('Error adding transaction:', error);
-        alert('Error adding transaction');
-    }
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({
+            action: 'addTransaction',
+            transactionType,
+            transactionSource,
+            transactionAmount,
+            transactionReason
+        }),
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Transaction added successfully!');
+            loadTransactions();
+            loadBalances();
+            loadDailyValues();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
 });
 
-async function loadTodaysTransactions() {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbxdi6n6ODb1UU_4w3Z0PYrrAvXh9tCmmKpbH-5_yeO7259P3iVVUcKq8CSgNR2C9Ho/exec?action=getTodaysTransactions');
-    const transactions = await response.json();
-
-    const transactionList = document.getElementById('transactionList');
-    transactionList.innerHTML = transactions.map(trx => `
-        <tr>
-            <td class="p-2">${trx.transactionDate}</td>
-            <td class="p-2">${trx.transactionType}</td>
-            <td class="p-2">${trx.transactionSource}</td>
-            <td class="p-2">${trx.transactionAmount} AZN</td>
-            <td class="p-2">${trx.transactionReason || ''}</td>
-        </tr>
-    `).join('');
-}
-
-async function loadBalances() {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbxdi6n6ODb1UU_4w3Z0PYrrAvXh9tCmmKpbH-5_yeO7259P3iVVUcKq8CSgNR2C9Ho/exec?action=getBankAndFundBalances');
-    const balances = await response.json();
-
-    const balancesList = document.getElementById('balancesList');
-    balancesList.innerHTML = `
-        <li>Leo Bank: ${balances.leoBankBalance} AZN</li>
-        <li>Kapital Bank: ${balances.kapitalBankBalance} AZN</li>
-        <li>Investment Fund: ${balances.investmentFundBalance} AZN</li>
-        <li>Qutu: ${balances.qutuBalance} AZN</li>
-        <li>Bazar: ${balances.bazarBalance} AZN</li>
-    `;
-}
-
-async function loadDailyValues() {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbxdi6n6ODb1UU_4w3Z0PYrrAvXh9tCmmKpbH-5_yeO7259P3iVVUcKq8CSgNR2C9Ho/exec?action=getDailyValues');
-    const values = await response.json();
-
-    document.getElementById('dailyExpenses').innerText = `${values.dailyExpenses} AZN`;
-    document.getElementById('cashInHand').innerText = `${values.cashInHand} AZN`;
-}
-
-// Adjust daily expenses
-document.getElementById('adjustDailyExpensesForm').addEventListener('submit', async function(event) {
-    event.preventDefault();
-    const newDailyExpenses = parseFloat(document.getElementById('newDailyExpenses').value);
-
-    const expensesData = {
-        action: 'adjustDailyExpenses',
-        newDailyExpenses: newDailyExpenses
-    };
-
-    try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxdi6n6ODb1UU_4w3Z0PYrrAvXh9tCmmKpbH-5_yeO7259P3iVVUcKq8CSgNR2C9Ho/exec', {
-            method: 'POST',
-            body: JSON.stringify(expensesData),
-            headers: { 'Content-Type': 'application/json' },
+// Load Today's Transactions
+function loadTransactions() {
+    fetch(`${GOOGLE_SCRIPT_URL}?action=getTodaysTransactions`)
+    .then(response => response.json())
+    .then(transactions => {
+        const tbody = document.getElementById('transactions-body');
+        tbody.innerHTML = '';
+        transactions.forEach(function(transaction) {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${transaction.transactionDate}</td>
+                <td>${transaction.transactionType}</td>
+                <td>${transaction.transactionSource}</td>
+                <td>${transaction.transactionAmount}</td>
+                <td>${transaction.transactionReason}</td>
+            `;
+            tbody.appendChild(row);
         });
-        const result = await response.json();
-        alert(result.message);
-        loadDailyValues();  // Reload daily values to reflect the changes
-    } catch (error) {
-        console.error('Error adjusting daily expenses:', error);
-        alert('Error adjusting daily expenses');
-    }
-});
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// Load Balances
+function loadBalances() {
+    fetch(`${GOOGLE_SCRIPT_URL}?action=getBalances`)
+    .then(response => response.json())
+    .then(balances => {
+        const ul = document.getElementById('balances-list');
+        ul.innerHTML = '';
+        for (const [source, balance] of Object.entries(balances)) {
+            const li = document.createElement('li');
+            li.textContent = `${source}: ${balance} AZN`;
+            ul.appendChild(li);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
+// Load Daily Values
+function loadDailyValues() {
+    fetch(`${GOOGLE_SCRIPT_URL}?action=getDailyValues`)
+    .then(response => response.json())
+    .then(dailyValues => {
+        document.getElementById('daily-expenses').textContent = dailyValues.dailyExpenses + ' AZN';
+        document.getElementById('cash-in-hand').textContent = dailyValues.cashInHand + ' AZN';
+    })
+    .catch(error => console.error('Error:', error));
+}
 
 // Load data on page load
 window.onload = function() {
-    loadTodaysTransactions();
+    loadTransactions();
     loadBalances();
     loadDailyValues();
 };
