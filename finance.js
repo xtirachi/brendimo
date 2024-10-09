@@ -20,29 +20,36 @@ document.getElementById('transaction-form').addEventListener('submit', function(
 
     // Make the POST request to add the transaction
     fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify({
-        action: 'addTransaction',
-        transactionType: 'Deposit',  // or 'Withdrawal'
-        transactionSource: 'Leo Bank',  // Change as needed
-        transactionAmount: 500,  // Example amount
-        transactionReason: 'Salary deposit'  // Optional reason
-    }),
-    headers: { 'Content-Type': 'application/json' }
-})
-.then(response => response.json())
-.then(data => {
-    if (data.status === 'success') {
-        alert('Transaction added successfully!');
-    } else {
-        alert('Error: ' + data.message);
-    }
-})
-.catch(error => {
-    console.error('Fetch error:', error);
-    alert('Error adding transaction: ' + error.message);
-});
-
+        method: 'POST',
+        body: JSON.stringify({
+            action: 'addTransaction',
+            transactionType,
+            transactionSource,
+            transactionAmount,
+            transactionReason
+        }),
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Transaction added successfully!');
+            loadTransactions();
+            loadBalances();
+            loadDailyValues();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert('Error adding transaction: ' + error.message);
+    });
 });
 
 // Load Today's Transactions with more detailed logging
