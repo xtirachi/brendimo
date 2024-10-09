@@ -14,7 +14,7 @@ document.getElementById('transactionForm').addEventListener('submit', async func
     };
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxfHf2gITwXEscaJEzC0L35CcQ8tgeOVQDaW3wAN4-l2EViBG_ZqTC6vidaUEHHTw/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxdi6n6ODb1UU_4w3Z0PYrrAvXh9tCmmKpbH-5_yeO7259P3iVVUcKq8CSgNR2C9Ho/exec', {
             method: 'POST',
             body: JSON.stringify(transactionData),
             headers: { 'Content-Type': 'application/json' },
@@ -31,7 +31,7 @@ document.getElementById('transactionForm').addEventListener('submit', async func
 });
 
 async function loadTodaysTransactions() {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbxfHf2gITwXEscaJEzC0L35CcQ8tgeOVQDaW3wAN4-l2EViBG_ZqTC6vidaUEHHTw/exec?action=getTodaysTransactions');
+    const response = await fetch('https://script.google.com/macros/s/AKfycbxdi6n6ODb1UU_4w3Z0PYrrAvXh9tCmmKpbH-5_yeO7259P3iVVUcKq8CSgNR2C9Ho/exec?action=getTodaysTransactions');
     const transactions = await response.json();
 
     const transactionList = document.getElementById('transactionList');
@@ -47,7 +47,7 @@ async function loadTodaysTransactions() {
 }
 
 async function loadBalances() {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbxfHf2gITwXEscaJEzC0L35CcQ8tgeOVQDaW3wAN4-l2EViBG_ZqTC6vidaUEHHTw/exec?action=getBankAndFundBalances');
+    const response = await fetch('https://script.google.com/macros/s/AKfycbxdi6n6ODb1UU_4w3Z0PYrrAvXh9tCmmKpbH-5_yeO7259P3iVVUcKq8CSgNR2C9Ho/exec?action=getBankAndFundBalances');
     const balances = await response.json();
 
     const balancesList = document.getElementById('balancesList');
@@ -61,7 +61,7 @@ async function loadBalances() {
 }
 
 async function loadDailyValues() {
-    const response = await fetch('https://script.google.com/macros/s/AKfycbxfHf2gITwXEscaJEzC0L35CcQ8tgeOVQDaW3wAN4-l2EViBG_ZqTC6vidaUEHHTw/exec?action=getDailyValues');
+    const response = await fetch('https://script.google.com/macros/s/AKfycbxdi6n6ODb1UU_4w3Z0PYrrAvXh9tCmmKpbH-5_yeO7259P3iVVUcKq8CSgNR2C9Ho/exec?action=getDailyValues');
     const values = await response.json();
 
     document.getElementById('dailyExpenses').innerText = `${values.dailyExpenses} AZN`;
@@ -79,7 +79,7 @@ document.getElementById('adjustDailyExpensesForm').addEventListener('submit', as
     };
 
     try {
-        const response = await fetch('https://script.google.com/macros/s/AKfycbxfHf2gITwXEscaJEzC0L35CcQ8tgeOVQDaW3wAN4-l2EViBG_ZqTC6vidaUEHHTw/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbxdi6n6ODb1UU_4w3Z0PYrrAvXh9tCmmKpbH-5_yeO7259P3iVVUcKq8CSgNR2C9Ho/exec', {
             method: 'POST',
             body: JSON.stringify(expensesData),
             headers: { 'Content-Type': 'application/json' },
