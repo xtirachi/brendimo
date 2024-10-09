@@ -15,23 +15,23 @@
             <h2>Add New Transaction</h2>
             <form id="transaction-form">
                 <label for="transaction-type">Transaction Type</label>
-                <select id="transaction-type">
+                <select id="transaction-type" required>
                     <option value="Deposit">Mədaxil (Deposit)</option>
                     <option value="Withdrawal">Məxaric (Withdrawal)</option>
                 </select>
 
                 <label for="transaction-source">Transaction Source</label>
-                <select id="transaction-source">
+                <select id="transaction-source" required>
                     <option value="Leo Bank">Leo Bank</option>
                     <option value="Kapital Bank">Kapital Bank</option>
                     <option value="İnv. Fund">İnv. Fund</option>
-                    <option value="Qutu">Qutu</option>
-                    <option value="Bazar">Bazar</option>
+                    <option value="Qutu">Qutu (Nağd Pul Ehtiyatı)</option>
+                    <option value="Bazar">Bazar (Market Ehtiyatı)</option>
                     <option value="Günlük Digər Xərclər">Günlük Digər Xərclər</option>
                 </select>
 
                 <label for="transaction-amount">Transaction Amount</label>
-                <input type="number" id="transaction-amount" required>
+                <input type="number" id="transaction-amount" step="0.01" min="0" required>
 
                 <label for="transaction-reason">Transaction Reason (optional)</label>
                 <input type="text" id="transaction-reason">
@@ -70,8 +70,8 @@
         <!-- Part 4: Daily Changing Values -->
         <section id="daily-values">
             <h2>Daily Values</h2>
-            <p>Günlük Digər Xərclər: <span id="daily-expenses"></span></p>
-            <p>Əldəki Pul: <span id="cash-in-hand"></span></p>
+            <p>Günlük Digər Xərclər: <span id="daily-expenses">0 AZN</span></p>
+            <p>Əldəki Pul: <span id="cash-in-hand">0 AZN</span></p>
         </section>
     </div>
 
