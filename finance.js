@@ -26,10 +26,10 @@ document.getElementById('transaction-form').addEventListener('submit', function(
     },
     body: new URLSearchParams({
         action: 'addTransaction',
-        transactionType: 'Deposit',  // Example data
-        transactionSource: 'Leo Bank',  // Example data
-        transactionAmount: 500,  // Example data
-        transactionReason: 'Salary deposit'  // Example reason
+        transactionType,  // Example data
+        transactionSource,  // Example data
+        transactionAmount,  // Example data
+        transactionReason // Example reason
     })
 })
 .then(response => response.json())
