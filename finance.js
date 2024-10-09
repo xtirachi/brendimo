@@ -52,11 +52,14 @@ document.getElementById('transaction-form').addEventListener('submit', function(
     });
 });
 
-// Load Today's Transactions with more detailed error handling
+// Load Today's Transactions with more detailed logging
 function loadTransactions() {
     console.log('Loading transactions...');
 
-    fetch(`${GOOGLE_SCRIPT_URL}?action=getTodaysTransactions`, { method: 'GET' })
+    const requestUrl = `${GOOGLE_SCRIPT_URL}?action=getTodaysTransactions`;
+    console.log('Fetching from URL:', requestUrl);  // Log the URL
+
+    fetch(requestUrl, { method: 'GET' })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok: ' + response.statusText + ' (' + response.status + ')');
@@ -64,6 +67,7 @@ function loadTransactions() {
             return response.json();
         })
         .then(transactions => {
+            console.log('Transactions loaded successfully:', transactions);
             const tbody = document.getElementById('transactions-body');
             tbody.innerHTML = '';
             transactions.forEach(function(transaction) {
@@ -83,6 +87,11 @@ function loadTransactions() {
             alert('Error loading transactions: ' + error.message);
         });
 }
+
+// Trigger the loading of transactions on page load
+window.onload = function() {
+    loadTransactions();
+};
 
 
 // Load Balances
