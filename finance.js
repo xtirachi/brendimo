@@ -1,4 +1,4 @@
-const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxhCBChw5NjGTruyOiNPdG1f4OTFYd08ufGY-Umgjb6FcsukcbGSZvpCHqz6n2mqg/exec';  // Replace with your Google Apps Script Web App URL
+const GOOGLE_APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxgm5MKw1yKNJCWqkaic83sUkwKrIOiBLblSvX-YN8RjQvT3NiWsXwuyD2_iH0xcRc/exec';  // Replace with your Google Apps Script Web App URL
 
 // Add a new transaction
 function addTransaction() {
