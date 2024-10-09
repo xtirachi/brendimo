@@ -52,14 +52,14 @@ document.getElementById('transaction-form').addEventListener('submit', function(
     });
 });
 
-// Load Today's Transactions
+// Load Today's Transactions with more detailed error handling
 function loadTransactions() {
-    console.log('Loading transactions...');  // Debugging message
+    console.log('Loading transactions...');
 
     fetch(`${GOOGLE_SCRIPT_URL}?action=getTodaysTransactions`, { method: 'GET' })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText);
+                throw new Error('Network response was not ok: ' + response.statusText + ' (' + response.status + ')');
             }
             return response.json();
         })
@@ -83,6 +83,7 @@ function loadTransactions() {
             alert('Error loading transactions: ' + error.message);
         });
 }
+
 
 // Load Balances
 function loadBalances() {
