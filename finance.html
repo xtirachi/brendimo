@@ -1,46 +1,25 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <base target="_top">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="finance.js"></script>
-  </head>
-  <body>
-    <h1>Gündəlik Maliyyə Dashboard</h1>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <title>Maliyyə İdarəetmə Sistemi</title>
+  <script src="finance.js"></script>
+</head>
+<body>
+  <h1>Maliyyə İdarəetmə Sistemi</h1>
 
-    <label for="selectedDate">Tarix seçin: </label>
-    <input type="date" id="selectedDate" name="selectedDate">
-    <button onclick="fetchDailyData()">Məlumatları Gətir</button>
-    
-    <h2>Bank Balansları</h2>
-    <ul>
-      <li>Leo Bank: <span id="leoBankBalance">Yüklənir...</span></li>
-      <li>Kapital Bank: <span id="kapitalBankBalance">Yüklənir...</span></li>
-      <li>İnvestisiya Fondu: <span id="investmentFundBalance">Yüklənir...</span></li>
-      <li>Qutu (Nağd Pul Ehtiyatı): <span id="qutuBalance">Yüklənir...</span></li>
-      <li>Bazar (Market Ehtiyatı): <span id="bazarBalance">Yüklənir...</span></li>
-    </ul>
-
-    <h2>Bugünkü Xərclər</h2>
-    <p>Günlük Digər Xərclər: <span id="otherExpenses">Yüklənir...</span></p>
-
-    <h2>Əldəki Pul (Bugünkü Pul)</h2>
-    <p>Əldəki Pul: <span id="cashInHand">Yüklənir...</span></p>
-
-    <h2>Yeni Əməliyyat Qeyd Edin</h2>
+  <!-- Part 1: Add Transaction -->
+  <section>
+    <h2>Əməliyyat Əlavə et</h2>
     <form id="transactionForm">
-      <label for="transactionDate">Əməliyyat Tarixi: </label>
-      <input type="date" id="transactionDate" name="transactionDate" required><br>
-
-      <label for="transactionType">Əməliyyat Növü: </label>
-      <select id="transactionType" name="transactionType" required>
-        <option value="Deposit">Depozit</option>
-        <option value="Withdrawal">Çıxarış</option>
+      <label for="transactionType">Əməliyyat Növü:</label>
+      <select id="transactionType" required>
+        <option value="Deposit">Mədaxil</option>
+        <option value="Withdrawal">Məxaric</option>
       </select><br>
 
-      <label for="transactionSource">Mənbə: </label>
-      <select id="transactionSource" name="transactionSource" required>
+      <label for="transactionSource">Mənbə:</label>
+      <select id="transactionSource" required>
         <option value="Leo Bank">Leo Bank</option>
         <option value="Kapital Bank">Kapital Bank</option>
         <option value="İnvestisiya Fondu">İnvestisiya Fondu</option>
@@ -49,15 +28,51 @@
         <option value="Günlük Digər Xərclər">Günlük Digər Xərclər</option>
       </select><br>
 
-      <label for="transactionAmount">Məbləğ: </label>
-      <input type="number" id="transactionAmount" name="transactionAmount" required><br>
+      <label for="transactionAmount">Məbləğ:</label>
+      <input type="number" id="transactionAmount" required><br>
 
-      <label for="transactionReason">Səbəb: </label>
-      <input type="text" id="transactionReason" name="transactionReason"><br>
+      <label for="transactionReason">Səbəb:</label>
+      <input type="text" id="transactionReason"><br>
 
-      <button type="button" onclick="submitTransaction()">Əməliyyatı Qeyd Et</button>
+      <button type="button" onclick="addTransaction()">Əməliyyatı Yerləşdir</button>
     </form>
+  </section>
 
-    <div id="statusMessage"></div>
-  </body>
+  <!-- Part 2: Today's Transactions -->
+  <section>
+    <h2>Bugünkü Əməliyyatlar</h2>
+    <table id="todaysTransactionsTable">
+      <thead>
+        <tr>
+          <th>Tarix</th>
+          <th>Növ</th>
+          <th>Mənbə</th>
+          <th>Məbləğ</th>
+          <th>Səbəb</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Part 3: Bank and Fund Balances -->
+  <section>
+    <h2>Bankların və Fondların Balansı</h2>
+    <ul>
+      <li>Leo Bank: <span id="leoBankBalance"></span> AZN</li>
+      <li>Kapital Bank: <span id="kapitalBankBalance"></span> AZN</li>
+      <li>İnvestisiya Fondu: <span id="investmentFundBalance"></span> AZN</li>
+      <li>Qutu: <span id="qutuBalance"></span> AZN</li>
+      <li>Bazar: <span id="bazarBalance"></span> AZN</li>
+    </ul>
+  </section>
+
+  <!-- Part 4: Daily Values -->
+  <section>
+    <h2>Bugünkü Göstəricilər</h2>
+    <p>Günlük Digər Xərclər: <span id="dailyExpenses"></span> AZN</p>
+    <p>Əldəki Pul (Bugünkü Pul): <span id="cashInHand"></span> AZN</p>
+  </section>
+</body>
 </html>
