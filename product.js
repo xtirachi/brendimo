@@ -1,10 +1,9 @@
 // Constants for Google Apps Script URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztd_3gVMNkKnk6R1NIGsAAe_m3IEb9H8U5qDQHiU-QrErEgOdjb1zhkRw9JTsXBCtB/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFEDO29rTQhWnbjP066jSNjHaq30efZlQnEZPcWlOAnqDBsZt--BGbYHWeZUeQQ0Y6/exec';
 
 // DOM elements
 const productForm = document.getElementById('productForm');
 const productSelect = document.getElementById('productSelect');
-const selectedComponents = [];
 const componentsDropdown = document.getElementById('components');
 const selectedComponentsContainer = document.getElementById('selectedComponents');
 const productSearch = document.getElementById('productSearch');
@@ -14,7 +13,7 @@ const updateProductContainer = document.getElementById('updateProductContainer')
 
 // Initialize flag for tracking add or update
 let isUpdatingProduct = false;
-let selectedProductForUpdate = '';
+const selectedComponents = [];  // Track the selected components for the product
 
 // Fetch and populate the dropdown with existing products for updating
 function loadProductOptions() {
@@ -26,10 +25,13 @@ function loadProductOptions() {
             option.text = product.productName;
             productSelect.appendChild(option);
         });
+    }).catch(error => {
+        console.error('Error loading product options:', error);
+        alert('Məhsullar yüklənərkən xəta baş verdi.');
     });
 }
 
-// Event listener to toggle Add/Update modes
+// Toggle between Add/Update modes
 document.querySelectorAll('input[name="productAction"]').forEach(action => {
     action.addEventListener('change', function () {
         if (this.value === 'update') {
@@ -43,59 +45,64 @@ document.querySelectorAll('input[name="productAction"]').forEach(action => {
     });
 });
 
-// Event listener to fetch and populate form with selected product details
+// Populate the form when a product is selected for updating
 productSelect.addEventListener('change', function () {
-    if (this.value) {
-        fetchProductDetails(this.value);
+    const selectedProduct = this.value;
+    if (selectedProduct) {
+        fetchProductDetails(selectedProduct);
+    } else {
+        alert('Zəhmət olmasa bir məhsul seçin.');
     }
 });
 
-// Event listener for form submission
+// Form submission event listener for adding/updating product
 productForm.addEventListener('submit', function (e) {
-    e.preventDefault();
+    e.preventDefault();  // Prevent form from submitting the default way
 
     const productName = document.getElementById('productName').value;
 
+    // Validate that all required fields are filled in
     if (!productName || !document.getElementById('cost').value || !document.getElementById('salesPrice').value || !document.getElementById('inventoryAmount').value) {
         alert('Zəhmət olmasa bütün sahələri doldurun!');
         return;
     }
 
+    // Create product data for submission
     const productData = new URLSearchParams({
         action: isUpdatingProduct ? 'updateProduct' : 'addProduct',
         productName: productName,
         cost: document.getElementById('cost').value,
         salesPrice: document.getElementById('salesPrice').value,
         inventoryAmount: document.getElementById('inventoryAmount').value,
-        components: selectedComponents.join(',')
+        components: selectedComponents.join(',')  // Join selected components into a comma-separated string
     });
 
     handleProductData(productData, isUpdatingProduct ? 'updateProduct' : 'addProduct');
 });
 
-// Fetch and handle product data
+// Handle product submission (add or update)
 function handleProductData(productData, action) {
     fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: productData
     })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert(`Məhsul uğurla ${action === 'addProduct' ? 'əlavə edildi' : 'yeniləndi'}!`);
-                window.location.reload();
-            } else {
-                alert('Xəta: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-            alert(`Məhsul ${action === 'addProduct' ? 'əlavə edilərkən' : 'yenilənərkən'} xəta baş verdi: ` + error.message);
-        });
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(`Məhsul uğurla ${action === 'addProduct' ? 'əlavə edildi' : 'yeniləndi'}!`);
+            window.location.reload();  // Optionally refresh the page after success
+        } else {
+            alert('Xəta: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert(`Məhsul ${action === 'addProduct' ? 'əlavə edilərkən' : 'yenilənərkən'} xəta baş verdi: ` + error.message);
+    });
 }
 
-// Fetch products for search functionality
+// Fetch product list from the backend
 function fetchProducts(searchTerm) {
     const url = new URL(GOOGLE_SCRIPT_URL);
     url.searchParams.append('action', 'getProducts');
@@ -114,7 +121,7 @@ function fetchProducts(searchTerm) {
             }
         })
         .catch(error => {
-            console.error('Fetch error:', error);
+            console.error('Error fetching products:', error);
             alert('Error fetching products: ' + error.message);
             return [];
         });
@@ -141,19 +148,22 @@ function fetchProductDetails(productName) {
         });
 }
 
-// Populate the form with existing product details to update it
+// Populate the form with product details for updating
 function populateFormForUpdate(product) {
     document.getElementById('productName').value = product.productName;
     document.getElementById('cost').value = product.cost;
     document.getElementById('salesPrice').value = product.salesPrice;
     document.getElementById('inventoryAmount').value = product.inventoryAmount;
 
+    // Handle components
     selectedComponents.length = 0;
-    selectedComponents.push(...product.components.split(','));
+    if (product.components) {
+        selectedComponents.push(...product.components.split(','));
+    }
     updateSelectedComponentsUI();
 }
 
-// Add component button click handler
+// Add component to the selected list
 document.getElementById('addComponent').addEventListener('click', function () {
     const selectedComponent = componentsDropdown.value;
     if (selectedComponent && !selectedComponents.includes(selectedComponent)) {
@@ -164,9 +174,9 @@ document.getElementById('addComponent').addEventListener('click', function () {
     }
 });
 
-// Update the UI to display selected components
+// Update the UI to show the selected components
 function updateSelectedComponentsUI() {
-    selectedComponentsContainer.innerHTML = '';
+    selectedComponentsContainer.innerHTML = '';  // Clear existing components
     selectedComponents.forEach((component, index) => {
         const componentElement = document.createElement('div');
         componentElement.classList.add('component-item');
@@ -177,6 +187,6 @@ function updateSelectedComponentsUI() {
 
 // Remove a component from the selected list
 function removeComponent(index) {
-    selectedComponents.splice(index, 1);
-    updateSelectedComponentsUI();
+    selectedComponents.splice(index, 1);  // Remove the component by index
+    updateSelectedComponentsUI();  // Refresh the UI
 }
