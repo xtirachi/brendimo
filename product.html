@@ -3,31 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İnventar İdarəsi</title>
+    <title>Məhsul Əlavə Et</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>İnventar Məhsulu Əlavə Et / Yenilə</h1>
+        <h1>Məhsul Əlavə Et</h1>
         <form id="productForm">
-            <label for="productName">Məhsulun Adı *</label>
+            <label for="productName">Məhsulun Adı:</label>
             <input type="text" id="productName" name="productName" required>
 
-            <label for="cost">Xərc *</label>
+            <label for="cost">Xərc:</label>
             <input type="number" id="cost" name="cost" required>
 
-            <label for="salePrice">Satış Qiyməti *</label>
-            <input type="number" id="salePrice" name="salePrice" required>
+            <label for="salesPrice">Satış Qiyməti:</label>
+            <input type="number" id="salesPrice" name="salesPrice" required>
 
-            <label for="inventoryAmount">Anbar Miqdarı *</label>
+            <label for="inventoryAmount">Anbar Miqdarı:</label>
             <input type="number" id="inventoryAmount" name="inventoryAmount" required>
 
-            <label for="components">Komponentlər</label>
-            <select id="components" name="components" multiple></select>
-            
+            <label for="components">Komponentlər:</label>
+            <input type="text" id="productSearch" placeholder="Məhsulu axtarın...">
+            <div id="componentsContainer">
+                <select id="components" name="components"></select>
+                <button type="button" id="addComponent">Komponent Əlavə Et</button>
+            </div>
+            <div id="selectedComponents"></div>
+
             <button type="submit">Məhsulu Yadda Saxla</button>
         </form>
-        <p id="statusMessage"></p>
     </div>
 
     <script src="product.js"></script>
