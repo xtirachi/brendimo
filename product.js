@@ -1,5 +1,5 @@
 // Constants for the Google Apps Script URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyL8wsI652UaPCoo-INpjmt7RI1avfiUCf7qBPk6gvpf-OZlYf3cQfWyYqbJYutDflD/exec';  // Replace with your actual Google Apps Script URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVg8706ibgOCB0A24Xdb9K-bwZAlzaDDJlgm0_EH9a1oPjcJ-T-NxlJvfw77z3fb8k/exec';  // Replace with your actual Google Apps Script URL
 const productForm = document.getElementById('productForm');
 const selectedComponents = [];
 const componentsDropdown = document.getElementById('components');
