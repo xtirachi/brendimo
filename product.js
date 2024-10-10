@@ -1,5 +1,5 @@
 // Constants for Google Apps Script URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztd_3gVMNkKnk6R1NIGsAAe_m3IEb9H8U5qDQHiU-QrErEgOdjb1zhkRw9JTsXBCtB/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyNyQvjS0M3_x7vuYVjEgiWisxfPJKaslCmxFD_LIB5-tZGeoH8xxwgC2gFKjbswyAB/exec';
 
 // DOM elements
 const productForm = document.getElementById('productForm');
