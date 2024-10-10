@@ -10,6 +10,7 @@ window.onload = function () {
     fetchComponents();
 };
 
+
 function fetchComponents() {
     fetch(`${SHEET_ID}?action=getProducts`)
         .then(response => response.json())
