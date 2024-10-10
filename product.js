@@ -1,124 +1,56 @@
-const SHEET_ID = 'https://script.google.com/macros/s/AKfycbxN7UhLySV257OhHiq_WhZxu6qWB6Q9IG-ce5fFqmuDFzN1HxRVWD-2wLQzKx4GwQo/exec';  // Replace with the web app URL
-const componentsDropdown = document.getElementById('components');
-const selectedComponentsDiv = document.getElementById('selectedComponents');
-const productSearch = document.getElementById('productSearch');
-let selectedComponents = [];
-let productList = [];  // To store the full list of products for searching
+const APPSCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyLtjXkIdUGF9EkoA89x2SUs9sE-S9kw-2UAFlWek_mSvCFels7Me9wfNY8GAft1UEN/exec';
 
-// Load products from Google Sheets into dropdown
-window.onload = function () {
-    fetchComponents();
-};
+document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('productForm');
+    const statusMessage = document.getElementById('statusMessage');
 
-
-function fetchComponents() {
-    fetch(`${SHEET_ID}?action=getProducts`)
+    // Populate the components dropdown (fetch products for selection)
+    fetch(`${APPSCRIPT_URL}?action=getProducts`)
         .then(response => response.json())
         .then(data => {
-            productList = data.products;  // Store the product list for search
-            populateProductDropdown(productList);  // Populate the dropdown with the full list
+            const componentsSelect = document.getElementById('components');
+            data.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product.name;
+                option.text = product.name;
+                componentsSelect.appendChild(option);
+            });
         })
-        .catch(error => console.error('Error fetching products:', error));
-}
+        .catch(error => console.error('Error fetching product list:', error));
 
-// Populate dropdown with products
-function populateProductDropdown(products) {
-    componentsDropdown.innerHTML = '';  // Clear previous options
-    products.forEach(product => {
-        const option = document.createElement('option');
-        option.value = product.name;
-        option.text = product.name;
-        componentsDropdown.appendChild(option);
+    // Handle form submission
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const components = Array.from(document.getElementById('components').selectedOptions)
+                                .map(option => option.value)
+                                .join(',');
+
+        const productData = {
+            action: 'addOrUpdateProduct',
+            productName: formData.get('productName'),
+            cost: formData.get('cost'),
+            salePrice: formData.get('salePrice'),
+            inventoryAmount: formData.get('inventoryAmount'),
+            components: components
+        };
+
+        fetch(APPSCRIPT_URL, {
+            method: 'POST',
+            body: JSON.stringify(productData),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            statusMessage.textContent = data.message;
+            form.reset();
+        })
+        .catch(error => {
+            console.error('Error adding/updating product:', error);
+            statusMessage.textContent = 'Məhsul əlavə edilərkən xəta baş verdi!';
+        });
     });
-}
-
-// Add selected component to the list
-document.getElementById('addComponent').addEventListener('click', function () {
-    const selectedComponent = componentsDropdown.value;
-    if (selectedComponent && !selectedComponents.includes(selectedComponent)) {
-        selectedComponents.push(selectedComponent);
-        updateSelectedComponents();
-    }
-});
-
-function updateSelectedComponents() {
-    selectedComponentsDiv.innerHTML = '';
-    selectedComponents.forEach(component => {
-        const componentElement = document.createElement('div');
-        componentElement.textContent = component;
-        selectedComponentsDiv.appendChild(componentElement);
-    });
-}
-
-// Handle form submission using URLSearchParams
-document.getElementById('productForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const productData = new URLSearchParams({
-        action: 'addProduct',
-        productName: document.getElementById('productName').value,
-        cost: document.getElementById('cost').value,
-        salesPrice: document.getElementById('salesPrice').value,
-        inventoryAmount: document.getElementById('inventoryAmount').value,
-        components: selectedComponents.join(',')  // Send components as a comma-separated string
-    });
-
-    saveProduct(productData);
-});
-
-document.getElementById('productForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    // Prepare the form data using URLSearchParams
-    const productData = new URLSearchParams({
-        action: 'addProduct',
-        productName: document.getElementById('productName').value,
-        cost: document.getElementById('cost').value,
-        salesPrice: document.getElementById('salesPrice').value,
-        inventoryAmount: document.getElementById('inventoryAmount').value,
-        components: selectedComponents.join(',')  // Send components as a comma-separated string
-    });
-
-    // Call saveProduct to send the data to the backend
-    saveProduct(productData);
-});
-
-function saveProduct(productData) {
-    fetch(SHEET_ID, {  // Replace GOOGLE_SCRIPT_URL with your Google Apps Script web app URL
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'  // Required for URLSearchParams
-        },
-        body: productData  // Using URLSearchParams here
-    })
-    .then(response => response.json())  // Parse the response as JSON
-    .then(data => {
-        if (data.success) {
-            alert('Məhsul uğurla əlavə edildi!');
-            window.location.reload();  // Refresh the page after a successful addition
-        } else {
-            alert('Error: ' + data.message);  // Show detailed error message
-        }
-    })
-    .catch(error => {
-        console.error('Fetch error:', error);
-        alert('Error adding product: ' + error.message);  // Show fetch error
-    });
-}
-
-
-// Search functionality for products with debouncing
-let searchTimeout;
-productSearch.addEventListener('input', function () {
-    const searchTerm = this.value.toLowerCase();
-
-    if (searchTimeout) {
-        clearTimeout(searchTimeout);  // Clear previous timeout
-    }
-
-    // Debounce search: wait 300ms after the last keystroke to perform search
-    searchTimeout = setTimeout(() => {
-        const filteredProducts = productList.filter(product => product.name.toLowerCase().includes(searchTerm));
-        populateProductDropdown(filteredProducts);
-    }, 300);
 });
