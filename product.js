@@ -66,6 +66,23 @@ document.getElementById('productForm').addEventListener('submit', function (e) {
     saveProduct(productData);
 });
 
+document.getElementById('productForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Prepare the form data using URLSearchParams
+    const productData = new URLSearchParams({
+        action: 'addProduct',
+        productName: document.getElementById('productName').value,
+        cost: document.getElementById('cost').value,
+        salesPrice: document.getElementById('salesPrice').value,
+        inventoryAmount: document.getElementById('inventoryAmount').value,
+        components: selectedComponents.join(',')  // Send components as a comma-separated string
+    });
+
+    // Call saveProduct to send the data to the backend
+    saveProduct(productData);
+});
+
 function saveProduct(productData) {
     fetch(SHEET_ID, {  // Replace GOOGLE_SCRIPT_URL with your Google Apps Script web app URL
         method: 'POST',
@@ -74,20 +91,21 @@ function saveProduct(productData) {
         },
         body: productData  // Using URLSearchParams here
     })
-    .then(response => response.json())
+    .then(response => response.json())  // Parse the response as JSON
     .then(data => {
         if (data.success) {
             alert('Məhsul uğurla əlavə edildi!');
             window.location.reload();  // Refresh the page after a successful addition
         } else {
-            alert('Error: ' + data.message);
+            alert('Error: ' + data.message);  // Show detailed error message
         }
     })
     .catch(error => {
         console.error('Fetch error:', error);
-        alert('Error adding product: ' + error.message);
+        alert('Error adding product: ' + error.message);  // Show fetch error
     });
 }
+
 
 // Search functionality for products with debouncing
 let searchTimeout;
