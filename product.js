@@ -1,4 +1,4 @@
-const SHEET_ID = 'https://script.google.com/macros/s/AKfycbyq8Uj7_OOVzZIAQhr7Kuoe4rV8iIvT_WVvxMzr4QvLX8mBVcWa3u6kkBRCpSSYpgk/exec';  // Replace with the web app URL
+const SHEET_ID = 'https://script.google.com/macros/s/AKfycbxN7UhLySV257OhHiq_WhZxu6qWB6Q9IG-ce5fFqmuDFzN1HxRVWD-2wLQzKx4GwQo/exec';  // Replace with the web app URL
 const componentsDropdown = document.getElementById('components');
 const selectedComponentsDiv = document.getElementById('selectedComponents');
 const productSearch = document.getElementById('productSearch');
