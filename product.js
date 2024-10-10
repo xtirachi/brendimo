@@ -1,5 +1,5 @@
 // Constants for Google Apps Script URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwnvl6qoWjcDRWD9UDFjgmBbHpiIcbZiGzDynFYrBUqlFngSVghQ-N-ud0pRBAxToI/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyrx3ii22DBHVd3ncyFur1Vrj7lzDXNxj8QvS8x-mjamMyXtNtNWQXIrevp_uXSF7xc/exec';
 
 // DOM elements
 const productForm = document.getElementById('productForm');
@@ -10,6 +10,7 @@ const productSearch = document.getElementById('productSearch');
 const actionAdd = document.getElementById('actionAdd');
 const actionUpdate = document.getElementById('actionUpdate');
 const updateProductContainer = document.getElementById('updateProductContainer');
+let originalProductName = '';  // Store the original product name
 
 // Initialize flag for tracking add or update
 let isUpdatingProduct = false;
@@ -49,6 +50,7 @@ document.querySelectorAll('input[name="productAction"]').forEach(action => {
 productSelect.addEventListener('change', function () {
     const selectedProduct = this.value;
     if (selectedProduct) {
+        originalProductName = selectedProduct;  // Store the original name
         fetchProductDetails(selectedProduct);
     } else {
         alert('Zəhmət olmasa bir məhsul seçin.');
@@ -68,7 +70,8 @@ productForm.addEventListener('submit', function (e) {
 
     const productData = new URLSearchParams({
         action: isUpdatingProduct ? 'updateProduct' : 'addProduct',
-        productName: productName,  // Send the clean product name
+        productName: productName,  // Send the updated product name
+        originalProductName: originalProductName,  // Send the original product name for lookup
         cost: document.getElementById('cost').value,
         salesPrice: document.getElementById('salesPrice').value,
         inventoryAmount: document.getElementById('inventoryAmount').value,
