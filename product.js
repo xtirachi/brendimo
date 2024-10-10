@@ -1,5 +1,5 @@
 // Constants for Google Apps Script URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyNyQvjS0M3_x7vuYVjEgiWisxfPJKaslCmxFD_LIB5-tZGeoH8xxwgC2gFKjbswyAB/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztd_3gVMNkKnk6R1NIGsAAe_m3IEb9H8U5qDQHiU-QrErEgOdjb1zhkRw9JTsXBCtB/exec';
 
 // DOM elements
 const productForm = document.getElementById('productForm');
@@ -14,13 +14,18 @@ let originalProductName = '';  // Store the original product name
 let isUpdatingProduct = false;
 const selectedComponents = [];  // Track the selected components for the product
 
-// Fetch products and populate the Komponentlər dropdown
-function loadProductComponents(searchTerm = '') {
+/**
+ * Fetch products for both the Komponentlər dropdown and the product selection dropdown.
+ * The searchTerm is optional and used for filtering products based on user input.
+ */
+function loadProducts(searchTerm = '') {
     fetch(GOOGLE_SCRIPT_URL + '?action=getProducts&searchTerm=' + encodeURIComponent(searchTerm))
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                populateComponentsDropdown(data.products);  // Populate dropdown with fetched products
+                // Populate both the Komponentlər dropdown and the product select dropdown
+                populateComponentsDropdown(data.products);
+                populateProductDropdown(data.products);
             } else {
                 alert('Xəta: ' + data.message);
             }
@@ -30,12 +35,6 @@ function loadProductComponents(searchTerm = '') {
             alert('Məhsullar alınarkən xəta baş verdi: ' + error.message);
         });
 }
-
-// Event listener for the product search input (Komponentlər)
-productSearch.addEventListener('input', function () {
-    const searchTerm = this.value.trim();  // Get the search term
-    loadProductComponents(searchTerm);  // Fetch and filter products based on the search term
-});
 
 // Populate the Komponentlər dropdown
 function populateComponentsDropdown(products) {
@@ -52,6 +51,24 @@ function populateComponentsDropdown(products) {
         const option = document.createElement('option');
         option.text = 'Məhsul tapılmadı';
         componentsDropdown.appendChild(option);
+    }
+}
+
+// Populate the product dropdown for editing
+function populateProductDropdown(products) {
+    productSelect.innerHTML = '';  // Clear the dropdown
+
+    products.forEach(product => {
+        const option = document.createElement('option');
+        option.value = product.productName;
+        option.text = product.productName;
+        productSelect.appendChild(option);
+    });
+
+    if (products.length === 0) {
+        const option = document.createElement('option');
+        option.text = 'Məhsul tapılmadı';
+        productSelect.appendChild(option);
     }
 }
 
@@ -132,45 +149,20 @@ function handleProductData(productData, action) {
 
 // Fetch products and populate the product dropdown for editing
 function loadEditProductOptions(searchTerm = '') {
-    fetch(GOOGLE_SCRIPT_URL + '?action=getProducts&searchTerm=' + encodeURIComponent(searchTerm))
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                populateProductDropdown(data.products);  // Populate the product dropdown with fetched products
-            } else {
-                alert('Xəta: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-            alert('Məhsullar alınarkən xəta baş verdi: ' + error.message);
-        });
+    loadProducts(searchTerm);  // Reuse the function to load and filter products for both dropdowns
 }
+
+// Event listener for the product search input (Komponentlər)
+productSearch.addEventListener('input', function () {
+    const searchTerm = this.value.trim();  // Get the search term
+    loadProducts(searchTerm);  // Fetch and filter products based on the search term
+});
 
 // Event listener for the product search input (editing products)
 editProductSearch.addEventListener('input', function () {
     const searchTerm = this.value.trim();  // Get the search term
     loadEditProductOptions(searchTerm);  // Fetch and filter products based on the search term
 });
-
-// Populate the product dropdown for editing
-function populateProductDropdown(products) {
-    const productSelect = document.getElementById('productSelect');
-    productSelect.innerHTML = '';  // Clear the dropdown
-
-    products.forEach(product => {
-        const option = document.createElement('option');
-        option.value = product.productName;
-        option.text = product.productName;
-        productSelect.appendChild(option);
-    });
-
-    if (products.length === 0) {
-        const option = document.createElement('option');
-        option.text = 'Məhsul tapılmadı';
-        productSelect.appendChild(option);
-    }
-}
 
 // Event listener for when a product is selected from the dropdown (for editing)
 productSelect.addEventListener('change', function () {
@@ -217,4 +209,4 @@ function populateFormForUpdate(product) {
 }
 
 // Load products when the page loads
-window.onload = loadEditProductOptions;  // Load all products initially when the page loads
+window.onload = loadProducts;  // Load all products initially when the page loads
