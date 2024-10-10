@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Məhsul Əlavə Et</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Məhsul Əlavə Et</h1>
+        <form id="productForm">
+            <label for="productName">Məhsulun Adı:</label>
+            <input type="text" id="productName" name="productName" required>
+
+            <label for="cost">Xərc:</label>
+            <input type="number" id="cost" name="cost" required>
+
+            <label for="salesPrice">Satış Qiyməti:</label>
+            <input type="number" id="salesPrice" name="salesPrice" required>
+
+            <label for="inventoryAmount">Anbar Miqdarı:</label>
+            <input type="number" id="inventoryAmount" name="inventoryAmount" required>
+
+            <label for="components">Komponentlər:</label>
+            <div id="componentsContainer">
+                <select id="components" name="components"></select>
+                <button type="button" id="addComponent">Komponent Əlavə Et</button>
+            </div>
+            <div id="selectedComponents"></div>
+
+            <button type="submit">Məhsulu Yadda Saxla</button>
+        </form>
+    </div>
+
+    <script src="product.js"></script>
+</body>
+</html>
