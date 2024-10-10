@@ -16,11 +16,11 @@
             <form id="transaction-form">
                 <label for="transaction-type">Transaction Type</label>
                 <select id="transaction-type" required>
-                    <option value="Deposit">Mədaxil (Deposit)</option>
-                    <option value="Withdrawal">Məxaric (Withdrawal)</option>
+                    <option value="Deposit">Mədaxil (Əlavə et)</option>
+                    <option value="Withdrawal">Məxaric (Çıxart)</option>
                 </select>
 
-                <label for="transaction-source">Transaction Source</label>
+                <label for="transaction-source">Tranzaksiya Mənbəyi</label>
                 <select id="transaction-source" required>
                     <option value="Leo Bank">Leo Bank</option>
                     <option value="Kapital Bank">Kapital Bank</option>
@@ -30,19 +30,19 @@
                     <option value="Günlük Digər Xərclər">Günlük Digər Xərclər</option>
                 </select>
 
-                <label for="transaction-amount">Transaction Amount</label>
+                <label for="transaction-amount">Tranzaksiya məbləği (AZN)</label>
                 <input type="number" id="transaction-amount" step="0.01" min="0" required>
 
-                <label for="transaction-reason">Transaction Reason (optional)</label>
+                <label for="transaction-reason">Tranzaksiya səbəbi(maaş, günlük və s.)</label>
                 <input type="text" id="transaction-reason">
 
-                <button type="submit">Add Transaction</button>
+                <button type="submit">Tranzaksiya əlavə et</button>
             </form>
         </section>
 
         <!-- Part 2: Today's Transactions -->
         <section id="todays-transactions">
-            <h2>Today's Transactions</h2>
+            <h2>Bu gün üçün əməliyyatlar</h2>
             <table id="transactions-table">
                 <thead>
                     <tr>
