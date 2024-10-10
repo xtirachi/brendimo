@@ -1,7 +1,9 @@
 const SHEET_ID = 'https://script.google.com/macros/s/AKfycbyALWKS9kMrQeOvJbJqR00_u6ycmuL1vpVOA2adz3Ro5SUm9mVszTKKby7Y7dyVSV0/exec';  // Replace with the web app URL
 const componentsDropdown = document.getElementById('components');
 const selectedComponentsDiv = document.getElementById('selectedComponents');
+const productSearch = document.getElementById('productSearch');
 let selectedComponents = [];
+let productList = [];  // To store the full list of products for searching
 
 // Load products from Google Sheets into dropdown
 window.onload = function () {
@@ -12,14 +14,21 @@ function fetchComponents() {
     fetch(`${SHEET_ID}?action=getProducts`)
         .then(response => response.json())
         .then(data => {
-            data.products.forEach(product => {
-                const option = document.createElement('option');
-                option.value = product.name;
-                option.text = product.name;
-                componentsDropdown.appendChild(option);
-            });
+            productList = data.products;  // Store the product list for search
+            populateProductDropdown(productList);  // Populate the dropdown with the full list
         })
         .catch(error => console.error('Error fetching products:', error));
+}
+
+// Populate dropdown with products
+function populateProductDropdown(products) {
+    componentsDropdown.innerHTML = '';  // Clear previous options
+    products.forEach(product => {
+        const option = document.createElement('option');
+        option.value = product.name;
+        option.text = product.name;
+        componentsDropdown.appendChild(option);
+    });
 }
 
 // Add selected component to the list
@@ -40,17 +49,18 @@ function updateSelectedComponents() {
     });
 }
 
-// Handle form submission
+// Handle form submission using URLSearchParams
 document.getElementById('productForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    const productData = {
+    const productData = new URLSearchParams({
+        action: 'addProduct',
         productName: document.getElementById('productName').value,
         cost: document.getElementById('cost').value,
         salesPrice: document.getElementById('salesPrice').value,
         inventoryAmount: document.getElementById('inventoryAmount').value,
-        components: selectedComponents.join(',') // Send components as a comma-separated string
-    };
+        components: selectedComponents.join(',')  // Send components as a comma-separated string
+    });
 
     saveProduct(productData);
 });
@@ -58,9 +68,9 @@ document.getElementById('productForm').addEventListener('submit', function (e) {
 function saveProduct(productData) {
     fetch(`${SHEET_ID}`, {
         method: 'POST',
-        body: JSON.stringify({ action: 'addProduct', productData }),
+        body: productData,  // Using URLSearchParams here
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/x-www-form-urlencoded'
         }
     })
     .then(response => response.json())
@@ -76,3 +86,19 @@ function saveProduct(productData) {
     })
     .catch(error => console.error('Error saving product:', error));
 }
+
+// Search functionality for products with debouncing
+let searchTimeout;
+productSearch.addEventListener('input', function () {
+    const searchTerm = this.value.toLowerCase();
+
+    if (searchTimeout) {
+        clearTimeout(searchTimeout);  // Clear previous timeout
+    }
+
+    // Debounce search: wait 300ms after the last keystroke to perform search
+    searchTimeout = setTimeout(() => {
+        const filteredProducts = productList.filter(product => product.name.toLowerCase().includes(searchTerm));
+        populateProductDropdown(filteredProducts);
+    }, 300);
+});
