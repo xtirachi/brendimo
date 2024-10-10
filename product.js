@@ -38,6 +38,7 @@ function loadProducts(searchTerm = '') {
 
 // Populate the Komponentlər dropdown
 function populateComponentsDropdown(products) {
+    const componentsDropdown = document.getElementById('productName');
     componentsDropdown.innerHTML = '';  // Clear the dropdown
 
     products.forEach(product => {
@@ -56,6 +57,7 @@ function populateComponentsDropdown(products) {
 
 // Populate the product dropdown for editing
 function populateProductDropdown(products) {
+    const componentsDropdown = document.getElementById('productName');
     productSelect.innerHTML = '';  // Clear the dropdown
 
     products.forEach(product => {
