@@ -9,37 +9,43 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f4f4f9;
     color: #333;
-    padding: 20px;
     line-height: 1.6;
-    min-height: 100vh;
+    padding: 20px;
 }
 
+/* Headings */
 h1, h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #222;
     text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 600;
 }
 
 h2 {
     font-size: 22px;
+    font-weight: 500;
     color: #007bff;
 }
 
 /* Form Styling */
 form {
-    background-color: white;
+    background-color: #fff;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     max-width: 600px;
-    margin: 20px auto;
+    margin: 0 auto;
+    margin-bottom: 20px;
 }
 
 label {
-    font-weight: bold;
     display: block;
     margin-bottom: 8px;
+    font-size: 14px;
     color: #555;
 }
 
@@ -49,30 +55,26 @@ input[type="number"],
 select {
     width: 100%;
     padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     border-radius: 6px;
+    margin-bottom: 16px;
     font-size: 16px;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease;
 }
 
-input[type="text"]:focus,
-input[type="date"]:focus,
-input[type="number"]:focus,
+input:focus,
 select:focus {
-    outline: none;
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
 
 /* Button Styling */
 button {
-    display: block;
     width: 100%;
     padding: 12px;
-    font-size: 18px;
+    font-size: 16px;
     background-color: #007bff;
-    color: white;
+    color: #fff;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -84,24 +86,22 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Navigation Buttons */
+/* Navigation Button Styling */
 .navigation {
-    margin-top: 20px;
     text-align: center;
+    margin-top: 20px;
 }
 
 .navigation button {
     display: inline-block;
-    width: auto;
-    padding: 12px 24px;
+    padding: 10px 20px;
     margin: 10px;
     background-color: #6c757d;
-    color: white;
+    color: #fff;
     border: none;
     border-radius: 6px;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
-    transition: background 0.3s ease;
 }
 
 .navigation button:hover {
@@ -109,270 +109,36 @@ button:hover {
 }
 
 /* Summary Section */
-#summaryResults {
-    background-color: white;
+#summaryResults,
+#inventoryResults {
+    background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 20px auto;
-}
-
-#summaryResults p {
-    font-size: 16px;
-    margin: 10px 0;
-}
-
-#summaryResults strong {
-    color: #007bff;
-}
-
-/* Inventory List Styles */
-#inventoryResults {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     max-width: 800px;
     margin: 20px auto;
 }
 
-#productList {
-    list-style-type: none;
-    padding: 0;
-    margin: 20px 0;
+#summaryResults p,
+#productList li {
+    font-size: 16px;
+    margin-bottom: 10px;
 }
 
 #productList li {
-    padding: 10px;
-    margin-bottom: 10px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 6px;
-    font-size: 18px;
-    color: #333;
+    padding: 10px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: background 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
 #productList li:hover {
     background-color: #f0f8ff;
-}
-
-#productList li.red {
-    color: #e63946;
-    font-weight: bold;
-}
-
-#totalInventoryValue {
-    font-size: 20px;
-    font-weight: bold;
-    color: #007bff;
-    text-align: center;
-    margin-top: 20px;
-}
-
-#currentCash {
-    font-weight: bold;
-    font-size: 20px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    body {
-        padding: 10px;
-    }
-
-    h1, h2 {
-        font-size: 22px;
-    }
-
-    form {
-        padding: 15px;
-        max-width: 100%;
-    }
-
-    input[type="text"],
-    input[type="date"],
-    input[type="number"],
-    select {
-        font-size: 14px;
-        padding: 10px;
-    }
-
-    button {
-        font-size: 16px;
-        padding: 10px;
-    }
-
-    .navigation button {
-        font-size: 14px;
-        padding: 10px 20px;
-    }
-
-    #summaryResults {
-        padding: 15px;
-        max-width: 100%;
-    }
-
-    #summaryResults p,
-    #productList li {
-        font-size: 14px;
-    }
-
-    #totalInventoryValue {
-        font-size: 18px;
-    }
-}
-
-/* Small Mobile Devices */
-@media (max-width: 480px) {
-    h1, h2 {
-        font-size: 20px;
-    }
-
-    form {
-        padding: 10px;
-    }
-
-    input[type="text"],
-    input[type="date"],
-    input[type="number"],
-    select {
-        font-size: 14px;
-        padding: 8px;
-    }
-
-    button {
-        font-size: 14px;
-        padding: 10px;
-    }
-
-    .navigation button {
-        font-size: 12px;
-        padding: 8px 14px;
-    }
-
-    #summaryResults {
-        padding: 10px;
-    }
-
-    #productList li {
-        font-size: 14px;
-        padding: 6px;
-    }
-
-    #totalInventoryValue {
-        font-size: 16px;
-    }
-}
-
-/* Focused Form Elements for Accessibility */
-input[type="text"]:focus,
-input[type="date"]:focus,
-input[type="number"]:focus,
-select:focus,
-button:focus {
-    outline: 2px solid #007bff;
-    outline-offset: 2px;
-}
-
-/* Hover Effects for Buttons */
-button:hover,
-.navigation button:hover {
-    background-color: #0056b3;
-}
-
-/* Financial Data List */
-ul {
-    list-style-type: none;
-    padding: 0;
-    margin-bottom: 20px;
-}
-
-ul li {
-    margin-bottom: 12px;
-    font-size: 18px;
-    color: #333;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
-}
-
-ul li:hover {
-    background-color: #f0f8ff;
-}
-
-ul li strong {
-    color: #007bff;
-}
-
-#eldekiPul {
-    font-weight: bold;
-    font-size: 20px;
-}
-
-/* Form Styling */
-form {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 0 auto 20px;
-}
-
-label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-input[type="text"],
-input[type="number"],
-select {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
-    transition: all 0.3s ease;
-}
-
-input[type="text"]:focus,
-input[type="number"]:focus,
-select:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
-}
-
-/* Submit Button */
-button {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    font-size: 18px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color: #0056b3;
 }
 
 /* Responsive Design */
@@ -389,30 +155,34 @@ button:hover {
         font-size: 20px;
     }
 
-    ul li {
-        font-size: 16px;
-        padding: 8px;
-    }
-
     form {
         padding: 15px;
         max-width: 100%;
     }
 
-    input[type="text"],
-    input[type="number"],
+    input,
     select {
         font-size: 14px;
         padding: 10px;
     }
 
     button {
-        font-size: 16px;
+        font-size: 14px;
         padding: 10px;
+    }
+
+    #summaryResults,
+    #inventoryResults {
+        padding: 15px;
+    }
+
+    #productList li {
+        font-size: 14px;
+        padding: 8px;
     }
 }
 
-/* Mobile Devices */
+/* Small Mobile Devices */
 @media (max-width: 480px) {
     h1 {
         font-size: 22px;
@@ -422,17 +192,11 @@ button:hover {
         font-size: 18px;
     }
 
-    ul li {
-        font-size: 14px;
-        padding: 6px;
-    }
-
     form {
         padding: 10px;
     }
 
-    input[type="text"],
-    input[type="number"],
+    input,
     select {
         font-size: 14px;
         padding: 8px;
@@ -441,6 +205,16 @@ button:hover {
     button {
         font-size: 14px;
         padding: 10px;
+    }
+
+    #summaryResults,
+    #inventoryResults {
+        padding: 10px;
+    }
+
+    #productList li {
+        font-size: 12px;
+        padding: 6px;
     }
 }
 
@@ -451,91 +225,26 @@ button:focus {
     outline-offset: 2px;
 }
 
-
-// finance
-
-/* Reset some default browser styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-
-input[type="date"],
-input[type="number"],
-input[type="text"],
-select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-
+/* Financial Data */
 #financialData {
-    background-color: #ffffff;
+    background-color: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
 #financialData p {
-    font-size: 18px;
-    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid #ecf0f1;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    font-size: 16px;
 }
 
-#financialData p:last-child {
-    border-bottom: none;
-}
-
-#financialData span {
+#financialData p span {
     font-weight: bold;
     color: #27ae60;
 }
-
-
-@media (min-width: 768px) {
-    body {
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
-    #financialData p {
-        font-size: 20px;
-    }
-
-    button {
-        width: auto;
-        max-width: 200px;
-        margin: 20px auto 0;
-    }
-}
-
-/* Additional Styling for Better User Experience */
-
-#financialData {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-#financialData p {
-    border: none;
-    padding: 10px;
-    background-color: #ecf0f1;
-    border-radius: 4px;
-}
-
