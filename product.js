@@ -1,5 +1,5 @@
 // Constants for Google Apps Script URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyFEDO29rTQhWnbjP066jSNjHaq30efZlQnEZPcWlOAnqDBsZt--BGbYHWeZUeQQ0Y6/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwnvl6qoWjcDRWD9UDFjgmBbHpiIcbZiGzDynFYrBUqlFngSVghQ-N-ud0pRBAxToI/exec';
 
 // DOM elements
 const productForm = document.getElementById('productForm');
@@ -21,7 +21,7 @@ function loadProductOptions() {
         productSelect.innerHTML = '<option value="">Məhsul seçin</option>';
         products.forEach(product => {
             const option = document.createElement('option');
-            option.value = product.productName;
+            option.value = product.productName.trim();  // Ensure no extra spaces
             option.text = product.productName;
             productSelect.appendChild(option);
         });
@@ -55,22 +55,20 @@ productSelect.addEventListener('change', function () {
     }
 });
 
-// Form submission event listener for adding/updating product
+// Form submission event listener for adding/updating product with components
 productForm.addEventListener('submit', function (e) {
     e.preventDefault();  // Prevent form from submitting the default way
 
-    const productName = document.getElementById('productName').value;
+    const productName = document.getElementById('productName').value.trim();  // Ensure no extra spaces
 
-    // Validate that all required fields are filled in
     if (!productName || !document.getElementById('cost').value || !document.getElementById('salesPrice').value || !document.getElementById('inventoryAmount').value) {
         alert('Zəhmət olmasa bütün sahələri doldurun!');
         return;
     }
 
-    // Create product data for submission
     const productData = new URLSearchParams({
         action: isUpdatingProduct ? 'updateProduct' : 'addProduct',
-        productName: productName,
+        productName: productName,  // Send the clean product name
         cost: document.getElementById('cost').value,
         salesPrice: document.getElementById('salesPrice').value,
         inventoryAmount: document.getElementById('inventoryAmount').value,
@@ -165,7 +163,7 @@ function populateFormForUpdate(product) {
 
 // Add component to the selected list
 document.getElementById('addComponent').addEventListener('click', function () {
-    const selectedComponent = componentsDropdown.value;
+    const selectedComponent = componentsDropdown.value.trim();  // Ensure no extra spaces
     if (selectedComponent && !selectedComponents.includes(selectedComponent)) {
         selectedComponents.push(selectedComponent);
         updateSelectedComponentsUI();
