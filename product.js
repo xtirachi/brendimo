@@ -3,11 +3,11 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyNyQvjS0M3_x
 
 // DOM elements
 const productForm = document.getElementById('productForm');
-const productSelect = document.getElementById('productSelect');
-const componentsDropdown = document.getElementById('components');
-const selectedComponentsContainer = document.getElementById('selectedComponents');
-const productSearch = document.getElementById('productSearch');
-const editProductSearch = document.getElementById('editProductSearch');
+const productSelect = document.getElementById('productSelect');  // Main product selection dropdown for editing
+const componentsDropdown = document.getElementById('components');  // Komponentlər dropdown for bundling products
+const selectedComponentsContainer = document.getElementById('selectedComponents');  // Container for displaying selected components
+const productSearch = document.getElementById('productSearch');  // Search for Komponentlər
+const editProductSearch = document.getElementById('editProductSearch');  // Search for product selection for editing
 let originalProductName = '';  // Store the original product name
 
 // Initialize flag for tracking add or update
@@ -24,8 +24,8 @@ function loadProducts(searchTerm = '') {
         .then(data => {
             if (data.success) {
                 // Populate both the Komponentlər dropdown and the product select dropdown
-                populateComponentsDropdown(data.products);
-                populateProductDropdown(data.products);
+                populateComponentsDropdown(data.products);  // Populate Komponentlər dropdown
+                populateProductDropdown(data.products);  // Populate product selection for editing
             } else {
                 alert('Xəta: ' + data.message);
             }
@@ -36,9 +36,11 @@ function loadProducts(searchTerm = '') {
         });
 }
 
-// Populate the Komponentlər dropdown
+/**
+ * Populate the Komponentlər dropdown with products.
+ * Users will select these products to add as components for bundles.
+ */
 function populateComponentsDropdown(products) {
-    const componentsDropdown = document.getElementById('productName');
     componentsDropdown.innerHTML = '';  // Clear the dropdown
 
     products.forEach(product => {
@@ -55,9 +57,10 @@ function populateComponentsDropdown(products) {
     }
 }
 
-// Populate the product dropdown for editing
+/**
+ * Populate the product dropdown for editing products.
+ */
 function populateProductDropdown(products) {
-    const componentsDropdown = document.getElementById('productName');
     productSelect.innerHTML = '';  // Clear the dropdown
 
     products.forEach(product => {
@@ -74,7 +77,7 @@ function populateProductDropdown(products) {
     }
 }
 
-// Add selected component to the list of components
+// Add selected component (product) to the list of components
 document.getElementById('addComponent').addEventListener('click', function () {
     const selectedComponent = componentsDropdown.value.trim();  // Get selected product from the Komponentlər dropdown
 
@@ -212,3 +215,4 @@ function populateFormForUpdate(product) {
 
 // Load products when the page loads
 window.onload = loadProducts;  // Load all products initially when the page loads
+
