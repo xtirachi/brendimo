@@ -9,6 +9,25 @@
 <body>
     <div class="container">
         <h1>Məhsul Əlavə Et və Yenilə</h1>
+        
+        <!-- Product Action Radio Buttons -->
+        <div>
+            <label>
+                <input type="radio" id="actionAdd" name="productAction" value="add" checked> Məhsul Əlavə Et
+            </label>
+            <label>
+                <input type="radio" id="actionUpdate" name="productAction" value="update"> Məhsulu Yenilə
+            </label>
+        </div>
+
+        <!-- Product Dropdown for Selecting Existing Products -->
+        <div id="updateProductContainer" style="display:none;">
+            <label for="productSelect">Mövcud Məhsulu Seçin:</label>
+            <select id="productSelect">
+                <option value="">Məhsul seçin</option>
+            </select>
+        </div>
+
         <form id="productForm">
             <label for="productName">Məhsulun Adı:</label>
             <input type="text" id="productName" name="productName" required>
@@ -30,7 +49,7 @@
             </div>
             <div id="selectedComponents"></div>
 
-            <button type="submit">Məhsulu Yadda Saxla</button>
+            <button type="submit" id="submitButton">Məhsulu Yadda Saxla</button>
         </form>
     </div>
 
