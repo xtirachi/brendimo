@@ -67,25 +67,26 @@ document.getElementById('productForm').addEventListener('submit', function (e) {
 });
 
 function saveProduct(productData) {
-    fetch(`${SHEET_ID}`, {
+    fetch(SHEET_ID, {  // Replace GOOGLE_SCRIPT_URL with your Google Apps Script web app URL
         method: 'POST',
-        body: productData,  // Using URLSearchParams here
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
+            'Content-Type': 'application/x-www-form-urlencoded'  // Required for URLSearchParams
+        },
+        body: productData  // Using URLSearchParams here
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             alert('Məhsul uğurla əlavə edildi!');
-            document.getElementById('productForm').reset();
-            selectedComponents = [];
-            updateSelectedComponents();
+            window.location.reload();  // Refresh the page after a successful addition
         } else {
-            alert('Məhsul əlavə edilərkən xəta baş verdi.');
+            alert('Error: ' + data.message);
         }
     })
-    .catch(error => console.error('Error saving product:', error));
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert('Error adding product: ' + error.message);
+    });
 }
 
 // Search functionality for products with debouncing
