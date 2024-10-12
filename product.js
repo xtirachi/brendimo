@@ -211,6 +211,9 @@ function populateFormForUpdate(product) {
     selectedComponents.length = 0;
     selectedComponents.push(...components);
     updateSelectedComponentsUI();
+    // Set the form to update mode and change the submit button text
+    isUpdatingProduct = true;  // Now in update mode
+    document.getElementById('submitButton').innerText = 'Məhsulu Yenilə';  // Change button text
 }
 
 // Load products when the page loads
