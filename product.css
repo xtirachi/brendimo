@@ -21,20 +21,58 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-h1, h2 {
-    text-align: center;
+/* Tab Menu Styling */
+.tab-menu {
+    display: flex;
+    justify-content: center;
     margin-bottom: 20px;
-    font-weight: 600;
-    color: #34495e;
 }
 
-form {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
+.tab-menu button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #ecf0f1;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.tab-menu button.active-tab {
+    background-color: #2980b9;
+    color: #fff;
+}
+
+.tab-menu button:hover {
+    background-color: #3498db;
+    color: white;
+}
+
+h1 {
+    text-align: center;
+    color: #2980b9;
+    margin-bottom: 20px;
+}
+
+h2 {
+    font-size: 20px;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.form-section {
+    background-color: #ecf0f1;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.hidden {
+    display: none;
 }
 
 label {
+    display: block;
     font-size: 14px;
     font-weight: bold;
     color: #34495e;
@@ -45,7 +83,8 @@ input[type="text"],
 input[type="number"],
 select {
     width: 100%;
-    padding: 12px;
+    padding: 10px;
+    margin-bottom: 15px;
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -59,57 +98,33 @@ select:focus {
     outline: none;
 }
 
+/* Button styling */
 button {
     width: 100%;
-    padding: 15px;
-    background-color: #2980b9;
-    color: #fff;
+    padding: 12px;
     border: none;
     border-radius: 5px;
     font-size: 16px;
-    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-button:hover {
+.primary-btn {
+    background-color: #2980b9;
+    color: #fff;
+}
+
+.primary-btn:hover {
     background-color: #3498db;
 }
 
-#componentsContainer,
-#selectedComponents {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.component-item {
-    background-color: #ecf0f1;
-    padding: 10px 15px;
-    border-radius: 5px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 14px;
-    color: #2c3e50;
-}
-
-.component-item button {
-    background-color: #e74c3c;
-    padding: 5px 10px;
-    border: none;
+.secondary-btn {
+    background-color: #27ae60;
     color: #fff;
-    border-radius: 4px;
-    cursor: pointer;
 }
 
-.component-item button:hover {
-    background-color: #c0392b;
-}
-
-/* Style for the dropdown */
-select {
-    font-size: 14px;
+.secondary-btn:hover {
+    background-color: #2ecc71;
 }
 
 /* Responsive Design */
@@ -118,15 +133,15 @@ select {
         padding: 15px;
     }
 
-    form {
-        gap: 15px;
+    h1 {
+        font-size: 24px;
     }
 
     button {
         font-size: 14px;
     }
 
-    h1, h2 {
-        font-size: 20px;
+    h2 {
+        font-size: 18px;
     }
 }
