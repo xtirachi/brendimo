@@ -38,7 +38,7 @@
                     <select id="components" name="components"></select>
                     <button type="button" id="addComponent">Dəstə Əlavə Et</button>
                 </div>
-                <div id="selectedComponents"></div>
+                <div id="selectedComponentsAdd"></div> <!-- Add products components -->
 
                 <button type="submit" class="primary-btn">Məhsulu Əlavə et</button>
             </form>
@@ -63,8 +63,15 @@
                 <label for="updateInventoryAmount">Anbar Miqdarı:</label>
                 <input type="number" id="updateInventoryAmount" name="updateInventoryAmount" required>
 
+                
+                <label for="components">Dəstin içindəkilər:</label>
+                <input type="text" id="productSearch" placeholder="Məhsulu axtarın...">
+                <div id="componentsContainer">
+                    <select id="components" name="components"></select>
+                    <button type="button" id="addComponent">Dəstə Əlavə Et</button>
+                </div>
                 <!-- Selected components for update -->
-                <div id="selectedComponents"></div>
+                <div id="selectedComponentsUpdate"></div> <!-- Update products components -->
 
                 <button type="submit" class="secondary-btn">Məhsulu Yenilə</button>
             </form>
