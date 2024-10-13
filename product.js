@@ -12,7 +12,8 @@ const updateCost = document.getElementById('updateCost'); // For cost in update 
 const updateSalesPrice = document.getElementById('updateSalesPrice'); // For sales price in update form
 const updateInventoryAmount = document.getElementById('updateInventoryAmount'); // For inventory amount in update form
 const componentsDropdown = document.getElementById('components'); // For components dropdown
-const selectedComponentsContainer = document.getElementById('selectedComponents'); // For displaying selected components
+const selectedComponentsAdd = document.getElementById('selectedComponentsAdd'); // Components for add form
+const selectedComponentsUpdate = document.getElementById('selectedComponentsUpdate'); // Components for update form
 
 let selectedComponents = []; // To store selected components
 
@@ -65,28 +66,29 @@ function populateFormForUpdate(product) {
         const components = product.components ? product.components.split(',') : [];
         selectedComponents.length = 0; // Clear the existing components
         selectedComponents.push(...components);
-        updateSelectedComponentsUI(); // Update the UI to display the selected components
+        updateSelectedComponentsUI('update'); // Update the UI to display the selected components in the update form
     } else {
         alert("Məhsul tapılmadı!");
     }
 }
 
 // Update the UI to display selected components
-function updateSelectedComponentsUI() {
+function updateSelectedComponentsUI(formType = 'add') {
+    let selectedComponentsContainer = formType === 'add' ? selectedComponentsAdd : selectedComponentsUpdate;
     selectedComponentsContainer.innerHTML = ''; // Clear existing components
 
     selectedComponents.forEach((component, index) => {
         const componentElement = document.createElement('div');
         componentElement.classList.add('component-item');
-        componentElement.innerHTML = `${component} <button type="button" onclick="removeComponent(${index})">Sil</button>`;
+        componentElement.innerHTML = `${component} <button type="button" onclick="removeComponent(${index}, '${formType}')">Sil</button>`;
         selectedComponentsContainer.appendChild(componentElement);
     });
 }
 
 // Remove a component from the selected list
-function removeComponent(index) {
+function removeComponent(index, formType = 'add') {
     selectedComponents.splice(index, 1); // Remove the component by index
-    updateSelectedComponentsUI(); // Refresh the UI
+    updateSelectedComponentsUI(formType); // Refresh the UI
 }
 
 // Fetch products and populate the product dropdown for editing
@@ -136,3 +138,4 @@ productSelect.addEventListener('change', function () {
 window.onload = function () {
     loadEditProductOptions(); // Load all products initially when the page loads
 };
+
