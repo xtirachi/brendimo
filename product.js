@@ -1,26 +1,15 @@
 // Constants for Google Apps Script URL
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyNyQvjS0M3_x7vuYVjEgiWisxfPJKaslCmxFD_LIB5-tZGeoH8xxwgC2gFKjbswyAB/exec';
 
+// Variables for selected components
+let selectedComponentsAdd = [];  // To store selected components in Add form
+let selectedComponentsUpdate = [];  // To store selected components in Update form
+
 // DOM elements
 const addProductForm = document.getElementById('addProductForm');
 const updateProductForm = document.getElementById('updateProductForm');
 const addProductTab = document.getElementById('addProductTab');
 const updateProductTab = document.getElementById('updateProductTab');
-const productSelect = document.getElementById('productSelect'); // For selecting product to update
-const updateProductName = document.getElementById('updateProductName'); // For product name in update form
-const updateCost = document.getElementById('updateCost'); // For cost in update form
-const updateSalesPrice = document.getElementById('updateSalesPrice'); // For sales price in update form
-const updateInventoryAmount = document.getElementById('updateInventoryAmount'); // For inventory amount in update form
-
-const productSearchAdd = document.getElementById('productSearch'); // Search input for adding components in Add form
-const componentsDropdownAdd = document.getElementById('components'); // Components dropdown in Add form
-const selectedComponentsAdd = document.getElementById('selectedComponentsAdd'); // Selected components in Add form
-
-const productSearchUpdate = document.getElementById('productSearch'); // Search input for adding components in Update form
-const componentsDropdownUpdate = document.getElementById('components'); // Components dropdown in Update form
-const selectedComponentsUpdate = document.getElementById('selectedComponentsUpdate'); // Selected components in Update form
-
-let selectedComponents = []; // To store selected components
 
 // Toggle forms based on the selected tab
 addProductTab.addEventListener('click', function () {
@@ -40,8 +29,8 @@ updateProductTab.addEventListener('click', function () {
 // Search functionality for adding components in both Add and Update forms
 function searchComponents(searchTerm, formType = 'add') {
     const url = new URL(GOOGLE_SCRIPT_URL);
-    url.searchParams.append('action', 'searchComponents');
-    url.searchParams.append('searchTerm', searchTerm);
+    url.searchParams.append('action', 'searchComponents'); // The 'searchComponents' action
+    url.searchParams.append('searchTerm', searchTerm);     // The search term from input
 
     fetch(url, { method: 'GET' })
         .then(response => response.json())
@@ -49,7 +38,7 @@ function searchComponents(searchTerm, formType = 'add') {
             if (data.success) {
                 populateComponentsDropdown(data.components, formType); // Populate dropdown with search results
             } else {
-                alert('Xəta: ' + data.message);
+                alert('Xəta: ' + data.message); // Display backend error
             }
         })
         .catch(error => {
@@ -58,9 +47,9 @@ function searchComponents(searchTerm, formType = 'add') {
         });
 }
 
-// Populate the dropdown with search results
+// Populate the dropdown with search results for both forms
 function populateComponentsDropdown(components, formType = 'add') {
-    let componentsDropdown = formType === 'add' ? componentsDropdownAdd : componentsDropdownUpdate;
+    let componentsDropdown = formType === 'add' ? document.getElementById('componentsAdd') : document.getElementById('componentsUpdate');
     componentsDropdown.innerHTML = ''; // Clear previous dropdown options
 
     components.forEach(component => {
@@ -77,33 +66,35 @@ function populateComponentsDropdown(components, formType = 'add') {
     }
 }
 
-// Add selected component (product) to the list of components
-document.getElementById('addComponent').addEventListener('click', function () {
-    const selectedComponent = componentsDropdownAdd.value.trim();  // Get selected product from the dropdown
+// Add selected component (product) to the list of components for Add form
+document.getElementById('addComponentAdd').addEventListener('click', function () {
+    const selectedComponent = document.getElementById('componentsAdd').value.trim();  // Get selected product from the Add form dropdown
 
-    if (selectedComponent && !selectedComponents.includes(selectedComponent)) {
-        selectedComponents.push(selectedComponent);  // Add the product to the list of selected components
-        updateSelectedComponentsUI('add');  // Update the UI to display the selected components
+    if (selectedComponent && !selectedComponentsAdd.includes(selectedComponent)) {
+        selectedComponentsAdd.push(selectedComponent);  // Add the product to the list of selected components
+        updateSelectedComponentsUI('add');  // Update the UI for Add form
     } else {
         alert('Zəhmət olmasa etibarlı bir məhsul seçin.');
     }
 });
 
-// Add selected component in the Update form
-document.getElementById('addComponent').addEventListener('click', function () {
-    const selectedComponent = componentsDropdownUpdate.value.trim();  // Get selected product from the dropdown
+// Add selected component (product) to the list of components for Update form
+document.getElementById('addComponentUpdate').addEventListener('click', function () {
+    const selectedComponent = document.getElementById('componentsUpdate').value.trim();  // Get selected product from the Update form dropdown
 
-    if (selectedComponent && !selectedComponents.includes(selectedComponent)) {
-        selectedComponents.push(selectedComponent);  // Add the product to the list of selected components
-        updateSelectedComponentsUI('update');  // Update the UI to display the selected components
+    if (selectedComponent && !selectedComponentsUpdate.includes(selectedComponent)) {
+        selectedComponentsUpdate.push(selectedComponent);  // Add the product to the list of selected components
+        updateSelectedComponentsUI('update');  // Update the UI for Update form
     } else {
         alert('Zəhmət olmasa etibarlı bir məhsul seçin.');
     }
 });
 
-// Update the UI to display selected components
+// Update the UI to display selected components for both Add and Update forms
 function updateSelectedComponentsUI(formType = 'add') {
-    let selectedComponentsContainer = formType === 'add' ? selectedComponentsAdd : selectedComponentsUpdate;
+    let selectedComponentsContainer = formType === 'add' ? document.getElementById('selectedComponentsAdd') : document.getElementById('selectedComponentsUpdate');
+    let selectedComponents = formType === 'add' ? selectedComponentsAdd : selectedComponentsUpdate;
+
     selectedComponentsContainer.innerHTML = ''; // Clear existing components
 
     selectedComponents.forEach((component, index) => {
@@ -114,25 +105,36 @@ function updateSelectedComponentsUI(formType = 'add') {
     });
 }
 
-// Remove a component from the selected list
+// Remove a component from the selected list in either Add or Update form
 function removeComponent(index, formType = 'add') {
+    let selectedComponents = formType === 'add' ? selectedComponentsAdd : selectedComponentsUpdate;
     selectedComponents.splice(index, 1); // Remove the component by index
     updateSelectedComponentsUI(formType); // Refresh the UI
 }
 
 // Event listeners for product search (for both add and update forms)
-productSearchAdd.addEventListener('input', function () {
+document.getElementById('productSearchAdd').addEventListener('input', function () {
     const searchTerm = this.value.trim();  // Get the search term
     searchComponents(searchTerm, 'add');  // Fetch and filter components for Add form
 });
 
-productSearchUpdate.addEventListener('input', function () {
+document.getElementById('productSearchUpdate').addEventListener('input', function () {
     const searchTerm = this.value.trim();  // Get the search term
     searchComponents(searchTerm, 'update');  // Fetch and filter components for Update form
 });
 
-// Load products when the page loads
-window.onload = function () {
-    // Load existing products or components if needed
-};
+// Function to handle form submissions if needed
+document.getElementById('productForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent form submission for testing
+    alert('Məhsul əlavə edildi.');
+});
 
+document.getElementById('updateForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Prevent form submission for testing
+    alert('Məhsul yeniləndi.');
+});
+
+// Load products when the page loads (additional logic can be placed here)
+window.onload = function () {
+    // Example: load components for the add or update form if needed
+};
