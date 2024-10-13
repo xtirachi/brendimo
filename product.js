@@ -1,5 +1,6 @@
 // Constants for Google Apps Script URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzmkAtQLnCBGB8bawMpQQU7qt_myeAd7XEJtRh58sEaMGkfNPliSTC0YzG5kKTlCFAz/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw-w8C32Y-welbk9Fstl3_TyHbiTx6kbi0JkafzeOFcmli7PyecKw___P-UEjGokSFr/exec';
+
 
 
 // Variables for selected components
@@ -160,20 +161,32 @@ document.getElementById('productForm').addEventListener('submit', function (e) {
     sendProductData(productData, 'Məhsul uğurla əlavə edildi!');
 });
 
-// Function to send product data (add or update) to the backend
 function sendProductData(productData, successMessage) {
-    const url = new URL(GOOGLE_SCRIPT_URL);  // Create the URL
+    const url = GOOGLE_SCRIPT_URL;  // Keep the base URL the same
+
+    // Convert product data to URLSearchParams
+    const params = new URLSearchParams();
+    for (const key in productData) {
+        if (productData.hasOwnProperty(key)) {
+            params.append(key, productData[key]);  // Append each key-value pair
+        }
+    }
 
     fetch(url, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(productData)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },  // Use URL-encoded content type
+        body: params.toString()  // Send URLSearchParams as body
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Server error: ' + response.status);  // Handle server errors
+        }
+        return response.json();  // Expecting JSON response
+    })
     .then(data => {
         if (data.success) {
             alert(successMessage);
-            window.location.reload();  // Optionally reload the page after success
+            window.location.reload();  // Reload the page after success
         } else {
             alert('Xəta: ' + data.message);
         }
@@ -183,6 +196,7 @@ function sendProductData(productData, successMessage) {
         alert('Xəta baş verdi: ' + error.message);
     });
 }
+
 
 // Event listener for product search in the 'Məhsulu Yenilə' section
 document.getElementById('editProductSearch').addEventListener('input', function () {
