@@ -10,37 +10,63 @@
     <div class="container">
         <h1>Məhsul Əlavə Et və Yenilə</h1>
 
-        <!-- Form for adding/updating products -->
-        <form id="productForm">
-            <label for="productName">Məhsulun Adı:</label>
-            <input type="text" id="productName" name="productName" required>
+        <!-- Navigation for toggling between add and update forms -->
+        <div class="tab-menu">
+            <button id="addProductTab" class="active-tab">Məhsul Əlavə Et</button>
+            <button id="updateProductTab">Məhsulu Yenilə</button>
+        </div>
 
-            <label for="cost">Xərc:</label>
-            <input type="number" id="cost" name="cost" required>
+        <!-- Form for adding products -->
+        <div class="form-section" id="addProductForm">
+            <h2>Məhsul Əlavə Et</h2>
+            <form id="productForm">
+                <label for="productName">Məhsulun Adı:</label>
+                <input type="text" id="productName" name="productName" required>
 
-            <label for="salesPrice">Satış Qiyməti:</label>
-            <input type="number" id="salesPrice" name="salesPrice" required>
+                <label for="cost">Xərc:</label>
+                <input type="number" id="cost" name="cost" required>
 
-            <label for="inventoryAmount">Anbar Miqdarı:</label>
-            <input type="number" id="inventoryAmount" name="inventoryAmount" required>
+                <label for="salesPrice">Satış Qiyməti:</label>
+                <input type="number" id="salesPrice" name="salesPrice" required>
 
-            <label for="components">Dəstin içindəkilər (Məs. Armani hamar dəst üçün Armani hamar kaşelok və Armani hamar kəmər əlavə olunmalıdır.):</label>
-            <input type="text" id="productSearch" placeholder="Məhsulu axtarın...">
-            <div id="componentsContainer">
-                <select id="components" name="components"></select>
-                <button type="button" id="addComponent">Dəstə Əlavə Et</button>
-            </div>
-            <div id="selectedComponents"></div>
+                <label for="inventoryAmount">Anbar Miqdarı:</label>
+                <input type="number" id="inventoryAmount" name="inventoryAmount" required>
 
-            <button type="submit">Məhsulu Əlavə et</button>
-        </form>
+                <label for="components">Dəstin içindəkilər:</label>
+                <input type="text" id="productSearch" placeholder="Məhsulu axtarın...">
+                <div id="componentsContainer">
+                    <select id="components" name="components"></select>
+                    <button type="button" id="addComponent">Dəstə Əlavə Et</button>
+                </div>
+                <div id="selectedComponents"></div>
 
-        <!-- Section for editing products -->
-        <h2>Məhsul məlumatlarını dəyişdir. (Xərc, Satış qiyməti və anbar miqdarı)</h2>
-        <input type="text" id="editProductSearch" placeholder="Məhsulu axtarın...">
-        <select id="productSelect"></select>
+                <button type="submit" class="primary-btn">Məhsulu Əlavə et</button>
+            </form>
+        </div>
+
+        <!-- Form for updating products -->
+        <div class="form-section hidden" id="updateProductForm">
+            <h2>Məhsulu Yenilə</h2>
+            <input type="text" id="editProductSearch" placeholder="Məhsulu axtarın...">
+            <select id="productSelect"></select>
+            
+            <form id="updateForm">
+                <label for="updateProductName">Məhsulun Adı:</label>
+                <input type="text" id="updateProductName" name="updateProductName" disabled>
+
+                <label for="updateCost">Xərc:</label>
+                <input type="number" id="updateCost" name="updateCost" required>
+
+                <label for="updateSalesPrice">Satış Qiyməti:</label>
+                <input type="number" id="updateSalesPrice" name="updateSalesPrice" required>
+
+                <label for="updateInventoryAmount">Anbar Miqdarı:</label>
+                <input type="number" id="updateInventoryAmount" name="updateInventoryAmount" required>
+
+                <button type="submit" class="secondary-btn">Məhsulu Yenilə</button>
+            </form>
+        </div>
     </div>
-        <button type="submit" id="submitButton">Məhsulu Yenilə</button>
 
     <script src="product.js"></script>
 </body>
