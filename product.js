@@ -28,9 +28,9 @@ updateProductTab.addEventListener('click', function () {
 
 // Search functionality for adding components in both Add and Update forms
 function searchComponents(searchTerm, formType = 'add') {
-    const url = new URL(GOOGLE_SCRIPT_URL);
-    url.searchParams.append('action', 'searchComponents'); // The 'searchComponents' action
-    url.searchParams.append('searchTerm', searchTerm);     // The search term from input
+    const url = new URL(GOOGLE_SCRIPT_URL);  // Replace GOOGLE_SCRIPT_URL with your actual Apps Script URL
+    url.searchParams.append('action', 'searchComponents'); // Add the 'action' parameter
+    url.searchParams.append('searchTerm', searchTerm);     // Add the 'searchTerm' parameter
 
     fetch(url, { method: 'GET' })
         .then(response => response.json())
@@ -123,18 +123,48 @@ document.getElementById('productSearchUpdate').addEventListener('input', functio
     searchComponents(searchTerm, 'update');  // Fetch and filter components for Update form
 });
 
-// Function to handle form submissions if needed
-document.getElementById('productForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevent form submission for testing
-    alert('Məhsul əlavə edildi.');
+// Event listener for product search in the 'Məhsulu Yenilə' section
+document.getElementById('editProductSearch').addEventListener('input', function () {
+    const searchTerm = this.value.trim();  // Get the search term from the input field
+    searchForProducts(searchTerm);  // Call the function to search products
 });
 
-document.getElementById('updateForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Prevent form submission for testing
-    alert('Məhsul yeniləndi.');
-});
+// Function to search for products in the 'Məhsulu Yenilə' part
+function searchForProducts(searchTerm) {
+    const url = new URL(GOOGLE_SCRIPT_URL);  // Replace with your actual Apps Script URL
+    url.searchParams.append('action', 'getProducts');  // Call the getProducts action
+    url.searchParams.append('searchTerm', searchTerm);  // Pass the search term
 
-// Load products when the page loads (additional logic can be placed here)
-window.onload = function () {
-    // Example: load components for the add or update form if needed
-};
+    fetch(url, { method: 'GET' })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                populateProductSelectDropdown(data.products);  // Populate dropdown with search results
+            } else {
+                alert('Xəta: ' + data.message);  // Display error message if the backend fails
+            }
+        })
+        .catch(error => {
+            console.error('Fetch error:', error);
+            alert('Məhsullar axtarılarkən xəta baş verdi: ' + error.message);
+        });
+}
+
+// Populate the product dropdown in the 'Məhsulu Yenilə' section
+function populateProductSelectDropdown(products) {
+    const productSelect = document.getElementById('productSelect'); // Dropdown element
+    productSelect.innerHTML = '';  // Clear previous dropdown options
+
+    products.forEach(product => {
+        const option = document.createElement('option');
+        option.value = product.productName;
+        option.text = product.productName;
+        productSelect.appendChild(option);
+    });
+
+    if (products.length === 0) {
+        const option = document.createElement('option');
+        option.text = 'Məhsul tapılmadı';
+        productSelect.appendChild(option);
+    }
+}
