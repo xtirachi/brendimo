@@ -26,44 +26,91 @@ updateProductTab.addEventListener('click', function () {
     updateProductTab.classList.add('active-tab');
 });
 
-// Search functionality for adding components in both Add and Update forms
-function searchComponents(searchTerm, formType = 'add') {
-    const url = new URL(GOOGLE_SCRIPT_URL);  // Replace GOOGLE_SCRIPT_URL with your actual Apps Script URL
-    url.searchParams.append('action', 'searchComponents'); // Add the 'action' parameter
-    url.searchParams.append('searchTerm', searchTerm);     // Add the 'searchTerm' parameter
+// Handle Add Product form submission
+document.getElementById('productForm').addEventListener('submit', function (e) {
+    e.preventDefault();  // Prevent the default form submission
 
-    fetch(url, { method: 'GET' })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                populateComponentsDropdown(data.components, formType); // Populate dropdown with search results
-            } else {
-                alert('Xəta: ' + data.message); // Display backend error
-            }
-        })
-        .catch(error => {
-            console.error('Fetch error:', error);
-            alert('Məhsullar axtarılarkən xəta baş verdi: ' + error.message);
-        });
-}
+    // Collect form data
+    const productName = document.getElementById('productName').value.trim();
+    const cost = document.getElementById('cost').value.trim();
+    const salesPrice = document.getElementById('salesPrice').value.trim();
+    const inventoryAmount = document.getElementById('inventoryAmount').value.trim();
+    const components = selectedComponentsAdd;  // Get selected components for the product
 
-// Populate the dropdown with search results for both forms
-function populateComponentsDropdown(components, formType = 'add') {
-    let componentsDropdown = formType === 'add' ? document.getElementById('componentsAdd') : document.getElementById('componentsUpdate');
-    componentsDropdown.innerHTML = ''; // Clear previous dropdown options
-
-    components.forEach(component => {
-        const option = document.createElement('option');
-        option.value = component.productName;
-        option.text = component.productName;
-        componentsDropdown.appendChild(option);
-    });
-
-    if (components.length === 0) {
-        const option = document.createElement('option');
-        option.text = 'Məhsul tapılmadı';
-        componentsDropdown.appendChild(option);
+    // Basic validation to ensure all required fields are filled
+    if (!productName || !cost || !salesPrice || !inventoryAmount) {
+        alert('Zəhmət olmasa bütün sahələri doldurun.');
+        return;
     }
+
+    // Create a data object to send to the backend
+    const productData = {
+        action: 'addProduct',
+        productName: productName,
+        cost: cost,
+        salesPrice: salesPrice,
+        inventoryAmount: inventoryAmount,
+        components: components
+    };
+
+    // Send data to the backend to add the product
+    sendProductData(productData, 'Məhsul uğurla əlavə edildi!');
+});
+
+// Handle Update Product form submission
+document.getElementById('updateForm').addEventListener('submit', function (e) {
+    e.preventDefault();  // Prevent the default form submission
+
+    // Collect form data for updating product
+    const productName = document.getElementById('updateProductName').value.trim();
+    const cost = document.getElementById('updateCost').value.trim();
+    const salesPrice = document.getElementById('updateSalesPrice').value.trim();
+    const inventoryAmount = document.getElementById('updateInventoryAmount').value.trim();
+    const components = selectedComponentsUpdate;  // Get selected components for the product
+
+    // Basic validation to ensure all required fields are filled
+    if (!productName || !cost || !salesPrice || !inventoryAmount) {
+        alert('Zəhmət olmasa bütün sahələri doldurun.');
+        return;
+    }
+
+    // Create a data object to send to the backend
+    const productData = {
+        action: 'updateProduct',
+        productName: productName,
+        cost: cost,
+        salesPrice: salesPrice,
+        inventoryAmount: inventoryAmount,
+        components: components
+    };
+
+    // Send data to the backend to update the product
+    sendProductData(productData, 'Məhsul uğurla yeniləndi!');
+});
+
+// Function to send product data (add or update) to the backend
+function sendProductData(productData, successMessage) {
+    const url = new URL(GOOGLE_SCRIPT_URL);  // Replace GOOGLE_SCRIPT_URL with your actual Apps Script URL
+
+    // Send data to the backend via POST request
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(productData)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(successMessage);
+            window.location.reload();  // Optionally reload the page after success
+        } else {
+            alert('Xəta: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert('Xəta baş verdi: ' + error.message);
+    });
 }
 
 // Add selected component (product) to the list of components for Add form
