@@ -47,9 +47,9 @@
         <!-- Form for updating products -->
         <div class="form-section hidden" id="updateProductForm">
             <h2>Məhsulu Yenilə</h2>
-            <input type="text" id="editProductSearch" placeholder="Məhsulu axtarın...">
-            <select id="productSelect"></select>
-            
+            <input type="text" id="editProductSearch" placeholder="Məhsulu axtarın..."> <!-- Unique ID for searching products -->
+            <select id="productSelect"></select> <!-- Dropdown for selecting product -->
+
             <form id="updateForm">
                 <label for="updateProductName">Məhsulun Adı:</label>
                 <input type="text" id="updateProductName" name="updateProductName" disabled>
@@ -70,7 +70,7 @@
                     <button type="button" id="addComponentUpdate">Dəstə Əlavə Et</button>
                 </div>
                 <!-- Selected components for update -->
-                <div id="selectedComponentsUpdate"></div> <!-- Update products components -->
+                <div id="selectedComponentsUpdate"></div>
 
                 <button type="submit" class="secondary-btn">Məhsulu Yenilə</button>
             </form>
