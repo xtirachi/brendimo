@@ -216,6 +216,30 @@ function populateFormForUpdate(product) {
     document.getElementById('submitButton').innerText = 'Məhsulu Yenilə';  // Change button text
 }
 
+// DOM elements
+const addProductForm = document.getElementById('addProductForm');
+const updateProductForm = document.getElementById('updateProductForm');
+const addProductTab = document.getElementById('addProductTab');
+const updateProductTab = document.getElementById('updateProductTab');
+
+// Toggle forms based on the selected tab
+addProductTab.addEventListener('click', function() {
+    addProductForm.classList.remove('hidden');
+    updateProductForm.classList.add('hidden');
+    addProductTab.classList.add('active-tab');
+    updateProductTab.classList.remove('active-tab');
+});
+
+updateProductTab.addEventListener('click', function() {
+    addProductForm.classList.add('hidden');
+    updateProductForm.classList.remove('hidden');
+    addProductTab.classList.remove('active-tab');
+    updateProductTab.classList.add('active-tab');
+});
+
+// Form functionality remains the same for both adding and updating
+// Add your existing product.js logic for adding and updating products
+
+
 // Load products when the page loads
 window.onload = loadProducts;  // Load all products initially when the page loads
-
