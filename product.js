@@ -1,5 +1,5 @@
 // Constants for Google Apps Script URL
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7FzsknnUkQ2uTKM-U7XewAqL7zZUV4Cd0MsBGXEjrmnqCs2bKh6vgy3Wkgewo8Gm4/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPSBkZzNVJayNpHzzvrTqFo9Hetkq5EuuySGisQNAJlWntwPb2_Gs8AK3DpAEMFGyF/exec';
 
 // Variables for selected components
 let selectedComponentsAdd = [];  // To store selected components in Add form
