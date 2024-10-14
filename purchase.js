@@ -52,7 +52,7 @@ function displaySalesData(data) {
 
     // Product Type (Main Product or Component)
     const productTypeCell = document.createElement('td');
-    productTypeCell.textContent = details.type === 'dəst' ? 'Main Product' : 'Component';
+    productTypeCell.textContent = details.type === 'dəst' ? 'Əsas sifariş ' : 'Dəstin içi';
     row.appendChild(productTypeCell);
 
     // Customer Name Cell
