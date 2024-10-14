@@ -13,7 +13,7 @@ function fetchSales() {
   const startDate = document.getElementById('startDate').value;
   const endDate = document.getElementById('endDate').value;
   
-  const googleAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbxLtszQcJhM6DZ4jZkBlx9dBK2JP_UCEGAe5Z8b6w5VhWCvCelLNw-e7bA7XSAUCs17/exec?action=fetchSales&startDate=' + startDate + '&endDate=' + endDate;
+  const googleAppsScriptUrl = 'https://script.google.com/macros/s/AKfycbyu9KAUM7eqODtyNEfwYK7Zm9H0h7cl16RXTSEdwz_AqVqI0b9SirdfrAt_Vo3L7cyV/exec?action=fetchSales&startDate=' + startDate + '&endDate=' + endDate;
 
   // Fetch sales data for the selected date range
   fetch(googleAppsScriptUrl)
