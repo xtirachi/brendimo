@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <title>Bu gün və ya Seçilən Günlərdə Alınmalı Məhsullar</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Alınmalı Məhsullar</h1>
+    
+    <!-- Date Range Selection -->
+    <div class="date-selection">
+      <label for="startDate">Başlama tarixi:</label>
+      <input type="date" id="startDate" name="startDate" value="">
+      
+      <label for="endDate">Bitmə tarixi:</label>
+      <input type="date" id="endDate" name="endDate" value="">
+      
+      <button onclick="fetchSales()">Göstər</button>
+    </div>
+     <!-- Total Purchases Needed -->
+    <h2>Ümumi Alınmalı Məhsullar:</h2>
+    <ul id="totalPurchasesList">
+      <!-- Total purchase list will be dynamically inserted here -->
+    </ul>
+    <!-- Table to Display Sales Data -->
+    <table id="purchaseTable">
+      <thead>
+        <tr>
+          <th>Məhsulun adı</th>
+          <th>Miqdar</th>
+          <th>Növ</th>
+          <th>Müştəri Adı</th>
+          <th>Qeydlər</th>  <!-- Notes Column -->
+        </tr>
+      </thead>
+      <tbody id="purchaseBody">
+        <!-- Rows will be dynamically inserted here by JS -->
+      </tbody>
+    </table>
+    
+  </div>
+
+  <script src="purchase.js"></script>
+</body>
+</html>
