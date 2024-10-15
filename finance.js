@@ -9,7 +9,7 @@ document.getElementById('transaction-form').addEventListener('submit', function(
     const transactionAmount = parseFloat(document.getElementById('transaction-amount').value);
     const transactionReason = document.getElementById('transaction-reason').value;
 
-    
+
     fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
