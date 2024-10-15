@@ -1,4 +1,5 @@
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyQWelniJWR5w3uwe6opfOGdE5R2f7e9mt1QeBfmBRnWSfLC971PriuF-zZbOlLDqtdcw/exec';  // Replace with actual URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbymCEvoWds1hnI4ZrPUyahtjY-SmQuGdHmwpMjfWWpEIvV5WEuiSdrSv-mjamgEic8mEg/exec';  // Replace with actual URL
+
 
 // Add Transaction
 document.getElementById('transaction-form').addEventListener('submit', function(event) {
@@ -8,7 +9,6 @@ document.getElementById('transaction-form').addEventListener('submit', function(
     const transactionSource = document.getElementById('transaction-source').value;
     const transactionAmount = parseFloat(document.getElementById('transaction-amount').value);
     const transactionReason = document.getElementById('transaction-reason').value;
-
 
     fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
@@ -80,18 +80,21 @@ function loadBalances() {
         });
 }
 
-// Load Daily Values
 function loadDailyValues() {
+    // Fetch the daily values from the Google Apps Script
     fetch(`${GOOGLE_SCRIPT_URL}?action=getDailyValues`, { method: 'GET' })
-        .then(response => response.json())
-        .then(dailyValues => {
-            document.getElementById('daily-sales').textContent = dailyValues.totalDailySales + ' AZN';
-            document.getElementById('daily-profits').textContent = dailyValues.totalDailyProfits + ' AZN';
-            document.getElementById('cash-in-hand').textContent = dailyValues.cashOnHand + ' AZN';
+        .then(response => response.json()) // Convert response to JSON
+        .then(data => {
+            // Log the response data for debugging
+            console.log('Daily values:', data);
+            
+            // Update the HTML elements with the fetched data
+            document.getElementById('daily-sales').textContent = data.dailySales + ' AZN'; // Total daily sales
+            document.getElementById('daily-profits').textContent = data.dailyProfit + ' AZN'; // Total daily profits
+            document.getElementById('cash-in-hand').textContent = data.cashOnHand + ' AZN'; // Cash on hand (calculated)
         })
         .catch(error => {
-            console.error('Fetch error:', error);
-            alert('Error loading daily values: ' + error.message);
+            console.error('Error fetching daily values:', error);
         });
 }
 
