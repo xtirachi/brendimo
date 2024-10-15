@@ -1,4 +1,4 @@
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdIPQBp3mvNHN7Sj9-8VhB9ba4hIpcHgTWnPhIIT6DxuvKZzexCfpQNnu7cdSC9rr4Gw/exec';  // Replace with actual URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyQWelniJWR5w3uwe6opfOGdE5R2f7e9mt1QeBfmBRnWSfLC971PriuF-zZbOlLDqtdcw/exec';  // Replace with actual URL
 
 // Add Transaction
 document.getElementById('transaction-form').addEventListener('submit', function(event) {
@@ -9,61 +9,37 @@ document.getElementById('transaction-form').addEventListener('submit', function(
     const transactionAmount = parseFloat(document.getElementById('transaction-amount').value);
     const transactionReason = document.getElementById('transaction-reason').value;
 
-    // Log payload to verify it's being built correctly
-    console.log({
-        action: 'addTransaction',
-        transactionType,
-        transactionSource,
-        transactionAmount,
-        transactionReason
-    });
-
-    // Make the POST request to add the transaction
-   fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-    },
-    body: new URLSearchParams({
-        action: 'addTransaction',
-        transactionType,  // Example data
-        transactionSource,  // Example data
-        transactionAmount,  // Example data
-        transactionReason // Example reason
-    })
-})
-.then(response => response.json())
-.then(data => {
-    if (data.status === 'success') {
-        alert('Əlavə olundu və balans dəyişildi');
-                window.location.reload();  // This will refresh the page
-    } else {
-        alert('Error: ' + data.message);
-    }
-})
-.catch(error => {
-    console.error('Fetch error:', error);
-    alert('Error adding transaction: ' + error.message);
-});
-    
-});
-
-// Load Today's Transactions with more detailed logging
-function loadTransactions() {
-    console.log('Loading transactions...');
-
-    const requestUrl = `${GOOGLE_SCRIPT_URL}?action=getTodaysTransactions`;
-    console.log('Fetching from URL:', requestUrl);  // Log the URL
-
-    fetch(requestUrl, { method: 'GET' })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText + ' (' + response.status + ')');
-            }
-            return response.json();
+    fetch(GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+            action: 'addTransaction',
+            transactionType,
+            transactionSource,
+            transactionAmount,
+            transactionReason
         })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('Əlavə olundu və balans dəyişildi');
+            window.location.reload();
+        } else {
+            alert('Error: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Fetch error:', error);
+        alert('Error adding transaction: ' + error.message);
+    });
+});
+
+// Load Today's Transactions
+function loadTransactions() {
+    fetch(`${GOOGLE_SCRIPT_URL}?action=getTodaysTransactions`, { method: 'GET' })
+        .then(response => response.json())
         .then(transactions => {
-            console.log('Transactions loaded successfully:', transactions);
             const tbody = document.getElementById('transactions-body');
             tbody.innerHTML = '';
             transactions.forEach(function(transaction) {
@@ -84,23 +60,10 @@ function loadTransactions() {
         });
 }
 
-// Trigger the loading of transactions on page load
-window.onload = function() {
-    loadTransactions();
-};
-
-
 // Load Balances
 function loadBalances() {
-    console.log('Loading balances...');  // Debugging message
-
     fetch(`${GOOGLE_SCRIPT_URL}?action=getBalances`, { method: 'GET' })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(balances => {
             const ul = document.getElementById('balances-list');
             ul.innerHTML = '';
@@ -118,18 +81,12 @@ function loadBalances() {
 
 // Load Daily Values
 function loadDailyValues() {
-    console.log('Loading daily values...');  // Debugging message
-
     fetch(`${GOOGLE_SCRIPT_URL}?action=getDailyValues`, { method: 'GET' })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok: ' + response.statusText);
-            }
-            return response.json();
-        })
+        .then(response => response.json())
         .then(dailyValues => {
-            document.getElementById('daily-expenses').textContent = dailyValues.dailyExpenses + ' AZN';
-            document.getElementById('cash-in-hand').textContent = dailyValues.cashInHand + ' AZN';
+            document.getElementById('daily-sales').textContent = dailyValues.totalDailySales + ' AZN';
+            document.getElementById('daily-profits').textContent = dailyValues.totalDailyProfits + ' AZN';
+            document.getElementById('cash-in-hand').textContent = dailyValues.cashOnHand + ' AZN';
         })
         .catch(error => {
             console.error('Fetch error:', error);
