@@ -1,50 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="az">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Financial Management System</title>
+    <title>Maliyyə İdarəetmə Sistemi</title>
     <link rel="stylesheet" href="finance.css">
 </head>
 <body>
     <div class="container">
-        <h1>Financial Management System</h1>
+        <h1>Maliyyə İdarəetmə Sistemi</h1>
 
-        <!-- Part 1: Add New Transaction -->
+        <!-- Hissə 1: Yeni Tranzaksiya Əlavə Et -->
         <section id="add-transaction">
-            <h2>Add New Transaction</h2>
+            <h2>Yeni Tranzaksiya Əlavə Et</h2>
             <form id="transaction-form">
-                <label for="transaction-type">Transaction Type</label>
+                <label for="transaction-type">Tranzaksiya Növü</label>
                 <select id="transaction-type" required>
                     <option value="Deposit">Mədaxil (Əlavə et)</option>
                     <option value="Withdrawal">Məxaric (Çıxart)</option>
                 </select>
 
-                
                 <label for="transaction-source">Tranzaksiya Mənbəyi</label>
                 <select id="transaction-source" required>
                     <option value="Leo Bank">Leo Bank</option>
                     <option value="Kapital Bank">Kapital Bank</option>
-                    <option value="İnv. Fund">İnv. Fund</option>
+                    <option value="İnv. Fund">İnv. Fond</option>
                     <option value="Fond Gəlirləri">Fond Gəlirləri</option>
                     <option value="Dövriyyə">Dövriyyə</option>
                     <option value="Qutu">Qutu (Nağd Pul Ehtiyatı)</option>
                     <option value="Bazar">Bazar (Market Ehtiyatı)</option>
                 </select>
 
-                <label for="transaction-amount">Tranzaksiya məbləği (AZN)</label>
+                <label for="transaction-amount">Tranzaksiya Məbləği (AZN)</label>
                 <input type="number" id="transaction-amount" step="0.01" min="0" required>
 
-                <label for="transaction-reason">Tranzaksiya səbəbi(maaş, günlük və s.)</label>
+                <label for="transaction-reason">Tranzaksiya Səbəbi (maaş, günlük və s.)</label>
                 <input type="text" id="transaction-reason">
 
-                <button type="submit">Tranzaksiya əlavə et</button>
+                <button type="submit">Tranzaksiya Əlavə Et</button>
             </form>
         </section>
 
-        <!-- Part 2: Today's Transactions -->
+        <!-- Hissə 2: Bu Gün Üçün Əməliyyatlar -->
         <section id="todays-transactions">
-            <h2>Bu gün üçün əməliyyatlar</h2>
+            <h2>Bu Gün Üçün Əməliyyatlar</h2>
             <table id="transactions-table">
                 <thead>
                     <tr>
@@ -56,21 +55,22 @@
                     </tr>
                 </thead>
                 <tbody id="transactions-body">
-                    <!-- Transactions will be populated here by JavaScript -->
+                    <!-- Tranzaksiyalar buraya JavaScript ilə əlavə olunacaq -->
                 </tbody>
             </table>
         </section>
-        <!-- Part 3: Bank and Fund Balances -->
+
+        <!-- Hissə 3: Bank və Fond Balansları -->
         <section id="balances">
-            <h2>Bank and Fund Balances</h2>
+            <h2>Bank və Fond Balansları</h2>
             <ul id="balances-list">
-                <!-- Balances will be populated here by JavaScript -->
+                <!-- Balanslar buraya JavaScript ilə əlavə olunacaq -->
             </ul>
         </section>
 
-        <!-- Part 4: Daily Changing Values -->
+        <!-- Hissə 4: Günlük Dəyişən Dəyərlər -->
         <section id="daily-values">
-            <h2>Daily Values</h2>
+            <h2>Günlük Dəyərlər</h2>
             <p>Toplam Günlük Satış: <span id="daily-sales">0 AZN</span></p>
             <p>Günlük Mənfəət: <span id="daily-profits">0 AZN</span></p>
             <p>Əldəki Pul: <span id="cash-in-hand">0 AZN</span></p>
