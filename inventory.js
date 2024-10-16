@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Fetch the inventory data from Google Apps Script
-    fetch('https://script.google.com/macros/s/AKfycbweqivU8BVaWco3IYTb39ER8JSozCcMKR6Q3NPM3uhazuVEX5cQbOqCgUdav-TXrHk/exec?action=getInventory')
+    fetch('https://script.google.com/macros/s/AKfycbw8Flh_gic62oBw2pIp0aPpGnzjlsn1Ahzjx_9Q3Md7HCDANN9KcT2yz6dJ2-yf6sA/exec?action=getInventory')
         .then(response => response.json())
         .then(data => {
             const productList = document.getElementById('productList');
