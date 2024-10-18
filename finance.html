@@ -10,7 +10,22 @@
     <div class="container">
         <h1>Maliyyə İdarəetmə Sistemi</h1>
 
-        <!-- Hissə 1: Yeni Tranzaksiya Əlavə Et -->
+        <!-- Hissə 1: Gündəlik İşlər (To-Do List) -->
+        <section id="daily-reminders">
+            <h2>Gündəlik İşlər</h2>
+            <ul id="todo-list">
+                <li>LeoBank - Mədaxil - 100 AZN - Günlük</li>
+                <li>KapitalBank - Mədaxil - 60 AZN - Günlük</li>
+                <li>İnv. Fund - Mədaxil - (Toplam Günlük Satışın 2%-i) - Əlavə Dəyər</li>
+                <li>İnv. Fund - Mədaxil - 2 AZN - Günlük</li>
+                <li>Fond Gəlirləri - Mədaxil - AZN, Kaşloklar</li>
+                <li>Dövriyyə - Məxaric - 20 AZN, Mama Maaş</li>
+                <li>Dövriyyə - Məxaric - AZN, Günlük Xərclər (Taksi, Bazarda xərclənən hər qəpik)</li>
+                <li>Dövriyyə - Mədaxil - AZN, Əldəki Pul</li>
+            </ul>
+        </section>
+
+        <!-- Hissə 2: Yeni Tranzaksiya Əlavə Et -->
         <section id="add-transaction">
             <h2>Yeni Tranzaksiya Əlavə Et</h2>
             <form id="transaction-form">
@@ -41,7 +56,14 @@
             </form>
         </section>
 
-        <!-- Hissə 2: Bu Gün Üçün Əməliyyatlar -->
+        <!-- Hissə 3: Tarixi Seçin (Date Selection) -->
+        <section id="date-selector">
+            <label for="transaction-date">Tarixi Seçin:</label>
+            <input type="date" id="transaction-date" value="">
+            <button id="load-date-data">Göstər</button>
+        </section>
+
+        <!-- Hissə 4: Bu Gün Üçün Əməliyyatlar -->
         <section id="todays-transactions">
             <h2>Bu Gün Üçün Əməliyyatlar</h2>
             <table id="transactions-table">
@@ -60,7 +82,7 @@
             </table>
         </section>
 
-        <!-- Hissə 3: Bank və Fond Balansları -->
+        <!-- Hissə 5: Bank və Fond Balansları -->
         <section id="balances">
             <h2>Bank və Fond Balansları</h2>
             <ul id="balances-list">
@@ -68,7 +90,7 @@
             </ul>
         </section>
 
-        <!-- Hissə 4: Günlük Dəyişən Dəyərlər -->
+        <!-- Hissə 6: Günlük Dəyişən Dəyərlər -->
         <section id="daily-values">
             <h2>Günlük Dəyərlər</h2>
             <p>Toplam Günlük Satış: <span id="daily-sales">0 AZN</span></p>
@@ -76,6 +98,8 @@
             <p>Əldəki Pul: <span id="cash-in-hand">0 AZN</span></p>
         </section>
     </div>
+
     <script src="finance.js"></script>
 </body>
 </html>
+
