@@ -1,4 +1,5 @@
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz6sVT4FRip05kZDULV6tIPeo2pf5w-WdVZ38oY5ec03TboRtntzcSWoLmOawsWhwfSBw/exec';  // Replace with actual URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxZ883sKwTShB0ZeiIqk2k-7iABOFQsMUbXWyw-kCXqudzPowmFNeGIN0zn1Gzzz2TnEw/exec';  // Replace with actual URL
+
 
 // Helper function to get the formatted date (yyyy-mm-dd)
 function getFormattedToday() {
