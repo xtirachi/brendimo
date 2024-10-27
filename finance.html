@@ -10,7 +10,9 @@
     <div class="container">
         <h1>Maliyyə İdarəetmə Sistemi</h1>
 
-        <!-- Hissə 1: Gündəlik İşlər (To-Do List) -->
+
+        
+         <!-- Hissə 1: Gündəlik İşlər (To-Do List) -->
         <section id="daily-reminders">
             <h2>Gündəlik İşlər</h2>
             <ul id="todo-list">
@@ -25,45 +27,104 @@
             </ul>
         </section>
 
-        <!-- Hissə 2: Yeni Tranzaksiya Əlavə Et -->
+        <!-- New Transaction Form -->
         <section id="add-transaction">
             <h2>Yeni Tranzaksiya Əlavə Et</h2>
             <form id="transaction-form">
-                <label for="transaction-type">Tranzaksiya Növü</label>
+                <label for="transaction-type">Növ:</label>
                 <select id="transaction-type" required>
-                    <option value="Deposit">Mədaxil (Əlavə et)</option>
-                    <option value="Withdrawal">Məxaric (Çıxart)</option>
+                    <option value="Deposit">Gəlir</option>
+                    <option value="Withdrawal">Xərc</option>
                 </select>
 
-                <label for="transaction-source">Tranzaksiya Mənbəyi</label>
+                <label for="transaction-source">Mənbə:</label>
                 <select id="transaction-source" required>
                     <option value="Leo Bank">Leo Bank</option>
                     <option value="Kapital Bank">Kapital Bank</option>
-                    <option value="İnv. Fund">İnv. Fond</option>
+                    <option value="Anbar Maya">Anbar Maya</option>
                     <option value="Fond Gəlirləri">Fond Gəlirləri</option>
                     <option value="Dövriyyə">Dövriyyə</option>
-                    <option value="Qutu">Qutu (Nağd Pul Ehtiyatı)</option>
-                    <option value="Bazar">Bazar (Market Ehtiyatı)</option>
+                    <option value="Bazar">Bazar</option>
                 </select>
 
-                <label for="transaction-amount">Tranzaksiya Məbləği (AZN)</label>
+                <label for="transaction-amount">Məbləğ (AZN):</label>
                 <input type="number" id="transaction-amount" step="0.01" min="0" required>
 
-                <label for="transaction-reason">Tranzaksiya Səbəbi (maaş, günlük və s.)</label>
-                <input type="text" id="transaction-reason">
+                <label for="transaction-reason">Səbəb:</label>
+                <input type="text" id="transaction-reason" placeholder="Günlük, maaş və s.">
 
-                <button type="submit">Tranzaksiya Əlavə Et</button>
+                <button type="submit">Əlavə Et</button>
             </form>
         </section>
 
-        <!-- Hissə 3: Tarixi Seçin (Date Selection) -->
+        <!-- Frequent Transaction Buttons -->
+        <section id="frequent-transactions">
+            <h2>Tez-tez İstifadə Edilən Tranzaksiyalar</h2>
+
+            <!-- Preset Buttons for Common Transactions -->
+            <button id="leo-daily-100" data-amount="100" data-source="Leo Bank" data-reason="Günlük">Leo Bank Günlük 100 AZN</button>
+            <button id="kapital-daily-60" data-amount="60" data-source="Kapital Bank" data-reason="Günlük">Kapital Bank Günlük 60 AZN</button>
+
+            <!-- Custom Transaction Inputs -->
+            <div class="custom-transaction">
+                <h3>Günlük Alış</h3>
+                <label>Məbləğ:</label>
+                <input type="number" id="purchase-amount" step="0.01" min="0">
+                <label>Səbəb:</label>
+                <select id="purchase-reason">
+                    <option value="Kəmər">Kəmər</option>
+                    <option value="Kaşelok">Kaşelok</option>
+                    <option value="Alışqan">Alışqan</option>
+                    <option value="Saat">Saat</option>
+                    <option value="Yazı">Yazı</option>
+                    <option value="others">Digər</option>
+                </select>
+                <input type="text" id="purchase-reason-other" placeholder="Digər səbəb" style="display:none;">
+                <button id="daily-purchase">Alış Et</button>
+            </div>
+
+            <div class="custom-transaction">
+                <h3>Günlük Satış</h3>
+                <label>Məbləğ:</label>
+                <input type="number" id="sale-amount" step="0.01" min="0">
+                <label>Səbəb:</label>
+                <select id="sale-reason">
+                    <option value="Kəmər">Kəmər</option>
+                    <option value="Kaşelok">Kaşelok</option>
+                    <option value="Alışqan">Alışqan</option>
+                    <option value="Saat">Saat</option>
+                    <option value="Yazı">Yazı</option>
+                    <option value="others">Digər</option>
+                </select>
+                <input type="text" id="sale-reason-other" placeholder="Digər səbəb" style="display:none;">
+                <button id="daily-sale">Satış Et</button>
+            </div>
+
+            <div class="custom-transaction">
+                <h3>Fond Gəlirləri</h3>
+                <label>Məbləğ:</label>
+                <input type="number" id="fond-income-amount" step="0.01" min="0">
+                <label>Səbəb:</label>
+                <select id="fond-income-reason">
+                    <option value="Sosial">Sosial</option>
+                    <option value="2%">2%</option>
+                    <option value="Yazı">Yazı</option>
+                    <option value="Kaşelok">Kaşelok (2 AZN)</option>
+                    <option value="Kəmər">Kəmər (2 AZN)</option>
+                    <option value="Qutu">Qutu</option>
+                </select>
+                <button id="fond-income">Əlavə Et</button>
+            </div>
+        </section>
+
+        <!-- Date Selector -->
         <section id="date-selector">
-            <label for="transaction-date">Tarixi Seçin:</label>
+            <label for="transaction-date">Tarix:</label>
             <input type="date" id="transaction-date" value="">
             <button id="load-date-data">Göstər</button>
         </section>
 
-        <!-- Hissə 4: Bu Gün Üçün Əməliyyatlar -->
+        <!-- Transactions Table -->
         <section id="todays-transactions">
             <h2>Bu Gün Üçün Əməliyyatlar</h2>
             <table id="transactions-table">
@@ -77,20 +138,26 @@
                     </tr>
                 </thead>
                 <tbody id="transactions-body">
-                    <!-- Tranzaksiyalar buraya JavaScript ilə əlavə olunacaq -->
+                    <!-- Dynamic transaction data added here -->
                 </tbody>
             </table>
         </section>
 
-        <!-- Hissə 5: Bank və Fond Balansları -->
+        <!-- Bank and Fund Balances -->
         <section id="balances">
             <h2>Bank və Fond Balansları</h2>
             <ul id="balances-list">
-                <!-- Balanslar buraya JavaScript ilə əlavə olunacaq -->
+                <!-- Dynamic balance data added here -->
             </ul>
         </section>
 
-        <!-- Hissə 6: Günlük Dəyişən Dəyərlər -->
+        <!-- Anbar Məhsul Display -->
+        <section id="anbar-value">
+            <h2>Anbar Məhsul</h2>
+            <p>Toplam Anbar Məhsul Dəyəri: <span id="warehouse-value">0 AZN</span></p>
+        </section>
+
+        <!-- Daily Values -->
         <section id="daily-values">
             <h2>Günlük Dəyərlər</h2>
             <p>Toplam Günlük Satış: <span id="daily-sales">0 AZN</span></p>
@@ -102,4 +169,3 @@
     <script src="finance.js"></script>
 </body>
 </html>
-
