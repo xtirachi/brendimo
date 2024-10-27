@@ -1,15 +1,15 @@
-/* General Reset */
+/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Body Styling */
+/* Body */
 body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    background-color: #f7f9fc; /* Light, neutral background */
-    color: #333; /* Dark, legible text */
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
     line-height: 1.6;
     padding: 20px;
 }
@@ -18,122 +18,161 @@ body {
 .container {
     max-width: 900px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #fff; /* White container for contrast */
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 /* Headings */
 h1, h2 {
     text-align: center;
     margin-bottom: 20px;
-    font-weight: 600; /* Slightly bold for emphasis */
-    color: #2c3e50; /* Elegant dark blue */
+    font-weight: 600;
+    color: #2c3e50;
 }
 
-/* Smaller heading for "Gündəlik İşlər" */
-#daily-tasks h2 {
-    font-size: 1.4rem; /* Smaller font size for this section */
-    color: #2c3e50;
+h2 {
+    font-size: 1.3rem;
+    margin-top: 30px;
 }
 
 /* Forms and Inputs */
 form {
     display: flex;
     flex-direction: column;
+    gap: 12px;
+    padding: 10px 0;
 }
 
 label {
-    margin-bottom: 8px;
     font-size: 0.9rem;
-    color: #34495e; /* Subtle color for labels */
+    color: #34495e;
 }
 
-input, select, button {
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #dcdcdc;
-    border-radius: 5px;
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+    padding: 12px;
     font-size: 1rem;
-    transition: border 0.3s;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    transition: all 0.3s;
 }
 
-input:focus, select:focus {
-    border-color: #3498db; /* Blue border on focus for interactivity */
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #3498db;
     outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
 }
 
+/* Buttons */
 button {
-    background-color: #3498db; /* Primary button color */
+    padding: 12px;
+    font-size: 1rem;
     color: white;
     border: none;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.1s;
 }
 
 button:hover {
-    background-color: #2980b9; /* Slightly darker on hover */
+    background-color: #2980b9;
+    transform: scale(1.02);
 }
 
-/* Tables */
-table {
+button[data-amount] {
+    background-color: #3498db;
+}
+
+button#daily-purchase,
+button#daily-sale,
+button#fond-income {
+    background-color: #16a085;
+    margin-top: 10px;
+}
+
+button#daily-purchase:hover,
+button#daily-sale:hover,
+button#fond-income:hover {
+    background-color: #138d75;
+}
+
+/* Custom Transaction Buttons */
+.custom-transaction h3 {
+    margin: 15px 0 8px;
+    font-size: 1.1rem;
+    color: #2c3e50;
+}
+
+button[data-amount]:hover {
+    background-color: #2980b9;
+}
+
+/* Transactions Table */
+#transactions-table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-top: 15px;
     font-size: 0.9rem;
 }
 
-th, td {
+#transactions-table th, #transactions-table td {
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
 
-th {
-    background-color: #ecf0f1; /* Light gray background for table headers */
+#transactions-table th {
+    background-color: #ecf0f1;
     font-weight: bold;
+    color: #34495e;
 }
 
-tbody tr:nth-child(even) {
-    background-color: #f9f9f9; /* Light gray stripes for readability */
+#transactions-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
-tbody tr:hover {
-    background-color: #f1f1f1; /* Highlight row on hover */
+#transactions-table tbody tr:hover {
+    background-color: #f1f1f1;
 }
 
-/* Lists (for balances) */
-ul {
+/* Balance and To-Do Lists */
+#balances-list, #todo-list {
     list-style: none;
     padding-left: 0;
+    font-size: 1rem;
+    color: #34495e;
 }
 
-ul li {
+#balances-list li, #todo-list li {
     padding: 10px 0;
     border-bottom: 1px solid #ddd;
-    font-size: 1rem;
-    color: #2c3e50;
 }
 
-ul li:last-child {
-    border-bottom: none; /* Remove last border */
+#balances-list li:last-child, #todo-list li:last-child {
+    border-bottom: none;
 }
 
-/* Daily Values Section */
-#daily-values p {
+/* Daily Values and Anbar Məhsul */
+#daily-values p, #anbar-value p {
     margin: 10px 0;
     font-size: 1.1rem;
     font-weight: 500;
-    color: #16a085; /* Highlight daily values with a fresh green color */
+    color: #16a085;
 }
 
-/* Date Selector Section */
+/* Date Selector */
 #date-selector {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin: 20px 0;
 }
 
 #date-selector label {
@@ -151,7 +190,7 @@ ul li:last-child {
 
 #date-selector button {
     margin-left: 10px;
-    background-color: #1abc9c; /* Different button color for distinction */
+    background-color: #1abc9c;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
@@ -160,7 +199,7 @@ ul li:last-child {
 }
 
 #date-selector button:hover {
-    background-color: #16a085; /* Darken on hover */
+    background-color: #16a085;
 }
 
 /* Mobile Responsiveness */
@@ -169,16 +208,11 @@ ul li:last-child {
         padding: 15px;
     }
 
-    table, input, select, button {
-        font-size: 0.9rem; /* Adjust font sizes for better readability */
-    }
-
     h1, h2 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
 
-    #daily-tasks h2 {
-        font-size: 0.5rem; /* Make "Gündəlik İşlər" even smaller on mobile */
+    button, input, select {
+        font-size: 0.9rem;
     }
 }
-
