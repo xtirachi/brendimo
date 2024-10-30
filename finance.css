@@ -16,24 +16,24 @@ body {
 
 /* Container */
 .container {
-    max-width: 900px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 25px;
     background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* Headings */
 h1, h2 {
     text-align: center;
-    margin-bottom: 20px;
-    font-weight: 600;
+    font-weight: 700;
     color: #2c3e50;
+    margin-bottom: 20px;
 }
 
 h2 {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     margin-top: 30px;
 }
 
@@ -41,40 +41,41 @@ h2 {
 form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     padding: 10px 0;
 }
 
 label {
     font-size: 0.9rem;
     color: #34495e;
+    font-weight: 500;
 }
 
 input[type="text"],
 input[type="number"],
 input[type="date"],
 select {
-    padding: 12px;
+    padding: 10px;
     font-size: 1rem;
-    border: 1px solid #dcdcdc;
+    border: 1px solid #ced4da;
     border-radius: 6px;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
 input[type="text"]:focus,
 input[type="number"]:focus,
 input[type="date"]:focus,
 select:focus {
-    border-color: #3498db;
+    border-color: #5a9ad4;
     outline: none;
-    box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
+    box-shadow: 0 0 5px rgba(90, 154, 212, 0.2);
 }
 
 /* Buttons */
 button {
     padding: 12px;
     font-size: 1rem;
-    color: white;
+    color: #fff;
     border: none;
     border-radius: 6px;
     cursor: pointer;
@@ -82,36 +83,63 @@ button {
 }
 
 button:hover {
-    background-color: #2980b9;
-    transform: scale(1.02);
+    transform: scale(1.03);
 }
 
 button[data-amount] {
-    background-color: #3498db;
+    background-color: #5a9ad4;
+}
+
+button[data-amount]:hover {
+    background-color: #4a89bd;
 }
 
 button#daily-purchase,
 button#daily-sale,
 button#fond-income {
-    background-color: #16a085;
+    background-color: #2fa973;
     margin-top: 10px;
 }
 
 button#daily-purchase:hover,
 button#daily-sale:hover,
 button#fond-income:hover {
-    background-color: #138d75;
+    background-color: #279d6b;
 }
 
-/* Custom Transaction Buttons */
+/* Frequent Transaction Buttons */
+#frequent-transactions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    margin: 10px 0 20px;
+}
+
+#frequent-transactions button {
+    flex: 1 1 calc(50% - 10px);
+    font-size: 0.95rem;
+    padding: 12px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 6px;
+    transition: background-color 0.3s;
+    text-align: center;
+}
+
+#frequent-transactions button:hover {
+    background-color: #2980b9;
+}
+
+/* Custom Transaction Section */
 .custom-transaction h3 {
     margin: 15px 0 8px;
     font-size: 1.1rem;
     color: #2c3e50;
 }
 
-button[data-amount]:hover {
-    background-color: #2980b9;
+.custom-transaction {
+    margin-bottom: 15px;
 }
 
 /* Transactions Table */
@@ -129,17 +157,32 @@ button[data-amount]:hover {
 }
 
 #transactions-table th {
-    background-color: #ecf0f1;
+    background-color: #f0f3f5;
     font-weight: bold;
     color: #34495e;
 }
 
 #transactions-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #fafafa;
 }
 
 #transactions-table tbody tr:hover {
     background-color: #f1f1f1;
+}
+
+/* Totals Section */
+#totals {
+    padding: 15px;
+    margin-top: 20px;
+    background-color: #ecf0f1;
+    border-radius: 8px;
+}
+
+#totals p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2c3e50;
+    margin: 10px 0;
 }
 
 /* Balance and To-Do Lists */
@@ -164,7 +207,7 @@ button[data-amount]:hover {
     margin: 10px 0;
     font-size: 1.1rem;
     font-weight: 500;
-    color: #16a085;
+    color: #2fa973;
 }
 
 /* Date Selector */
@@ -184,13 +227,14 @@ button[data-amount]:hover {
 #date-selector input[type="date"] {
     padding: 8px;
     font-size: 1rem;
-    border: 1px solid #dcdcdc;
+    border: 1px solid #ced4da;
     border-radius: 5px;
+    transition: all 0.3s;
 }
 
 #date-selector button {
     margin-left: 10px;
-    background-color: #1abc9c;
+    background-color: #2fa973;
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
@@ -199,7 +243,7 @@ button[data-amount]:hover {
 }
 
 #date-selector button:hover {
-    background-color: #16a085;
+    background-color: #279d6b;
 }
 
 /* Mobile Responsiveness */
@@ -209,10 +253,14 @@ button[data-amount]:hover {
     }
 
     h1, h2 {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
 
     button, input, select {
         font-size: 0.9rem;
+    }
+
+    #frequent-transactions button {
+        flex: 1 1 100%;
     }
 }
