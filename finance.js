@@ -1,23 +1,30 @@
 // Constants
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBYjsU_4Xy-IpCTNRQ0J6qaV1tEh9ruGJJQ0ULtl-X_uTCeqNCLx1OsVlbiv0mgMHsNQ/exec'; // Replace with actual Google Apps Script URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiPcK8gAzsQK4fJT2oXelWY654WWimj_m5qu-jO_fABsMLdJZm87GXcUFZZc8jVeHUrw/exec'; // Replace with actual Google Apps Script URL
 
-// Helper: Get formatted date (yyyy-mm-dd)
-function getFormattedToday() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');
-    const day = String(today.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+// Helper to set today's date as default for date picker
+function setTodayAsDefaultDate() {
+    const dateInput = document.getElementById('transaction-date');
+    const today = new Date().toISOString().split('T')[0]; // Get YYYY-MM-DD format
+    dateInput.value = today;
 }
 
-// Set default date in date picker
-document.getElementById('transaction-date').value = getFormattedToday();
+// Load totals for today's date by default on page load
+window.addEventListener('DOMContentLoaded', () => {
+    setTodayAsDefaultDate();
+    const today = document.getElementById('transaction-date').value;
+    loadTransactions(today);
+    loadBalances();
+    loadDailyValues(today);
+    updateTotals(today);
+});
 
-// Load data based on selected date
+// Re-fetch and update totals when date changes
 document.getElementById('load-date-data').addEventListener('click', () => {
     const selectedDate = document.getElementById('transaction-date').value;
     loadTransactions(selectedDate);
+    loadBalances();
     loadDailyValues(selectedDate);
+    updateTotals(selectedDate);
 });
 
 // Form submission for new transactions
@@ -108,7 +115,7 @@ function loadBalances() {
             ul.innerHTML = ''; // Clear previous balances
             Object.entries(balances).forEach(([source, balance]) => {
                 const li = document.createElement('li');
-                li.textContent = `${source}: ${balance} AZN`;
+                li.textContent = `${source}: ${balance.toFixed(2)} AZN`;
                 ul.appendChild(li);
             });
         })
@@ -120,9 +127,9 @@ function loadDailyValues(date) {
     fetch(`${GOOGLE_SCRIPT_URL}?action=getDailyValues&date=${date}`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById('daily-sales').textContent = `${data.dailySales} AZN`;
-            document.getElementById('daily-profits').textContent = `${data.dailyProfit} AZN`;
-            document.getElementById('cash-in-hand').textContent = `${data.cashOnHand} AZN`;
+            document.getElementById('daily-sales').textContent = `${data.dailySales.toFixed(2)} AZN`;
+            document.getElementById('daily-profits').textContent = `${data.dailyProfit.toFixed(2)} AZN`;
+            document.getElementById('cash-in-hand').textContent = `${data.cashOnHand.toFixed(2)} AZN`;
         })
         .catch(error => console.error('Error loading daily values:', error));
 }
@@ -144,8 +151,11 @@ function postTransaction({ transactionType, transactionSource, transactionAmount
     .then(data => {
         if (data.status === 'success') {
             alert('Tranzaksiya uğurla əlavə edildi.');
-            loadTransactions(getFormattedToday()); // Reload transactions for today
+            const today = getFormattedToday();
+            loadTransactions(today); // Reload transactions for today
             loadBalances(); // Reload balances
+            loadDailyValues(today); // Reload daily values
+            updateTotals(today); // Update totals after transaction
         } else {
             alert('Xəta: ' + data.message);
         }
@@ -153,10 +163,23 @@ function postTransaction({ transactionType, transactionSource, transactionAmount
     .catch(error => console.error('Error posting transaction:', error));
 }
 
-// Load today's data on page load
-window.onload = () => {
-    const today = getFormattedToday();
-    loadTransactions(today);  // Load transactions for today
-    loadBalances();           // Load balances on page load
-    loadDailyValues(today);    // Load daily values for today
-};
+// Update total daily purchase, sales, and fund income by fetching from Google Apps Script
+function updateTotals(date) {
+    fetch(`${GOOGLE_SCRIPT_URL}?action=getDailyTotalsBySource&date=${date}`)
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('total-daily-purchase').textContent = `${data.totals.totalDailyPurchase.toFixed(2)} AZN`;
+            document.getElementById('total-daily-sales').textContent = `${data.totals.totalDailySales.toFixed(2)} AZN`;
+            document.getElementById('total-fund-income').textContent = `${data.totals.totalFundIncome.toFixed(2)} AZN`;
+        })
+        .catch(error => console.error('Error fetching totals:', error));
+}
+
+// Helper: Get formatted date (yyyy-mm-dd)
+function getFormattedToday() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
