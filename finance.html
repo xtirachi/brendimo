@@ -10,8 +10,7 @@
     <div class="container">
         <h1>Maliyyə İdarəetmə Sistemi</h1>
 
-
-        
+       
          <!-- Hissə 1: Gündəlik İşlər (To-Do List) -->
         <section id="daily-reminders">
             <h2>Gündəlik İşlər</h2>
@@ -27,40 +26,10 @@
             </ul>
         </section>
 
-        <!-- New Transaction Form -->
-        <section id="add-transaction">
-            <h2>Yeni Tranzaksiya Əlavə Et</h2>
-            <form id="transaction-form">
-                <label for="transaction-type">Növ:</label>
-                <select id="transaction-type" required>
-                    <option value="Deposit">Gəlir</option>
-                    <option value="Withdrawal">Xərc</option>
-                </select>
-
-                <label for="transaction-source">Mənbə:</label>
-                <select id="transaction-source" required>
-                    <option value="Leo Bank">Leo Bank</option>
-                    <option value="Kapital Bank">Kapital Bank</option>
-                    <option value="Anbar Maya">Anbar Maya</option>
-                    <option value="Fond Gəlirləri">Fond Gəlirləri</option>
-                    <option value="Dövriyyə">Dövriyyə</option>
-                    <option value="Bazar">Bazar</option>
-                </select>
-
-                <label for="transaction-amount">Məbləğ (AZN):</label>
-                <input type="number" id="transaction-amount" step="0.01" min="0" required>
-
-                <label for="transaction-reason">Səbəb:</label>
-                <input type="text" id="transaction-reason" placeholder="Günlük, maaş və s.">
-
-                <button type="submit">Əlavə Et</button>
-            </form>
-        </section>
 
         <!-- Frequent Transaction Buttons -->
         <section id="frequent-transactions">
             <h2>Tez-tez İstifadə Edilən Tranzaksiyalar</h2>
-
             <!-- Preset Buttons for Common Transactions -->
             <button id="leo-daily-100" data-amount="100" data-source="Leo Bank" data-reason="Günlük">Leo Bank Günlük 100 AZN</button>
             <button id="kapital-daily-60" data-amount="60" data-source="Kapital Bank" data-reason="Günlük">Kapital Bank Günlük 60 AZN</button>
@@ -77,6 +46,9 @@
                     <option value="Alışqan">Alışqan</option>
                     <option value="Saat">Saat</option>
                     <option value="Yazı">Yazı</option>
+                    <option value="Taksi">Taksi</option>
+                    <option value="Qutu">Qutu</option>
+                    <option value="Paket">Paket</option>
                     <option value="others">Digər</option>
                 </select>
                 <input type="text" id="purchase-reason-other" placeholder="Digər səbəb" style="display:none;">
@@ -94,6 +66,8 @@
                     <option value="Alışqan">Alışqan</option>
                     <option value="Saat">Saat</option>
                     <option value="Yazı">Yazı</option>
+                    <option value="Qutu">Qutu</option>
+                    <option value="Paket">Paket</option>
                     <option value="others">Digər</option>
                 </select>
                 <input type="text" id="sale-reason-other" placeholder="Digər səbəb" style="display:none;">
@@ -143,6 +117,14 @@
             </table>
         </section>
 
+        <!-- Totals Section -->
+        <section id="totals">
+            <h2>Ümumi Göstəricilər</h2>
+            <p>Toplam Günlük Alış: <span id="total-daily-purchase">0 AZN</span></p>
+            <p>Toplam Günlük Satış: <span id="total-daily-sales">0 AZN</span></p>
+            <p>Toplam Fond Gəlirləri: <span id="total-fund-income">0 AZN</span></p>
+        </section>
+
         <!-- Bank and Fund Balances -->
         <section id="balances">
             <h2>Bank və Fond Balansları</h2>
@@ -169,3 +151,5 @@
     <script src="finance.js"></script>
 </body>
 </html>
+
+   
