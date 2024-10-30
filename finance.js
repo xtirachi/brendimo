@@ -1,5 +1,5 @@
 // Constants
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiPcK8gAzsQK4fJT2oXelWY654WWimj_m5qu-jO_fABsMLdJZm87GXcUFZZc8jVeHUrw/exec'; // Replace with actual Google Apps Script URL
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzdgskE-weccjHSa0pdEFVPSLCsb2MkGLP6CAfieC0yzQz2SImDC2xnc1pyT1PFqU5mkA/exec'; // Replace with actual Google Apps Script URL
 
 // Helper to set today's date as default for date picker
 function setTodayAsDefaultDate() {
