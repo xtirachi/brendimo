@@ -134,8 +134,9 @@ function loadDailyValues(date) {
         .catch(error => console.error('Error loading daily values:', error));
 }
 
-// Post new transaction to Google Apps Script
 function postTransaction({ transactionType, transactionSource, transactionAmount, transactionReason }) {
+    console.log('postTransaction called:', { transactionType, transactionSource, transactionAmount, transactionReason });
+
     fetch(GOOGLE_SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -147,8 +148,12 @@ function postTransaction({ transactionType, transactionSource, transactionAmount
             transactionReason
         })
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response received:', response);
+        return response.json();
+    })
     .then(data => {
+        console.log('Parsed response data:', data);
         if (data.status === 'success') {
             alert('Tranzaksiya uğurla əlavə edildi.');
             const today = getFormattedToday();
@@ -160,8 +165,12 @@ function postTransaction({ transactionType, transactionSource, transactionAmount
             alert('Xəta: ' + data.message);
         }
     })
-    .catch(error => console.error('Error posting transaction:', error));
+    .catch(error => {
+        console.error('Error posting transaction:', error);
+        alert('Error posting transaction: ' + error.message);
+    });
 }
+
 
 // Update total daily purchase, sales, and fund income by fetching from Google Apps Script
 function updateTotals(date) {
