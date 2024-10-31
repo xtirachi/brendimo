@@ -9,78 +9,78 @@ function setTodayAsDefaultDate() {
 }
 
 // Load totals for today's date by default on page load
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     setTodayAsDefaultDate();
     const today = document.getElementById('transaction-date').value;
     loadTransactions(today);
     loadBalances();
     loadDailyValues(today);
     updateTotals(today);
-});
 
-// Re-fetch and update totals when date changes
-document.getElementById('load-date-data').addEventListener('click', () => {
-    const selectedDate = document.getElementById('transaction-date').value;
-    loadTransactions(selectedDate);
-    loadBalances();
-    loadDailyValues(selectedDate);
-    updateTotals(selectedDate);
-});
+    // Re-fetch and update totals when date changes
+    document.getElementById('load-date-data').addEventListener('click', () => {
+        const selectedDate = document.getElementById('transaction-date').value;
+        loadTransactions(selectedDate);
+        loadBalances();
+        loadDailyValues(selectedDate);
+        updateTotals(selectedDate);
+    });
 
-// Form submission for new transactions
-document.getElementById('transaction-form').addEventListener('submit', (event) => {
-    event.preventDefault();
+    // Form submission for new transactions
+    document.getElementById('transaction-form').addEventListener('submit', (event) => {
+        event.preventDefault();
 
-    const transactionType = document.getElementById('transaction-type').value;
-    const transactionSource = document.getElementById('transaction-source').value;
-    const transactionAmount = parseFloat(document.getElementById('transaction-amount').value);
-    const transactionReason = document.getElementById('transaction-reason').value;
-
-    postTransaction({ transactionType, transactionSource, transactionAmount, transactionReason });
-});
-
-// Preset frequent transaction buttons
-document.querySelectorAll('button[data-amount]').forEach(button => {
-    button.addEventListener('click', () => {
-        const transactionType = 'Deposit';
-        const transactionSource = button.getAttribute('data-source');
-        const transactionAmount = parseFloat(button.getAttribute('data-amount'));
-        const transactionReason = button.getAttribute('data-reason');
+        const transactionType = document.getElementById('transaction-type').value;
+        const transactionSource = document.getElementById('transaction-source').value;
+        const transactionAmount = parseFloat(document.getElementById('transaction-amount').value);
+        const transactionReason = document.getElementById('transaction-reason').value;
 
         postTransaction({ transactionType, transactionSource, transactionAmount, transactionReason });
     });
-});
 
-// Custom transaction options for Günlük Alış and Günlük Satış
-document.getElementById('daily-purchase').addEventListener('click', () => {
-    const amount = parseFloat(document.getElementById('purchase-amount').value);
-    const reasonSelect = document.getElementById('purchase-reason');
-    const reason = reasonSelect.value === 'others' ? document.getElementById('purchase-reason-other').value : reasonSelect.value;
+    // Preset frequent transaction buttons
+    document.querySelectorAll('button[data-amount]').forEach(button => {
+        button.addEventListener('click', () => {
+            const transactionType = 'Deposit';
+            const transactionSource = button.getAttribute('data-source');
+            const transactionAmount = parseFloat(button.getAttribute('data-amount'));
+            const transactionReason = button.getAttribute('data-reason');
 
-    postTransaction({ transactionType: 'Withdrawal', transactionSource: 'Anbar Maya', transactionAmount: amount, transactionReason: reason });
-});
+            postTransaction({ transactionType, transactionSource, transactionAmount, transactionReason });
+        });
+    });
 
-document.getElementById('daily-sale').addEventListener('click', () => {
-    const amount = parseFloat(document.getElementById('sale-amount').value);
-    const reasonSelect = document.getElementById('sale-reason');
-    const reason = reasonSelect.value === 'others' ? document.getElementById('sale-reason-other').value : reasonSelect.value;
+    // Custom transaction options for Günlük Alış and Günlük Satış
+    document.getElementById('daily-purchase').addEventListener('click', () => {
+        const amount = parseFloat(document.getElementById('purchase-amount').value);
+        const reasonSelect = document.getElementById('purchase-reason');
+        const reason = reasonSelect.value === 'others' ? document.getElementById('purchase-reason-other').value : reasonSelect.value;
 
-    postTransaction({ transactionType: 'Deposit', transactionSource: 'Anbar Maya', transactionAmount: amount, transactionReason: reason });
-});
+        postTransaction({ transactionType: 'Withdrawal', transactionSource: 'Anbar Maya', transactionAmount: amount, transactionReason: reason });
+    });
 
-// Custom transaction for Fond Gəlirləri
-document.getElementById('fond-income').addEventListener('click', () => {
-    const amount = parseFloat(document.getElementById('fond-income-amount').value);
-    const reason = document.getElementById('fond-income-reason').value;
+    document.getElementById('daily-sale').addEventListener('click', () => {
+        const amount = parseFloat(document.getElementById('sale-amount').value);
+        const reasonSelect = document.getElementById('sale-reason');
+        const reason = reasonSelect.value === 'others' ? document.getElementById('sale-reason-other').value : reasonSelect.value;
 
-    postTransaction({ transactionType: 'Deposit', transactionSource: 'Fond Gəlirləri', transactionAmount: amount, transactionReason: reason });
-});
+        postTransaction({ transactionType: 'Deposit', transactionSource: 'Anbar Maya', transactionAmount: amount, transactionReason: reason });
+    });
 
-// Show/hide custom reason input for "others" options
-document.querySelectorAll('select[id$="reason"]').forEach(select => {
-    select.addEventListener('change', (event) => {
-        const otherInput = document.getElementById(`${event.target.id}-other`);
-        otherInput.style.display = event.target.value === 'others' ? 'block' : 'none';
+    // Custom transaction for Fond Gəlirləri
+    document.getElementById('fond-income').addEventListener('click', () => {
+        const amount = parseFloat(document.getElementById('fond-income-amount').value);
+        const reason = document.getElementById('fond-income-reason').value;
+
+        postTransaction({ transactionType: 'Deposit', transactionSource: 'Fond Gəlirləri', transactionAmount: amount, transactionReason: reason });
+    });
+
+    // Show/hide custom reason input for "others" options
+    document.querySelectorAll('select[id$="reason"]').forEach(select => {
+        select.addEventListener('change', (event) => {
+            const otherInput = document.getElementById(`${event.target.id}-other`);
+            otherInput.style.display = event.target.value === 'others' ? 'block' : 'none';
+        });
     });
 });
 
