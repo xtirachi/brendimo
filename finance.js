@@ -192,3 +192,12 @@ function getFormattedToday() {
     const day = String(today.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
 }
+
+
+// Load data on page load (default to today's data)
+window.onload = function() {
+    const today = getFormattedToday();
+    loadTransactions(today);  // Load today's transactions
+    loadBalances();           // Load balances on page load
+    loadDailyValues(today);   // Load today's daily values
+};
