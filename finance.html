@@ -146,6 +146,36 @@
             <p>Günlük Mənfəət: <span id="daily-profits">0 AZN</span></p>
             <p>Əldəki Pul: <span id="cash-in-hand">0 AZN</span></p>
         </section>
+
+                <!-- New Transaction Form -->
+        <section id="add-transaction">
+            <h2>Yeni Tranzaksiya Əlavə Et</h2>
+            <form id="transaction-form">
+                <label for="transaction-type">Növ:</label>
+                <select id="transaction-type" required>
+                    <option value="Deposit">Gəlir</option>
+                    <option value="Withdrawal">Xərc</option>
+                </select>
+
+                <label for="transaction-source">Mənbə:</label>
+                <select id="transaction-source" required>
+                    <option value="Leo Bank">Leo Bank</option>
+                    <option value="Kapital Bank">Kapital Bank</option>
+                    <option value="Anbar Maya">Anbar Maya</option>
+                    <option value="Fond Gəlirləri">Fond Gəlirləri</option>
+                    <option value="Dövriyyə">Dövriyyə</option>
+                    <option value="Bazar">Bazar</option>
+                </select>
+
+                <label for="transaction-amount">Məbləğ (AZN):</label>
+                <input type="number" id="transaction-amount" step="0.01" min="0" required>
+
+                <label for="transaction-reason">Səbəb:</label>
+                <input type="text" id="transaction-reason" placeholder="Günlük, maaş və s.">
+
+                <button type="submit">Əlavə Et</button>
+            </form>
+        </section>
     </div>
 
     <script src="finance.js"></script>
