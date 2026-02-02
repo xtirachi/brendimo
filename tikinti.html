@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tikinti Maliyyə Paneli Pro</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Loading Animation */
+        .spinner {
+            border: 3px solid rgba(226, 232, 240, 0.3);
+            border-left-color: #2563eb;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        /* Transitions */
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Print Settings */
+        @media print {
+            body { background: white; -webkit-print-color-adjust: exact; }
+            .no-print { display: none !important; }
+            .break-avoid { break-inside: avoid; page-break-inside: avoid; }
+            .shadow-sm, .shadow-xl { box-shadow: none !important; border: 1px solid #ddd; }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-20">
+
+    <div id="toast" class="hidden fixed bottom-5 right-5 px-6 py-4 rounded-xl shadow-2xl text-white flex items-center space-x-3 z-50 transform transition-all duration-300 translate-y-10 opacity-0">
+        <i id="toast-icon" data-lucide="check-circle"></i>
+        <div>
+            <h4 id="toast-title" class="font-bold text-sm">Bildiriş</h4>
+            <span id="toast-msg" class="text-sm opacity-90">Message</span>
+        </div>
+    </div>
+
+    <div id="loading-overlay" class="fixed inset-0 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center z-50 transition-opacity duration-500">
+        <div class="spinner mb-4"></div>
+        <span class="text-slate-600 font-medium tracking-wide animate-pulse">Məlumatlar Yüklənir...</span>
+    </div>
+
+    <header class="bg-white border-b sticky top-0 z-40 px-4 md:px-6 py-3 flex justify-between items-center shadow-sm no-print">
+        <div class="flex items-center space-x-3">
+            <div class="bg-blue-600 text-white p-2 rounded-lg shadow-blue-200 shadow-lg">
+                <i data-lucide="building-2" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg leading-tight text-slate-800">Tikinti Maliyyə</h1>
+                <p class="text-xs text-slate-400 font-medium hidden md:block">İdarəetmə Paneli</p>
+            </div>
+        </div>
+        <nav class="bg-slate-100 p-1 rounded-lg flex space-x-1">
+            <button onclick="app.switchTab('analysis')" id="btn-analysis" class="nav-btn px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 bg-white text-blue-600 shadow-sm">Analiz</button>
+            <button onclick="app.switchTab('calculator')" id="btn-calculator" class="nav-btn px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 text-slate-500 hover:text-slate-700">Hesablayıcı</button>
+            <button onclick="app.switchTab('admin')" id="btn-admin" class="nav-btn px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 text-slate-500 hover:text-slate-700">Admin</button>
+        </nav>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
+
+        <div id="tab-analysis" class="tab-content fade-in">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 no-print">
+                <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="wallet"></i></div>
+                        <span class="text-xs font-bold text-green-600 bg-green-50 px-2 py-1 rounded">+12%</span>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Ümumi Xərc</p>
+                        <h3 id="stat-total" class="text-2xl font-bold text-slate-800 tracking-tight">0.00 AZN</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-2 bg-indigo-50 text-indigo-600 rounded-lg"><i data-lucide="layers"></i></div>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Tikili Sayı</p>
+                        <h3 id="stat-count" class="text-2xl font-bold text-slate-800 tracking-tight">0</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-2 bg-amber-50 text-amber-600 rounded-lg"><i data-lucide="hard-hat"></i></div>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Ən Böyük Xərc</p>
+                        <h3 id="stat-max-cost" class="text-lg font-bold text-slate-800 tracking-tight truncate">-</h3>
+                    </div>
+                </div>
+
+                <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+                    <div class="flex justify-between items-start mb-2">
+                        <div class="p-2 bg-emerald-50 text-emerald-600 rounded-lg"><i data-lucide="activity"></i></div>
+                    </div>
+                    <div>
+                        <p class="text-sm text-slate-500 font-medium">Status</p>
+                        <h3 class="text-2xl font-bold text-emerald-600 tracking-tight">Aktiv</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 no-print">
+                <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                    <h3 class="font-bold text-slate-700 mb-4 flex items-center"><i data-lucide="bar-chart-2" class="w-4 h-4 mr-2"></i>Tikililər üzrə Xərc</h3>
+                    <div class="h-64 relative">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl border border-slate-100 shadow-sm">
+                    <h3 class="font-bold text-slate-700 mb-4 flex items-center"><i data-lucide="pie-chart" class="w-4 h-4 mr-2"></i>Kateqoriya Analizi</h3>
+                    <div class="h-64 relative flex justify-center">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-between items-end pt-4 border-t border-slate-200 no-print">
+                <h2 class="text-xl font-bold text-slate-800">Xərc Hesabatı</h2>
+                <button onclick="window.print()" class="group flex items-center text-sm font-medium text-slate-500 hover:text-blue-600 transition">
+                    <div class="bg-slate-100 p-2 rounded-full mr-2 group-hover:bg-blue-50 transition"><i data-lucide="printer" class="w-4 h-4"></i></div>
+                    Çap Versiyası
+                </button>
+            </div>
+            
+            <div id="breakdown-container" class="space-y-4 mt-4">
+                </div>
+        </div>
+
+        <div id="tab-calculator" class="tab-content hidden fade-in">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-8">
+                    <h2 class="text-2xl font-bold text-slate-800">Ağıllı Material Hesablayıcısı</h2>
+                    <p class="text-slate-500">Cari bazar qiymətləri ilə dəqiq hesablamalar aparın</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    <div class="md:col-span-5 space-y-6">
+                        <div class="bg-white p-1 rounded-xl border shadow-sm flex">
+                            <button onclick="calculator.setMode('masonry')" id="mode-masonry" class="flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center space-x-2 transition bg-blue-50 text-blue-600 border border-blue-100">
+                                <i data-lucide="brick-wall" class="w-4 h-4"></i>
+                                <span>Hörgü</span>
+                            </button>
+                            <button onclick="calculator.setMode('plaster')" id="mode-plaster" class="flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center space-x-2 transition text-slate-500 hover:bg-slate-50">
+                                <i data-lucide="paint-roller" class="w-4 h-4"></i>
+                                <span>Suvaq</span>
+                            </button>
+                        </div>
+
+                        <div class="bg-white p-6 rounded-xl border shadow-sm space-y-4">
+                            <div id="inputs-masonry">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-xs font-semibold text-slate-500 uppercase mb-1 block">Uzunluq (metr)</label>
+                                        <input type="number" id="inp-len" oninput="calculator.calculate()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition font-medium text-slate-800" placeholder="0">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs font-semibold text-slate-500 uppercase mb-1 block">Hündürlük (metr)</label>
+                                        <input type="number" id="inp-height" oninput="calculator.calculate()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition font-medium text-slate-800" placeholder="0">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="inputs-plaster" class="hidden">
+                                <div>
+                                    <label class="text-xs font-semibold text-slate-500 uppercase mb-1 block">Ümumi Sahə (m²)</label>
+                                    <input type="number" id="inp-area" oninput="calculator.calculate()" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition font-medium text-slate-800" placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-7">
+                        <div class="bg-slate-900 text-white rounded-2xl p-8 shadow-2xl relative overflow-hidden h-full flex flex-col justify-center">
+                            <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-blue-600 rounded-full opacity-20 blur-3xl"></div>
+                            
+                            <div class="relative z-10">
+                                <h3 class="text-blue-200 text-xs font-bold tracking-widest uppercase mb-2">Təxmini Yekun Xərc</h3>
+                                <div class="flex items-baseline space-x-2 mb-8">
+                                    <span id="calc-total" class="text-5xl font-bold tracking-tighter">0</span>
+                                    <span class="text-xl font-medium text-slate-400">AZN</span>
+                                </div>
+
+                                <div class="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/10">
+                                    <div id="calc-details" class="space-y-3 text-sm">
+                                        <div class="text-slate-400 text-center italic">Nəticə üçün ölçüləri daxil edin...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-admin" class="tab-content hidden fade-in">
+            
+            <div id="admin-lock-screen" class="max-w-sm mx-auto mt-16 text-center fade-in">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-slate-100 rounded-full mb-6 text-slate-400">
+                    <i data-lucide="lock" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Admin Panel Girişi</h3>
+                <p class="text-slate-500 mb-6 text-sm">Qiymətləri dəyişmək üçün şifrə tələb olunur.</p>
+                
+                <div class="relative">
+                    <input type="password" id="admin-pass-input" placeholder="Şifrə daxil edin" 
+                        class="w-full p-4 border border-slate-200 rounded-xl text-center outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition shadow-sm"
+                        onkeyup="if(event.key === 'Enter') admin.checkPassword()">
+                    <button onclick="admin.checkPassword()" class="absolute right-2 top-2 bottom-2 bg-slate-900 text-white px-4 rounded-lg font-medium hover:bg-black transition">
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="admin-real-content" class="hidden"> 
+                <div class="bg-white rounded-xl shadow-sm border border-slate-100 p-6 md:p-8">
+                    <div class="flex flex-col md:flex-row justify-between items-center mb-8 pb-6 border-b border-slate-100">
+                        <div>
+                            <h2 class="font-bold text-2xl text-slate-800">Qiymət Cədvəli</h2>
+                            <p class="text-slate-500 text-sm mt-1">Bütün layihə və hesablayıcı üçün vahid qiymətlər</p>
+                        </div>
+                        <button onclick="admin.saveData()" id="btn-save" class="mt-4 md:mt-0 bg-emerald-600 text-white px-6 py-3 rounded-xl font-medium shadow-lg shadow-emerald-200 flex items-center space-x-2 hover:bg-emerald-700 hover:scale-105 active:scale-95 transition-all">
+                            <i data-lucide="save" class="w-5 h-5"></i>
+                            <span id="save-text">Dəyişiklikləri Yadda Saxla</span>
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-2 text-blue-600 mb-4">
+                                <i data-lucide="package" class="w-5 h-5"></i>
+                                <h3 class="font-bold text-lg">Material Qiymətləri</h3>
+                            </div>
+                            <div id="admin-materials-list" class="space-y-3"></div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-2 text-orange-600 mb-4">
+                                <i data-lucide="hammer" class="w-5 h-5"></i>
+                                <h3 class="font-bold text-lg">Usta Xidmət Haqqı (m²)</h3>
+                            </div>
+                            <div id="admin-labor-list" class="space-y-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // ************************************************************
+        // APP LOGIC & STATE MANAGEMENT
+        // ************************************************************
+        
+        const API_URL = "https://script.google.com/macros/s/AKfycbyCwYGa7bX3UcfJ3WSktkYRWg88X5VuidOIr47iehRDKUjHPJOZIA-PX3mm8Jswk6HT/exec";
+        
+        // Central App Object
+        const app = {
+            data: {
+                structures: [],
+                rates: { labor: {} }
+            },
+            charts: {
+                bar: null,
+                pie: null
+            },
+            
+            init: async () => {
+                lucide.createIcons();
+                await app.fetchData();
+            },
+
+            fetchData: async () => {
+                const overlay = document.getElementById('loading-overlay');
+                try {
+                    const response = await fetch(API_URL);
+                    const result = await response.json();
+                    
+                    if (result.status === 'success') {
+                        app.data = result.data;
+                        app.renderAll();
+                        calculator.calculate(); // Update calculator with new rates
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (err) {
+                    ui.showToast("Məlumatları yükləmək mümkün olmadı. İnterneti yoxlayın.", "error");
+                    console.error(err);
+                } finally {
+                    overlay.classList.add('opacity-0', 'pointer-events-none');
+                    setTimeout(() => overlay.classList.add('hidden'), 500);
+                }
+            },
+
+            renderAll: () => {
+                analysis.render();
+                admin.render();
+            },
+
+            switchTab: (tabId) => {
+                // Hide all tabs
+                document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+                
+                // Reset Nav styles
+                document.querySelectorAll('.nav-btn').forEach(el => {
+                    el.classList.remove('bg-white', 'text-blue-600', 'shadow-sm');
+                    el.classList.add('text-slate-500');
+                });
+
+                // Show selected tab
+                const target = document.getElementById(`tab-${tabId}`);
+                target.classList.remove('hidden');
+                
+                // Animate entrance
+                target.classList.remove('fade-in');
+                void target.offsetWidth; // Trigger reflow
+                target.classList.add('fade-in');
+
+                // Style active button
+                const btn = document.getElementById(`btn-${tabId}`);
+                btn.classList.remove('text-slate-500');
+                btn.classList.add('bg-white', 'text-blue-600', 'shadow-sm');
+
+                // Security: Reset Admin if leaving
+                if (tabId !== 'admin') {
+                    document.getElementById('admin-lock-screen').classList.remove('hidden');
+                    document.getElementById('admin-real-content').classList.add('hidden');
+                    document.getElementById('admin-pass-input').value = '';
+                }
+            }
+        };
+
+        // ************************************************************
+        // UI HELPERS
+        // ************************************************************
+        const ui = {
+            showToast: (msg, type = 'success') => {
+                const el = document.getElementById('toast');
+                const icon = document.getElementById('toast-icon');
+                const title = document.getElementById('toast-title');
+                const text = document.getElementById('toast-msg');
+
+                el.classList.remove('hidden');
+                // Force reflow for animation
+                void el.offsetWidth;
+                
+                if(type === 'error') {
+                    el.className = "fixed bottom-5 right-5 px-6 py-4 rounded-xl shadow-2xl text-white flex items-center space-x-3 z-50 transform transition-all duration-300 bg-red-600";
+                    icon.setAttribute('data-lucide', 'alert-triangle');
+                    title.innerText = "Xəta Baş Verdi";
+                } else {
+                    el.className = "fixed bottom-5 right-5 px-6 py-4 rounded-xl shadow-2xl text-white flex items-center space-x-3 z-50 transform transition-all duration-300 bg-emerald-600";
+                    icon.setAttribute('data-lucide', 'check-circle');
+                    title.innerText = "Uğurlu Əməliyyat";
+                }
+                
+                text.innerText = msg;
+                lucide.createIcons();
+
+                // Show
+                el.classList.remove('translate-y-10', 'opacity-0');
+
+                // Hide after delay
+                setTimeout(() => {
+                    el.classList.add('translate-y-10', 'opacity-0');
+                    setTimeout(() => el.classList.add('hidden'), 300);
+                }, 3000);
+            },
+
+            toggleAccordion: (id) => {
+                const content = document.getElementById(id);
+                const isHidden = content.classList.contains('hidden');
+                const icon = document.getElementById(`icon-${id}`);
+                
+                if(isHidden) {
+                    content.classList.remove('hidden');
+                    icon.style.transform = "rotate(180deg)";
+                } else {
+                    content.classList.add('hidden');
+                    icon.style.transform = "rotate(0deg)";
+                }
+            }
+        };
+
+        // ************************************************************
+        // MODULE: ANALYSIS (DASHBOARD)
+        // ************************************************************
+        const analysis = {
+            render: () => {
+                const container = document.getElementById('breakdown-container');
+                container.innerHTML = '';
+                
+                let totalCost = 0;
+                let maxCost = 0;
+                let maxCostName = "-";
+                
+                const structLabels = [];
+                const structValues = [];
+                
+                // For Category Analysis
+                const categoryMap = {};
+
+                if (app.data.structures.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center p-12 bg-white rounded-xl border border-dashed border-slate-300">
+                            <i data-lucide="clipboard" class="w-12 h-12 mx-auto text-slate-300 mb-3"></i>
+                            <p class="text-slate-500 font-medium">Hələ ki, məlumat yoxdur.</p>
+                        </div>`;
+                    lucide.createIcons();
+                    return;
+                }
+
+                app.data.structures.forEach((s, idx) => {
+                    // Calculate Structure Total
+                    const structTotal = s.categories.reduce((acc, cat) => {
+                        // Aggregate for Category Chart
+                        const catSum = cat.items.reduce((sum, i) => sum + i.cost, 0);
+                        categoryMap[cat.name] = (categoryMap[cat.name] || 0) + catSum;
+                        return acc + catSum;
+                    }, 0);
+
+                    totalCost += structTotal;
+                    if(structTotal > maxCost) {
+                        maxCost = structTotal;
+                        maxCostName = s.name;
+                    }
+                    
+                    structLabels.push(s.name.replace("Layihə", "").trim()); // Shorten Name
+                    structValues.push(structTotal);
+
+                    // DOM Creation
+                    const html = `
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden break-avoid transition hover:border-blue-200">
+                            <div class="p-4 md:p-5 bg-white flex justify-between items-center cursor-pointer group" onclick="ui.toggleAccordion('acc-${idx}')">
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition">
+                                        <span class="font-bold text-sm">${idx + 1}</span>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-800 text-lg">${s.name}</h3>
+                                        <span class="text-xs font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded">${s.area} m²</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <span class="font-bold text-slate-800 text-lg">${structTotal.toLocaleString('az-AZ')} ₼</span>
+                                    <i id="icon-acc-${idx}" data-lucide="chevron-down" class="text-slate-400 transition-transform duration-300"></i>
+                                </div>
+                            </div>
+                            <div id="acc-${idx}" class="hidden bg-slate-50/50 border-t border-slate-100 animate-fade-in">
+                                <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    ${s.categories.map(cat => {
+                                        const catTotal = cat.items.reduce((x, i) => x + i.cost, 0);
+                                        return `
+                                            <div class="bg-white p-4 rounded-lg border border-slate-100 shadow-sm">
+                                                <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-50">
+                                                    <span class="font-bold text-slate-600 text-sm uppercase tracking-wide">${cat.name}</span>
+                                                    <span class="font-bold text-blue-600 text-sm">${catTotal.toLocaleString()} ₼</span>
+                                                </div>
+                                                <ul class="space-y-2">
+                                                    ${cat.items.map(item => `
+                                                        <li class="flex justify-between text-sm group">
+                                                            <span class="text-slate-500 group-hover:text-slate-700 transition">${item.name}</span>
+                                                            <span class="font-medium text-slate-700">${item.cost.toLocaleString()}</span>
+                                                        </li>
+                                                    `).join('')}
+                                                </ul>
+                                            </div>
+                                        `;
+                                    }).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.insertAdjacentHTML('beforeend', html);
+                });
+
+                // Update Stats
+                document.getElementById('stat-total').innerText = `${totalCost.toLocaleString('az-AZ', { minimumFractionDigits: 2 })} AZN`;
+                document.getElementById('stat-count').innerText = app.data.structures.length;
+                document.getElementById('stat-max-cost').innerText = maxCostName;
+
+                // Render Charts
+                analysis.renderCharts(structLabels, structValues, categoryMap);
+                lucide.createIcons();
+            },
+
+            renderCharts: (labels, values, catMap) => {
+                // Bar Chart
+                const ctxBar = document.getElementById('barChart').getContext('2d');
+                if (app.charts.bar) app.charts.bar.destroy();
+                
+                app.charts.bar = new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Xərc (AZN)',
+                            data: values,
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 6,
+                            barThickness: 30
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { grid: { borderDash: [5, 5] }, beginAtZero: true },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+
+                // Pie Chart (Category Analysis)
+                const ctxPie = document.getElementById('categoryChart').getContext('2d');
+                if (app.charts.pie) app.charts.pie.destroy();
+                
+                app.charts.pie = new Chart(ctxPie, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(catMap),
+                        datasets: [{
+                            data: Object.values(catMap),
+                            backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'],
+                            borderWidth: 0,
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '70%',
+                        plugins: {
+                            legend: { position: 'right', labels: { usePointStyle: true, font: { size: 11 } } }
+                        }
+                    }
+                });
+            }
+        };
+
+        // ************************************************************
+        // MODULE: CALCULATOR
+        // ************************************************************
+        const calculator = {
+            mode: 'masonry',
+            
+            setMode: (mode) => {
+                calculator.mode = mode;
+                
+                // Toggle Buttons
+                const btnM = document.getElementById('mode-masonry');
+                const btnP = document.getElementById('mode-plaster');
+                
+                // Toggle Inputs
+                const inpM = document.getElementById('inputs-masonry');
+                const inpP = document.getElementById('inputs-plaster');
+
+                if (mode === 'masonry') {
+                    // Active Masonry
+                    btnM.className = "flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center space-x-2 transition bg-blue-50 text-blue-600 border border-blue-100 shadow-sm";
+                    btnP.className = "flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center space-x-2 transition text-slate-500 hover:bg-slate-50";
+                    inpM.classList.remove('hidden');
+                    inpP.classList.add('hidden');
+                } else {
+                    // Active Plaster
+                    btnP.className = "flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center space-x-2 transition bg-blue-50 text-blue-600 border border-blue-100 shadow-sm";
+                    btnM.className = "flex-1 py-3 px-4 rounded-lg text-sm font-bold flex items-center justify-center space-x-2 transition text-slate-500 hover:bg-slate-50";
+                    inpM.classList.add('hidden');
+                    inpP.classList.remove('hidden');
+                }
+                calculator.calculate();
+            },
+
+            calculate: () => {
+                // Get Dynamic Rates from loaded Data (Fallbacks provided)
+                const rates = app.data.rates;
+                const rStone = rates.stone || 0.60;
+                const rCement = rates.cementBag || 9.50;
+                const rSand = rates.sandCube || 25.00;
+                const rLaborM = rates.labor?.masonryDouble || 9.00;
+                const rLaborP = rates.labor?.plaster || 5.00;
+
+                let total = 0;
+                let html = '';
+
+                if (calculator.mode === 'masonry') {
+                    const l = parseFloat(document.getElementById('inp-len').value) || 0;
+                    const h = parseFloat(document.getElementById('inp-height').value) || 0;
+                    const area = l * h;
+
+                    if (area > 0) {
+                        const stones = area * 25; 
+                        const cement = Math.ceil(stones / 200) * 4;
+                        const sand = (stones / 1000) * 1.5; 
+                        const labor = area * rLaborM;
+
+                        total = (stones * rStone) + (cement * rCement) + (sand * rSand) + labor;
+
+                        html = `
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span>Həcm:</span> <span class="font-bold text-white">${area.toFixed(1)} m²</span></div>
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span>Daş (${Math.round(stones)} əd):</span> <span class="font-bold text-white">${Math.round(stones * rStone)} ₼</span></div>
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span>Sement (${cement} kisə):</span> <span class="font-bold text-white">${Math.round(cement * rCement)} ₼</span></div>
+                            <div class="flex justify-between border-b border-white/10 pb-2"><span>Qum (${sand.toFixed(1)} m³):</span> <span class="font-bold text-white">${Math.round(sand * rSand)} ₼</span></div>
+                            <div class="flex justify-between"><span>Usta:</span> <span class="font-bold text-white">${Math.round(labor)} ₼</span></div>
+                        `;
+                    }
+                } else {
+                    const area = parseFloat(document.getElementById('inp-area').value) || 0;
+                    if (area > 0) {
+                        const cement = Math.ceil(area / 10);
+                        const labor = area * rLaborP;
+                        total = labor + (cement * rCement);
+
+                        html = `
+                             <div class="flex justify-between border-b border-white/10 pb-2"><span>Sahə:</span> <span class="font-bold text-white">${area.toFixed(1)} m²</span></div>
+                             <div class="flex justify-between border-b border-white/10 pb-2"><span>Sement (${cement} kisə):</span> <span class="font-bold text-white">${Math.round(cement * rCement)} ₼</span></div>
+                             <div class="flex justify-between"><span>Usta:</span> <span class="font-bold text-white">${Math.round(labor)} ₼</span></div>
+                        `;
+                    }
+                }
+
+                document.getElementById('calc-total').innerText = Math.round(total).toLocaleString();
+                document.getElementById('calc-details').innerHTML = html || `<div class="text-slate-400 text-center italic">Nəticə üçün ölçüləri daxil edin...</div>`;
+            }
+        };
+
+        // ************************************************************
+        // MODULE: ADMIN
+        // ************************************************************
+        const admin = {
+            checkPassword: () => {
+                const input = document.getElementById('admin-pass-input');
+                if(input.value === '12345') { // Simple client-side check
+                    document.getElementById('admin-lock-screen').classList.add('hidden');
+                    document.getElementById('admin-real-content').classList.remove('hidden');
+                    ui.showToast("Giriş uğurludur!", "success");
+                } else {
+                    ui.showToast("Şifrə yanlışdır!", "error");
+                    input.classList.add('animate-pulse', 'border-red-500');
+                    setTimeout(() => input.classList.remove('animate-pulse', 'border-red-500'), 500);
+                }
+            },
+
+            render: () => {
+                const matList = document.getElementById('admin-materials-list');
+                const laborList = document.getElementById('admin-labor-list');
+                matList.innerHTML = '';
+                laborList.innerHTML = '';
+
+                // Helpers for Inputs
+                const createRow = (key, val, isLabor) => {
+                    const cleanKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                    const div = document.createElement('div');
+                    div.className = "flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100 hover:border-blue-200 transition";
+                    div.innerHTML = `
+                        <label class="text-sm font-medium text-slate-700">${cleanKey}</label>
+                        <div class="relative w-32">
+                            <input type="number" step="0.01" value="${val}" 
+                                onchange="admin.updateRate('${key}', this.value, ${isLabor})"
+                                class="w-full p-2 pl-3 pr-8 text-right bg-white border rounded focus:ring-2 focus:ring-blue-500 outline-none font-bold text-slate-800">
+                            <span class="absolute right-3 top-2 text-slate-400 text-xs">₼</span>
+                        </div>
+                    `;
+                    return div;
+                };
+
+                // Materials
+                Object.keys(app.data.rates).forEach(key => {
+                    if(key !== 'labor') {
+                        matList.appendChild(createRow(key, app.data.rates[key], false));
+                    }
+                });
+
+                // Labor
+                if(app.data.rates.labor) {
+                    Object.keys(app.data.rates.labor).forEach(key => {
+                        laborList.appendChild(createRow(key, app.data.rates.labor[key], true));
+                    });
+                }
+            },
+
+            updateRate: (key, value, isLabor) => {
+                const numVal = parseFloat(value);
+                if(isLabor) {
+                    app.data.rates.labor[key] = numVal;
+                } else {
+                    app.data.rates[key] = numVal;
+                }
+                // Auto-recalculate calculator when admin changes rates
+                calculator.calculate(); 
+            },
+
+            saveData: async () => {
+                const btn = document.getElementById('btn-save');
+                const txt = document.getElementById('save-text');
+                const originalText = txt.innerText;
+
+                // Loading State
+                btn.disabled = true;
+                btn.classList.add('opacity-75', 'cursor-wait');
+                txt.innerText = "Yadda saxlanılır...";
+
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(app.data) // Sending raw JSON as before
+                    });
+                    const result = await response.json();
+                    
+                    if(result.status === 'success') {
+                        ui.showToast("Məlumatlar uğurla yeniləndi!", "success");
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (err) {
+                    ui.showToast("Xəta: " + err.message, "error");
+                } finally {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-75', 'cursor-wait');
+                    txt.innerText = originalText;
+                }
+            }
+        };
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', app.init);
+
+    </script>
+</body>
+</html>
